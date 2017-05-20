@@ -135,3 +135,4 @@ alias mirrors='sudo pacman-mirrors -g'
 alias printer='system-config-printer'
 alias update='yaourt -Syua'
 
+eval `keychain --eval --ignore-missing --quiet --timeout 600 --agents ssh id_rsa`

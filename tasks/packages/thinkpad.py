@@ -11,6 +11,9 @@ So no point in installing
 - tp_smapi
 - tpacpi-bat
 
+
+Consider installing thermald to limit CPU when using a lot of cpu
+
 """
 
 from os import path
@@ -26,16 +29,17 @@ TLP_PACKAGES = [
     'tlp-rdw',
     'ethtool',
     'x86_energy_perf_policy',
+    'powertop',
+    #'thermald'
 ]
 
 
 def install():
     yaourt.install(' '.join(TLP_PACKAGES))
-    #configure()
+    configure()
 
 
 def configure():
-    # systemctl enable/start tpacpi-bat
     files.remove(TLP_CONFIG, use_sudo=True)
     files.upload_template(
         'files/tlp/tlp',

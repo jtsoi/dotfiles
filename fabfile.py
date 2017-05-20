@@ -13,5 +13,4 @@ def local():
 @task
 def setup():
     with sshd.sshd():
-        run('ls -la')
         packages.install()
