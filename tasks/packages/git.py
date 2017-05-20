@@ -8,6 +8,7 @@ GIT_PACKAGES = [
     'tk',
     'git',
     'tig',
+    'aspell-en'
 ]
 
 

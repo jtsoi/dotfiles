@@ -1,10 +1,18 @@
 """
+ATTENTION!
+As this is a dkms package, you need to keep
+correct version of linux-headers installed
+
 How to configure TLP:
 http://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html
 
-TODO: Write a balancer script:
-## http: // www.thinkwiki.org / wiki / Talk:Code / tp - bat - balance
+Unfortunately new style ThinkPad laptops do not support force discharge. so there is no point in trying.
+So no point in installing 
+- tp_smapi
+- tpacpi-bat
+
 """
+
 from os import path
 from tasks import dotfiles
 from tasks.packages import yaourt
@@ -13,8 +21,7 @@ from fabtools import files
 
 TLP_CONFIG = path.abspath('/etc/default/tlp')
 TLP_PACKAGES = [
-    'linux49-tp_smapi',
-    'linux49-acpi_call',
+    'acpi_call-dkms',
     'tlp',
     'tlp-rdw',
     'ethtool',
@@ -28,6 +35,7 @@ def install():
 
 
 def configure():
+    # systemctl enable/start tpacpi-bat
     files.remove(TLP_CONFIG, use_sudo=True)
     files.upload_template(
         'files/tlp/tlp',
