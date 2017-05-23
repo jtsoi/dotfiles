@@ -18,7 +18,7 @@ PREZTO_SYMLINKS = [
 
 
 def install():
-    yaourt.install('zsh')
+    yaourt.install('zsh fasd')
     configure()
 
 

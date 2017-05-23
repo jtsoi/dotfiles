@@ -29,6 +29,8 @@ zstyle ':prezto:load' pmodule \
   'completion' \
   'archive' \
   'ssh' \
+  'fasd' \
+  'git' \
   'prompt'
 
 
@@ -86,3 +88,8 @@ zstyle ':prezto:module:prompt' theme 'sorin'
 
 # Set the SSH identities to load into the agent.
 zstyle ':prezto:module:ssh:load' identities 'id_rsa'
+
+
+##
+# Alias
+alias z='fasd_cd -i'
