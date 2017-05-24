@@ -1,6 +1,6 @@
 from fabric.api import run, sudo
 
-from tasks.packages import termite, fonts, thinkpad, dkms, ssh, bash, zsh
+from tasks.packages import termite, fonts, thinkpad, dkms, ssh, bash, zsh, i3wm
 from tasks.packages import git
 
 
@@ -12,4 +12,5 @@ def install():
     #ssh.install()
     #thinkpad.install()
     #bash.install()
-    zsh.install()
+    #zsh.install()
+    i3wm.install()

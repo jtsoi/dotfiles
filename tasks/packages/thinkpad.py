@@ -30,6 +30,7 @@ TLP_PACKAGES = [
     'ethtool',
     'x86_energy_perf_policy',
     'powertop',
+    'libva-intel-driver',
     #'thermald'
 ]
 
