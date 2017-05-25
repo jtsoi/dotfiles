@@ -7,3 +7,7 @@
 export GTK2_RC_FILES="$HOME/.gtkrc-2.0"
 
 DEFAULT_SESSION='i3 --shmlog-size 0'
+
+if [ -s ~/.Xmodmap ]; then
+    xmodmap ~/.Xmodmap
+fi

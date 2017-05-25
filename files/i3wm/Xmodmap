@@ -1,0 +1,11 @@
+! Set AltGr as ModeSwitch
+keycode 108 = Mode_switch
+
+! Map ModeSwitch to Swedish chars (Keys around P-key)
+keycode 34 = bracketleft braceleft aring Aring
+keycode 47 = semicolon colon odiaeresis Odiaeresis
+keycode 48 = apostrophe quotedbl adiaeresis Adiaeresis
+
+! Remap CapsLock to ModeSwitch
+clear Lock
+keycode 66 = Mode_switch
