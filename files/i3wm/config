@@ -182,6 +182,8 @@ bindsym $mod+Shift+0 move container to workspace $ws0; workspace $ws0
 
 # Open specific applications in floating mode
 for_window [title="alsamixer"] floating enable border pixel 1
+for_window [title="cal"] floating enable border pixel 1
+for_window [title="nmtui"] floating enable border pixel 1
 for_window [class="Calamares"] floating enable border normal
 for_window [class="Clipgrab"] floating enable
 for_window [title="File Transfer*"] floating enable
@@ -260,14 +262,15 @@ bindsym $mod+m bar mode toggle
 
 # Autostart applications
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-exec --no-startup-id nitrogen --restore; sleep 1; compton -b
+exec --no-startup-id nitrogen --restore
+#exec --no-startup-id nitrogen --restore; sleep 1; compton -b
 #exec --no-startup-id manjaro-hello
 exec --no-startup-id nm-applet
 exec --no-startup-id xfce4-power-manager
 #exec --no-startup-id pamac-tray
 exec --no-startup-id clipit
 # exec --no-startup-id blueman
-exec --no-startup-id start_conky_maia
+# exec --no-startup-id start_conky_maia
 # exec --no-startup-id start_conky_green
 exec --no-startup-id xautolock -time 10 -locker blurlock
 exec_always --no-startup-id fix_xcursor
@@ -276,9 +279,10 @@ smart_borders on
 
 # Start i3bar to display a workspace bar (plus the system information i3status if available)
 bar {
-    status_command i3status
+    status_command py3status -c ~/.i3/py3status.conf
     strip_workspace_numbers yes
     position bottom
+    tray_output none
     font xft:RobotoMono, FontAwesome 12
 
     # Disable scroll wheel in bar
