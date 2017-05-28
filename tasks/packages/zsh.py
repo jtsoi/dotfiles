@@ -1,12 +1,12 @@
 from os import path
 from fabric.api import env, run, cd
-from tasks import dotfiles
+from tasks import dotfiles, util
 from tasks.packages import yaourt
 from fabtools import files, require
 
-HOME = path.abspath(path.expanduser('~/'))
-PREZTO_DIR = path.abspath(path.expanduser('~/.zprezto'))
-PREZTO_CONFIG = path.abspath(path.expanduser('~/.zpreztorc'))
+HOME = util.full_path('~/')
+PREZTO_DIR = util.full_path('~/.zprezto')
+PREZTO_CONFIG = util.full_path('~/.zpreztorc')
 PREZTO_SYMLINKS = [
     'zlogin',
     'zlogout',

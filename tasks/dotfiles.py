@@ -3,8 +3,10 @@ from fabric.contrib.files import upload_template
 from fabtools import files, require
 from os import path
 
+from tasks import util
+
 DOTFILES_TEMPLATES_DIR = path.abspath('files')
-DOTFILES_STORAGE_DIR = path.abspath(path.expanduser('~/.dotfiles/'))
+DOTFILES_STORAGE_DIR = util.full_path('~/.dotfiles/')
 
 
 def link(source, target):

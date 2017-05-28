@@ -1,10 +1,10 @@
 from os import path
 from fabric.api import env
-from tasks import dotfiles
+from tasks import dotfiles, util
 from tasks.packages import yaourt
 from fabtools import files, require
 
-SSH_CONFIG = path.abspath(path.expanduser('~/.ssh/config'))
+SSH_CONFIG = util.full_path('~/.ssh/config')
 
 
 def install():
