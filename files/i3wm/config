@@ -35,10 +35,12 @@ bindsym $mod+q kill
 bindsym Control+q kill
 
 # start program launcher
-bindsym $mod+space exec --no-startup-id rofi -show run
+#bindsym $mod+space exec --no-startup-id rofi -show run
+bindsym $mod+Mod1+space exec --no-startup-id rofi -show run
 
 # launch categorized menu
-bindsym $mod+Mod1+space exec --no-startup-id morc_menu
+#bindsym $mod+Mod1+space exec --no-startup-id morc_menu
+bindsym $mod+space exec --no-startup-id i3-dmenu-desktop --dmenu='rofi -dmenu'
 
 ################################################################################################
 ## sound-section - DO NOT EDIT if you wish to automatically upgrade Alsa -> Pulseaudio later! ##
@@ -139,7 +141,7 @@ set $ws4 4: 
 set $ws5 5: 
 set $ws6 6: 
 set $ws7 7: 
-set $ws8 8: 
+set $ws8 8: 
 set $ws9 9: 
 set $ws0 10: 
 
