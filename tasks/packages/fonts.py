@@ -6,7 +6,8 @@ FONTS = [
     'fonts-meta-base',
     'ttf-vista-fonts',
     'ttf-mac-fonts',
-    'ttf-roboto-mono'
+    'ttf-roboto-mono',
+    'ttf-opensans',
 ]
 
 
