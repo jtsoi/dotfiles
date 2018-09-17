@@ -15,4 +15,4 @@ def install():
     #zsh.install()
     #i3wm.install()
     #imaging.install()
-    docker.install()
+    #docker.install()

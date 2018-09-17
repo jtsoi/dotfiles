@@ -196,6 +196,7 @@ for_window [title="i3_help"] floating enable sticky enable border normal
 for_window [class="Lightdm-gtk-greeter-settings"] floating enable
 for_window [class="Lxappearance"] floating enable sticky enable border normal
 for_window [title="Git Gui"] floating enable border normal
+for_window [class="gitk"] floating enable border normal
 for_window [class="Manjaro-hello"] floating enable
 for_window [class="Manjaro Settings Manager"] floating enable border normal
 for_window [title="MuseScore: Play Panel"] floating enable
@@ -320,7 +321,7 @@ client.background       #ffffff
 ### settings for i3-gaps: ###
 #############################
 # Set inner/outer gaps
-gaps inner 2
+gaps inner 0
 gaps outer 0
 # Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.
 # gaps inner|outer current|all set|plus|minus <px>
