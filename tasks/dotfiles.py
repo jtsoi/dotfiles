@@ -1,40 +1,31 @@
-from fabric.api import env
-from fabric.contrib.files import upload_template
-from fabtools import files, require
-from os import path
+from tasks import files, local
 
-from tasks import util
-
-DOTFILES_TEMPLATES_DIR = path.abspath('files')
-DOTFILES_STORAGE_DIR = util.full_path('~/.dotfiles/')
+DOTFILES_TEMPLATES_DIR = files.resolve_path('files')
+DOTFILES_STORAGE_DIR = files.resolve_path('~/.dotfiles/')
 
 
-def link(source, target):
+def link(c, source, target, context=None):
     """
     Copy the dotfile to ~/.dotfiles/
     Create a dotfile link from ~/.dotfiles/
     Ensure dir exists and rm any existing file before linking.
     :param source: 
-    :param target: 
-    :param use_sudo: 
+    :param target:
     :return: 
     """
 
-    source_rel = path.relpath(path.abspath(source), DOTFILES_TEMPLATES_DIR)
-    storage = path.abspath(path.join(DOTFILES_STORAGE_DIR, source_rel))
-    target = path.abspath(path.expanduser(target))
-    target_dir = path.dirname(target)
-    storage_dir = path.dirname(storage)
+    source_rel = files.resolve_path(source).relative_to(DOTFILES_TEMPLATES_DIR)
+    storage = DOTFILES_STORAGE_DIR / source_rel
+    target = files.resolve_path(target)
+    target_dir = target.parent
+    storage_dir = storage.parent
 
-    require.files.directory(storage_dir)
-    require.files.directory(target_dir)
-    upload_template(
-        source,
-        storage,
-        context=env.vars,
-        use_jinja=True,
-        keep_trailing_newline=True
-    )
-    if files.exists(target):
-        files.remove(target)
-    files.symlink(storage, target)
+    files.directory(c, storage_dir)
+    files.directory(c, target_dir)
+
+    local.template(c, source, storage, context=context or {})
+
+    if files.exists(c, target):
+        files.remove(c, target)
+    files.symlink(c, storage, target)
+

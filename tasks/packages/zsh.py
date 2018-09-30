@@ -1,12 +1,13 @@
-from os import path
-from fabric.api import env, run, cd
-from tasks import dotfiles, util
-from tasks.packages import yaourt
-from fabtools import files, require
 
-HOME = util.full_path('~/')
-PREZTO_DIR = util.full_path('~/.zprezto')
-PREZTO_CONFIG = util.full_path('~/.zpreztorc')
+from tasks import dotfiles, files
+from tasks.packages import apt
+
+
+HOME = files.resolve_path('~/')
+BASH_ALIASES = files.resolve_path('~/.bash_aliases')
+
+PREZTO_DIR = files.resolve_path('~/.zprezto')
+PREZTO_CONFIG = files.resolve_path('~/.zpreztorc')
 PREZTO_SYMLINKS = [
     'zlogin',
     'zlogout',
@@ -17,19 +18,23 @@ PREZTO_SYMLINKS = [
 ]
 
 
-def install():
-    yaourt.install('zsh fasd')
-    configure()
+def build(c):
+    apt.install(c, 'zsh')
+    if not files.exists(c, PREZTO_DIR):
+        c.run(f'git clone --recursive https://github.com/sorin-ionescu/prezto.git {PREZTO_DIR}')
+    with c.cd(str(PREZTO_DIR)):
+        c.run('git pull && git submodule update --init --recursive')
+    configure(c)
 
 
-def configure():
-    if not files.exists(PREZTO_DIR):
-        run('git clone --recursive https://github.com/sorin-ionescu/prezto.git {}'.format(PREZTO_DIR))
-    with cd(PREZTO_DIR):
-        run('git pull && git submodule update --init --recursive')
+def configure(c):
     for link in PREZTO_SYMLINKS:
-        target_path = path.join(HOME, '.{}'.format(link))
-        files.remove(target_path)
-        files.symlink(path.join(PREZTO_DIR, 'runcoms', link), target_path)
-    dotfiles.link('files/zsh/zpreztorc', PREZTO_CONFIG)
-    run('chsh -s /usr/bin/zsh')
+        target_path = HOME / f'.{link}'
+        files.remove(c, target_path)
+        files.symlink(c, PREZTO_DIR / 'runcoms' / link, target_path)
+
+    dotfiles.link(c, 'files/zsh/zpreztorc', PREZTO_CONFIG)
+    dotfiles.link(c, 'files/zsh/bash_aliases', BASH_ALIASES)
+
+    c.run('chsh -s /usr/bin/zsh')
+

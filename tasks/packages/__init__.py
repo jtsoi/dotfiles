@@ -1,10 +1,6 @@
-from fabric.api import run, sudo
-
-from tasks.packages import termite, fonts, thinkpad, dkms, ssh, bash, zsh, i3wm, imaging, docker
-from tasks.packages import git
-
 
 def install():
+    pass
     #dkms.install()
     #fonts.install()
     #termite.install()

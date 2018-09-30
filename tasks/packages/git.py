@@ -1,21 +1,13 @@
 from tasks import dotfiles
-from tasks.packages import yaourt
-from fabtools import files
-
+from tasks.packages import apt
 
 GIT_CONFIG = '~/.gitconfig'
-GIT_PACKAGES = [
-    'tk',
-    'git',
-    'tig',
-    'aspell-en'
-]
 
 
-def install():
-    yaourt.install(' '.join(GIT_PACKAGES))
-    configure()
+def build(c):
+    apt.install('git aspell-en')
+    configure(c)
 
 
-def configure():
-    dotfiles.link('files/git/gitconfig', GIT_CONFIG)
+def configure(c):
+    dotfiles.link(c, 'files/git/gitconfig', GIT_CONFIG, context=c.config.dot)
