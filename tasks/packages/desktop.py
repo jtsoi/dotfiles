@@ -1,10 +1,10 @@
-from tasks import dotfiles
-from tasks.packages import apt
+from tasks import dotfiles, apt, files
 
 
 def build(c):
     lxterminal(c)
-    sublime_merge(c)
+    chrome(c)
+    mc(c)
 
 
 def lxterminal(c):
@@ -12,8 +12,14 @@ def lxterminal(c):
     dotfiles.link(c, 'files/lxterminal/lxterminal.conf', '~/.config/lxterminal/lxterminal.conf')
 
 
-def sublime_merge(c):
-    c.sudo('wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -', pty=True)
-    c.sudo('echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list', pty=True)
+def chrome(c):
+    c.sudo('wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -', pty=True)
+    c.sudo('echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list', pty=True)
     apt.update(c)
-    apt.install(c, 'sublime-merge')
+    apt.install(c, 'google-chrome-stable')
+
+
+def mc(c):
+    apt.install(c, 'mc')
+    dotfiles.link(c, files.resolve_path('files/mc/solarized.ini'), files.resolve_path('~/.mc/solarized.ini'))
+    dotfiles.link(c, files.resolve_path('files/mc/100_zshrc_mc.zsh'), files.resolve_path('~/.zshrc.d/100_zshrc_mc.zsh'))

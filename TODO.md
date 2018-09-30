@@ -1,13 +1,12 @@
 # Dotfiles todo
 
-### Communication
-- Slack
-- Spotify
 
 ### System
 + apt
 + snapd
 + SSH
++ zsh
+- bash aliases file
 
 ### WM
 - i3
@@ -15,23 +14,22 @@
 - polybar
 
 ### Editors
-+ VScode
 + pycharm
-- sublime merge
++ sublime merge
 
 ### Desktop
 + lxterminal
-+ zsh
-- Chrome
-- pcman
++ Chrome
++ MC
 - Insync
 - Bitwarden
 - pinta
 - clipboard (?)
 - Synology backup
 - Boostnote
+- Slack
+- Spotify
 
 ### SDKs
-- Docker (and compose)
-- AWS cli
++ Docker (and compose)
 + git
