@@ -1,8 +1,5 @@
-# from os import path
-# from fabric.api import env, run, cd
-# from tasks import dotfiles, util
-# from tasks.packages import yaourt
-# from fabtools import files, require
+from tasks import dotfiles, apt, files
+
 
 # XRESOURCES_CONFIG = util.full_path('~/.extend.Xresources')
 # XINITRC_CONFIG = util.full_path('~/.extend.xinitrc')
@@ -11,7 +8,6 @@
 # PY3STATUS_CONFIG = util.full_path('~/.i3/py3status.conf')
 # MORC_MENU_CONFIG = util.full_path('~/.i3config.gaps.old/morc_menu/morc_menu_v1.conf')
 # COMPTON_CONFIG = util.full_path('~/.i3config.gaps.old/compton.conf')
-from tasks import apt
 
 PACKAGES = [
     'rofi',
@@ -21,7 +17,28 @@ PACKAGES = [
 
 
 def build(c):
-    apt.install(c, 'i3')
+    i3(c)
+    #themes(c)
+    #fonts(c)
+
+
+def i3(c):
+    apt.install(c, 'i3 i3blocks')
+    dotfiles.link(c, 'files/i3wm/i3config', files.resolve_path('~/.config/i3/config'), c.config.dot.i3wm)
+    dotfiles.link(c, 'files/i3wm/i3blocks', files.resolve_path('~/.config/i3blocks/config'), c.config.dot.i3wm)
+
+
+def themes(c):
+    apt.add_ppa(c, 'ppa:noobslab/themes')
+    apt.add_ppa(c, 'ppa:noobslab/icons')
+
+    #apt.install(c, 'arc-theme arc-icons')
+    apt.install(c, 'matcha-theme matcha-icons')
+    #apt.install(c, 'plane-theme plane-icons') < this for now
+
+
+def fonts(c):
+    apt.install(c, 'ttf-mscorefonts-installer')
 
 
 

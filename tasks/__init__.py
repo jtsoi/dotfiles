@@ -13,9 +13,9 @@ from tasks.packages import (
 def build(c):
     print("Building!")
     #system.build(c)
-    #i3wm.build(c)
+    i3wm.build(c)
 
-    desktop.build(c)
+    #desktop.build(c)
     #editors.build(c)
 
     #sdk.build(c)

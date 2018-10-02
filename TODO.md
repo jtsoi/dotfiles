@@ -10,8 +10,15 @@
 
 ### WM
 - i3
+  -  wicd-client
+  - https://libraries.io/github/ashinkarov/i3-extras
 - compton
-- polybar
+- i3blocks
+- polybar options:
+  - https://github.com/addy-dclxvi/almighty-dotfiles/blob/master/README.md
+
+- fonts
+  - https://github.com/ryanoasis/nerd-fonts  ?
 
 ### Editors
 + pycharm
