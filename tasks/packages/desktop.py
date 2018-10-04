@@ -2,9 +2,10 @@ from tasks import dotfiles, apt, files
 
 
 def build(c):
-    lxterminal(c)
-    chrome(c)
-    mc(c)
+    print('Building desktop')
+#    lxterminal(c)
+#    chrome(c)
+#    mc(c)
 
 
 def lxterminal(c):
