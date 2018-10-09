@@ -1,5 +1,5 @@
 
-def install(c, pkg, classic=True):
+def install(c, pkg, classic=False):
     cmd = f'snap install {pkg} {"--classic" if classic else ""}'
     c.sudo(cmd, pty=True)
 

@@ -7,7 +7,7 @@ def build(c):
 
 
 def pycharm(c):
-    snap.install(c, 'pycharm-professional')
+    snap.install(c, 'pycharm-professional', classic=True)
 
 
 def sublime_merge(c):

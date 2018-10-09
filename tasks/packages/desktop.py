@@ -1,8 +1,12 @@
-from tasks import dotfiles, apt, files
+from tasks import dotfiles, apt, files, snap
 
 
 def build(c):
     print('Building desktop')
+    bitwarden(c)
+    spotify(c)
+    slack(c)
+
 #    lxterminal(c)
 #    chrome(c)
 #    mc(c)
@@ -24,3 +28,15 @@ def mc(c):
     apt.install(c, 'mc')
     dotfiles.link(c, files.resolve_path('files/mc/solarized.ini'), files.resolve_path('~/.mc/solarized.ini'))
     dotfiles.link(c, files.resolve_path('files/mc/100_zshrc_mc.zsh'), files.resolve_path('~/.zshrc.d/100_zshrc_mc.zsh'))
+
+
+def bitwarden(c):
+    snap.install(c, 'bitwarden')
+
+
+def spotify(c):
+    snap.install(c, 'spotify')
+
+
+def slack(c):
+    snap.install(c, 'slack', classic=True)
