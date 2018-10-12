@@ -3,11 +3,13 @@ from tasks import apt, snap
 
 def build(c):
     pycharm(c)
-    sublime_merge(c)
+    #sublime_merge(c)
 
 
 def pycharm(c):
     snap.install(c, 'pycharm-professional', classic=True)
+    c.sudo('echo "fs.inotify.max_user_watches = 524288\n" | sudo tee /etc/sysctl.d/60-inotify-limits.conf', pty=True)
+    c.sudo('sysctl -p --system')
 
 
 def sublime_merge(c):

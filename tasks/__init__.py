@@ -14,7 +14,7 @@ def build(c):
     print("Building!")
     #system.build(c)
 
-    desktop.build(c)
-    #editors.build(c)
+    #desktop.build(c)
+    editors.build(c)
     #sdk.build(c)
 

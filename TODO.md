@@ -19,9 +19,13 @@
 
 - fonts
   - https://github.com/ryanoasis/nerd-fonts  ?
++ Keymap for swedish keys
+  Link: https://askubuntu.com/questions/873933/using-ctrl-as-modifier-to-produce-swedish-letters-%C3%A5-%C3%A4-%C3%B6-on-us-keyboard-while/873950#873950
+  
 
 ### Editors
 + pycharm
+  + Increase inotify limits 
 + sublime merge
 
 ### Desktop
@@ -29,13 +33,12 @@
 + Chrome
 + MC
 - Insync
-- Bitwarden
++ Bitwarden
 - pinta
-- clipboard (?)
++ clipboard
 - Synology backup
-- Boostnote
-- Slack
-- Spotify
++ Slack
++ Spotify
 
 ### SDKs
 + Docker (and compose)
