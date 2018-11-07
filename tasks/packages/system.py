@@ -42,6 +42,7 @@ def zsh(c):
     dotfiles.link(c, 'files/zsh/zpreztorc', PREZTO_CONFIG)
     dotfiles.link(c, 'files/zsh/bash_aliases', BASH_ALIASES)
 
+
     c.run('chsh -s /usr/bin/zsh')
 
 
