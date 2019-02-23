@@ -10,6 +10,9 @@ To install
 # make
 ```
 
+Secrets:
+Put .invoke.yaml inb the root directory.
+Hint: Where do you store secrets? ;-)
 
 To run
 ```
