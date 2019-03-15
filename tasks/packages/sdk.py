@@ -26,3 +26,7 @@ def python(c):
     # Custom RC Files
     c.run(f'curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash', pty=True)
     dotfiles.link(c, 'files/zsh/zshrcd/pyenv.zsh', files.resolve_path('~/.zshrc.d/pyenv.zsh'))
+
+
+def web(c):
+    apt.install(c, 'apache2-utils')

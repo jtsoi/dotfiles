@@ -11,7 +11,7 @@ To install
 ```
 
 Secrets:
-Put .invoke.yaml inb the root directory.
+Put .invoke.yaml in the root directory.  
 Hint: Where do you store secrets? ;-)
 
 To run

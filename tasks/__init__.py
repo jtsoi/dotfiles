@@ -6,7 +6,8 @@ from tasks.packages import (
     editors,
     i3wm,
     desktop,
-    sdk)
+    sdk,
+    thinkpad)
 
 
 @task
@@ -16,5 +17,6 @@ def build(c):
 
     #desktop.build(c)
     #editors.build(c)
-    sdk.build(c)
+    #sdk.build(c)
+    thinkpad.build(c)
 

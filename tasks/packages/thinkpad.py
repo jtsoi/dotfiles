@@ -6,47 +6,30 @@ correct version of linux-headers installed
 How to configure TLP:
 http://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html
 
-Unfortunately new style ThinkPad laptops do not support force discharge. so there is no point in trying.
-So no point in installing 
-- tp_smapi
-- tpacpi-bat
-
-
 Consider installing thermald to limit CPU when using a lot of cpu
-
 """
-
-from os import path
-from tasks import dotfiles
-from tasks.packages import yaourt
-from fabtools import files
+from tasks import apt
 
 
-TLP_CONFIG = path.abspath('/etc/default/tlp')
-TLP_PACKAGES = [
-    'acpi_call-dkms',
-    'tlp',
-    'tlp-rdw',
-    'ethtool',
-    'x86_energy_perf_policy',
-    'powertop',
-    'libva-intel-driver',
-    #'thermald'
-]
+def build(c):
+    tlp(c)
+    powertop(c)
 
 
-def install():
-    yaourt.install(' '.join(TLP_PACKAGES))
-    configure()
+def tlp(c):
+    # https://wiki.archlinux.org/index.php/tp_smapi
+    # apt.install(c, 'tp-smapi-dkms') # For older Thinkpads? https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html
+    apt.install(c, 'tlp tlp-rdw acpi-call-dkms smartmontools')
+
+    tlp_lines = [
+        "sed -i.bak 's|#START_CHARGE_THRESH_BAT1=75|START_CHARGE_THRESH_BAT1=80|g' /etc/default/tlp",
+        "sed -i.bak 's|#START_CHARGE_THRESH_BAT0=75|START_CHARGE_THRESH_BAT0=80|g' /etc/default/tlp",
+        "sed -i.bak 's|#STOP_CHARGE_THRESH_BAT1=80|STOP_CHARGE_THRESH_BAT1=89|g' /etc/default/tlp",
+        "sed -i.bak 's|#STOP_CHARGE_THRESH_BAT0=80|STOP_CHARGE_THRESH_BAT0=89|g' /etc/default/tlp"
+    ]
+    for line in tlp_lines:
+        c.sudo(line)
 
 
-def configure():
-    files.remove(TLP_CONFIG, use_sudo=True)
-    files.upload_template(
-        'files/tlp/tlp',
-        TLP_CONFIG,
-        use_sudo=True,
-        mode='0644',
-        chown=True,
-        user='root'
-    )
+def powertop(c):
+    apt.install(c, 'powertop')
