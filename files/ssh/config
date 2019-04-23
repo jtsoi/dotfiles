@@ -1,2 +1,8 @@
 Host *
     ForwardAgent yes
+
+Host nullstation
+    HostName nullstation.duckdns.org
+    Port 22001
+    User admin
+    IdentityFile ~/.ssh/id_rsa

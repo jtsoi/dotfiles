@@ -13,10 +13,10 @@ from tasks.packages import (
 @task
 def build(c):
     print("Building!")
-    #system.build(c)
+    system.build(c)
 
     #desktop.build(c)
     #editors.build(c)
     #sdk.build(c)
-    thinkpad.build(c)
+    #thinkpad.build(c)
 
