@@ -26,7 +26,7 @@ def zsh(c):
         'zshenv',
     ]
 
-    apt.install(c, 'zsh')
+    apt.install(c, 'zsh direnv')
     if not files.exists(c, PREZTO_DIR):
         c.run(f'git clone --recursive https://github.com/sorin-ionescu/prezto.git {PREZTO_DIR}')
 
@@ -41,7 +41,7 @@ def zsh(c):
     dotfiles.link(c, 'files/zsh/zshrc', ZSHRC)
     dotfiles.link(c, 'files/zsh/zpreztorc', PREZTO_CONFIG)
     dotfiles.link(c, 'files/zsh/bash_aliases', BASH_ALIASES)
-
+    dotfiles.link(c, 'files/zsh/zshrcd/direnv.zsh', files.resolve_path('~/.zshrc.d/direnv.zsh'))
 
     c.run('chsh -s /usr/bin/zsh')
 

@@ -16,7 +16,9 @@ xkb_symbols "swedish" {
 ```
 
 and this to /usr/share/X11/xkb/rules/evdev.xml:
-Search for ```<name>us</name>```
+Navigate tree to: xkbConfigRegistry >> layoutList >> layout (configItem.name="us") >> variantList
+(It is the first layout in layoutList )
+Add variant in variantList:
 ```xml
 <variant>
   <configItem>
@@ -26,4 +28,7 @@ Search for ```<name>us</name>```
 </variant>
 
 ```
-That will let you access å, ä and ö via AltGr (RightAlt), which is the conventional way to access third and fourth level symbols.
+That will let you access å, ä and ö via AltGr (RightAlt), 
+which is the conventional way to access third and fourth level symbols.
+
+Reboot and select the new layout in regional settings.
