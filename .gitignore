@@ -3,4 +3,4 @@
 .vscode
 *.pyc
 *.swp
-.invoke.yaml
+invoke.yaml

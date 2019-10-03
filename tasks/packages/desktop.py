@@ -3,25 +3,23 @@ from tasks import dotfiles, apt, files, snap
 
 def build(c):
     print('Building desktop')
-    bitwarden(c)
-    spotify(c)
-    slack(c)
+    #bitwarden(c)
+    #spotify(c)
+    #chrome(c)
 
-#    lxterminal(c)
-#    chrome(c)
-#    mc(c)
+    # slack(c)
+    lxterminal(c)
+    # mc(c)
 
 
 def lxterminal(c):
     # LXTerminal
+    apt.install(c, 'lxterminal')
     dotfiles.link(c, 'files/lxterminal/lxterminal.conf', '~/.config/lxterminal/lxterminal.conf')
 
 
 def chrome(c):
-    c.sudo('wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -', pty=True)
-    c.sudo('echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list', pty=True)
-    apt.update(c)
-    apt.install(c, 'google-chrome-stable')
+    c.sudo('bash -c "cd /tmp && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && dpkg -i google-chrome-stable_current_amd64.deb"', pty=True)
 
 
 def mc(c):

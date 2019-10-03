@@ -92,4 +92,6 @@ zstyle ':prezto:module:ssh:load' identities 'id_rsa'
 
 ##
 # Alias
+eval "$(fasd --init auto)"
 alias z='fasd_cd -i'
+alias j='fasd_cd -i'

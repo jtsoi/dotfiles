@@ -2,12 +2,12 @@ from tasks import snap, dotfiles, apt, files
 
 
 def build(c):
-    # git(c)
-    # docker(c)
-    # python(c)
-    # ruby(c)
-    # web(c)
-    node(c)
+    #git(c)
+    #docker(c)
+    #python(c)
+    ruby(c)
+    #web(c)
+    #node(c)
 
 
 def git(c):
@@ -25,8 +25,9 @@ def docker(c):
 
 
 def python(c):
-    c.run(f'curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash', pty=True)
-    dotfiles.link(c, 'files/zsh/zshrcd/pyenv.zsh', files.resolve_path('~/.zshrc.d/pyenv.zsh'))
+    c.sudo(f'pip3 install --upgrade pip setuptools wheel', pty=True)
+    #c.run(f'curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash', pty=True)
+    #dotfiles.link(c, 'files/zsh/zshrcd/pyenv.zsh', files.resolve_path('~/.zshrc.d/pyenv.zsh'))
 
 
 def ruby(c, version='2.6.5'):
@@ -39,11 +40,11 @@ def ruby(c, version='2.6.5'):
 
     dotfiles.link(c, 'files/zsh/zshrcd/rbenv.zsh', files.resolve_path('~/.zshrc.d/rbenv.zsh'))
 
-    c.run(f'rbenv install {version} && rbenv global {version} && rbenv rehash', pty=True)
+    c.run(f'export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/plugins/ruby-build/bin:$PATH" && rbenv install {version} && rbenv global {version} && rbenv rehash', pty=True)
 
     dotfiles.link(c, 'files/ruby/gemrc', files.resolve_path('~/.gemrc'))
 
-    c.run(f'gem install bundler', pty=True)
+    c.run(f'export PATH="$HOME/.rbenv/shims:$PATH" && gem install bundler', pty=True)
 
 
 def web(c):

@@ -2,9 +2,9 @@ from tasks import dotfiles, files, local, apt
 
 
 def build(c):
-    snap(c)
+    #snap(c)
     zsh(c)
-    ssh(c)
+    #ssh(c)
 
 
 def snap(c):
@@ -26,7 +26,7 @@ def zsh(c):
         'zshenv',
     ]
 
-    apt.install(c, 'zsh direnv')
+    apt.install(c, 'zsh direnv fasd')
     if not files.exists(c, PREZTO_DIR):
         c.run(f'git clone --recursive https://github.com/sorin-ionescu/prezto.git {PREZTO_DIR}')
 
@@ -63,4 +63,3 @@ def ssh(c):
         files.chmod(c, 600, private_key_path)
         local.content(c, key['public'], public_key_path)
         files.chmod(c, 644, public_key_path)
-

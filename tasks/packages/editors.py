@@ -2,9 +2,9 @@ from tasks import apt, snap
 
 
 def build(c):
-    #pycharm(c)
+    pycharm(c)
     rubymine(c)
-    #sublime_merge(c)
+    sublime_merge(c)
 
 
 def pycharm(c):
