@@ -2,5 +2,5 @@ addict==2.2.0
 
 invoke==1.2.0
 patchwork==1.0.1
-pyyaml==3.13
+pyyaml==5.1
 Jinja2==2.10
