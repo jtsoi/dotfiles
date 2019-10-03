@@ -2,11 +2,12 @@ from tasks import snap, dotfiles, apt, files
 
 
 def build(c):
-    #git(c)
-    #docker(c)
-    #python(c)
-    ruby(c)
-    #web(c)
+    # git(c)
+    # docker(c)
+    # python(c)
+    # ruby(c)
+    # web(c)
+    node(c)
 
 
 def git(c):
@@ -42,6 +43,13 @@ def ruby(c, version='2.6.5'):
 
     dotfiles.link(c, 'files/ruby/gemrc', files.resolve_path('~/.gemrc'))
 
+    c.run(f'gem install bundler', pty=True)
+
 
 def web(c):
     apt.install(c, 'apache2-utils')
+
+
+def node(c):
+    # Yarn & NPM included
+    snap.install(c, 'node --channel=12/stable', classic=True)
