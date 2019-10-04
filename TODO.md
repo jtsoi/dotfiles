@@ -14,10 +14,7 @@
 ### Regolith
 - i3
   - https://libraries.io/github/ashinkarov/i3-extras
-- i3blocks
-
-- zsh PS1
-
+- i3blocks - bar
 
 ### Editors
 + pycharm

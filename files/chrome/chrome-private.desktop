@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Chrome (Private)
+Exec=/usr/bin/google-chrome-stable --user-data-dir=$HOME/.config/google-chrome-private
+StartupNotify=true
+Terminal=false
+Icon=google-chrome
+Type=Application
+Categories=Network;WebBrowser;
+MimeType=text/html;text/xml;application/xhtml_xml;image/webp;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/ftp;

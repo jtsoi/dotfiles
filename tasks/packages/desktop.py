@@ -5,10 +5,10 @@ def build(c):
     print('Building desktop')
     #bitwarden(c)
     #spotify(c)
-    #chrome(c)
+    chrome(c)
 
     # slack(c)
-    lxterminal(c)
+    #lxterminal(c)
     # mc(c)
 
 
@@ -19,7 +19,9 @@ def lxterminal(c):
 
 
 def chrome(c):
-    c.sudo('bash -c "cd /tmp && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && dpkg -i google-chrome-stable_current_amd64.deb"', pty=True)
+    #c.sudo('bash -c "cd /tmp && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && dpkg -i google-chrome-stable_current_amd64.deb"', pty=True)
+    dotfiles.link(c, files.resolve_path('files/chrome/chrome-nulltales.desktop'), files.resolve_path('~/.local/share/applications/chrome-nulltales.desktop'))
+    dotfiles.link(c, files.resolve_path('files/chrome/chrome-private.desktop'), files.resolve_path('~/.local/share/applications/chrome-private.desktop'))
 
 
 def mc(c):
