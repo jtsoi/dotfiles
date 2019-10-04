@@ -26,9 +26,10 @@ def zsh(c):
         'zshenv',
     ]
 
-    apt.install(c, 'zsh direnv fasd')
+    apt.install(c, 'zsh direnv fasd fonts-powerline')
     if not files.exists(c, PREZTO_DIR):
         c.run(f'git clone --recursive https://github.com/sorin-ionescu/prezto.git {PREZTO_DIR}')
+        c.run(f'git clone --recurse-submodules https://github.com/belak/prezto-contrib {PREZTO_DIR}/contrib')
 
     with c.cd(str(PREZTO_DIR)):
         c.run('git pull && git submodule update --init --recursive')

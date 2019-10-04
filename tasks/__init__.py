@@ -15,7 +15,7 @@ from tasks.packages import (
 @task
 def build(c):
     print("Building!")
-    #system.build(c)
+    system.build(c)
     regolith.build(c)
     #utils.build(c)
     desktop.build(c)

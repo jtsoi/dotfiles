@@ -17,3 +17,6 @@ if [ -d $HOME/.zshrc.d ]; then
     source $file
   done
 fi
+
+zstyle ':prezto:module:editor:info:keymap:primary' format ' %B%F{2}>%f%b'
+zstyle ':prezto:module:editor:info:keymap:alternate' format ' %B%F{1}<%f%b'

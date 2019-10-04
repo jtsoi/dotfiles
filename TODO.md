@@ -1,38 +1,35 @@
 # Dotfiles todo
 
-
 ### System
 + apt
 + snapd
 + SSH
 + zsh
-- bash aliases file
-
-### WM
-- i3
-  -  wicd-client
-  - https://libraries.io/github/ashinkarov/i3-extras
-- compton
-- i3blocks
-- polybar options:
-  - https://github.com/addy-dclxvi/almighty-dotfiles/blob/master/README.md
-
-- fonts
-  - https://github.com/ryanoasis/nerd-fonts  ?
++ zsh aliases file
 + Keymap for swedish keys
   Link: https://askubuntu.com/questions/873933/using-ctrl-as-modifier-to-produce-swedish-letters-%C3%A5-%C3%A4-%C3%B6-on-us-keyboard-while/873950#873950
-  
+- Fasd alisases
+
+
+### Regolith
+- i3
+  - https://libraries.io/github/ashinkarov/i3-extras
+- i3blocks
+
+- zsh PS1
+
 
 ### Editors
 + pycharm
   + Increase inotify limits 
++ Rubymine
 + sublime merge
 
 ### Desktop
-+ lxterminal
+- lxterminal
+  - theme 
 + Chrome
 + MC
-- Insync
 + Bitwarden
 - pinta
 + clipboard
@@ -47,3 +44,12 @@
 
 ### Utils
 - https://github.com/raboof/nethogs#readme ?
+
+### Braindump:
+- fonts
+  - https://github.com/ryanoasis/nerd-fonts  ?
+- nethogs
+  - https://github.com/raboof/nethogs#readme ?
+- Insync ?
+- polybar options:
+  - https://github.com/addy-dclxvi/almighty-dotfiles/blob/master/README.md
