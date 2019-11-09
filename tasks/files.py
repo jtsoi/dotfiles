@@ -19,3 +19,8 @@ def symlink(c, source_path, target_path):
 
 def chmod(c, mode, path):
     return c.run(f'chmod {mode} {Path(path)}')
+
+
+def curl_download(c, from_url, to_path):
+    return c.run(f'curl -L -C {from_url} -o {to_path}')
+

@@ -7,6 +7,7 @@ from tasks.packages import (
     i3wm,
     desktop,
     sdk,
+    media,
     thinkpad,
     utils,
     regolith)
@@ -15,10 +16,11 @@ from tasks.packages import (
 @task
 def build(c):
     print("Building!")
-    system.build(c)
+    #system.build(c)
     regolith.build(c)
     #utils.build(c)
     desktop.build(c)
+    media.build(c)
     #editors.build(c)
     #sdk.build(c)
     #thinkpad.build(c)

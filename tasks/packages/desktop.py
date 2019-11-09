@@ -6,7 +6,7 @@ def build(c):
     #bitwarden(c)
     #spotify(c)
     chrome(c)
-
+    #pinta(c)
     # slack(c)
     #lxterminal(c)
     # mc(c)
@@ -22,6 +22,7 @@ def chrome(c):
     #c.sudo('bash -c "cd /tmp && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && dpkg -i google-chrome-stable_current_amd64.deb"', pty=True)
     dotfiles.link(c, files.resolve_path('files/chrome/chrome-nulltales.desktop'), files.resolve_path('~/.local/share/applications/chrome-nulltales.desktop'))
     dotfiles.link(c, files.resolve_path('files/chrome/chrome-private.desktop'), files.resolve_path('~/.local/share/applications/chrome-private.desktop'))
+    dotfiles.link(c, files.resolve_path('files/chrome/chrome-horizon.desktop'), files.resolve_path('~/.local/share/applications/chrome-horizon.desktop'))
 
 
 def mc(c):
@@ -40,3 +41,8 @@ def spotify(c):
 
 def slack(c):
     snap.install(c, 'slack', classic=True)
+
+
+def pinta(c):
+    # Runs Mono, do you really need pinta?
+    apt.install(c, 'pinta')

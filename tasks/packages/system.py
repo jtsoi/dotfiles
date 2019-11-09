@@ -2,13 +2,23 @@ from tasks import dotfiles, files, local, apt
 
 
 def build(c):
+    base(c)
     #snap(c)
+    tldr(c)
     zsh(c)
     #ssh(c)
 
 
+def base(c):
+    apt.install(c, 'curl')
+
+
 def snap(c):
     apt.install(c, 'snapd')
+
+
+def tldr(c):
+    apt.install(c, 'tldr')
 
 
 def zsh(c):

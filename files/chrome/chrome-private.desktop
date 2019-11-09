@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Name=Chrome (Private)
-Exec=/usr/bin/google-chrome-stable --user-data-dir=$HOME/.config/google-chrome-private
+Exec=/usr/bin/google-chrome-stable --user-data-dir=.config/google-chrome-private
 StartupNotify=true
 Terminal=false
 Icon=google-chrome

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
-Name=Chrome (Nulltales)
-Exec=/usr/bin/google-chrome-stable --user-data-dir=.config/google-chrome-nulltales
+Name=Chrome (Capital horizon)
+Exec=/usr/bin/google-chrome-stable --user-data-dir=.config/google-chrome-horizon
 StartupNotify=true
 Terminal=false
 Icon=google-chrome

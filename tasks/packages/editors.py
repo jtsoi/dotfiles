@@ -2,9 +2,15 @@ from tasks import apt, snap
 
 
 def build(c):
+    micro(c)
     pycharm(c)
     rubymine(c)
     sublime_merge(c)
+
+
+def micro(c):
+    # Or: curl https://getmic.ro | bash
+    snap.install(c, 'micro', classic=True)
 
 
 def pycharm(c):
