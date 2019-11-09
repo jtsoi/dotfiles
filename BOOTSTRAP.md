@@ -1,4 +1,5 @@
 ```
+# sudo snap install pycharm-professional --classic
 # sudo apt install build-essential python3-venv python3-pip
 # sudo pip3 install --upgrade pip setuptools wheel
 # sudo apt install git
