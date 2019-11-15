@@ -1,10 +1,20 @@
+from invoke import task
+
 from tasks import apt, snap, files
 
 
+@task
 def build(c):
     kodi(c)
+    spotify(c)
 
 
+@task
 def kodi(c):
     apt.add_ppa(c, 'ppa:team-xbmc/ppa')
     apt.install(c, 'kodi')
+
+
+@task
+def spotify(c):
+    snap.install(c, 'spotify')

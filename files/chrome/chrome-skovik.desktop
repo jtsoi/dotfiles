@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Chrome (Skovik)
+Exec=/usr/bin/google-chrome-stable --user-data-dir=.config/google-chrome-skovik
+StartupNotify=true
+Terminal=false
+Icon=google-chrome
+Type=Application
+Categories=Network;WebBrowser;
+MimeType=text/html;text/xml;application/xhtml_xml;image/webp;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/ftp;

@@ -1,11 +1,14 @@
-from invoke import task
+from os import environ
 
-from tasks import files, apt, snap
+from invoke import Collection
+
+from tasks import files, apt, snap, machine
 from tasks.packages import (
     system,
     editors,
-    i3wm,
     desktop,
+    browsers,
+    messaging,
     sdk,
     media,
     thinkpad,
@@ -13,15 +16,16 @@ from tasks.packages import (
     regolith)
 
 
-@task
-def build(c):
-    print("Building!")
-    #system.build(c)
-    regolith.build(c)
-    #utils.build(c)
-    desktop.build(c)
-    media.build(c)
-    #editors.build(c)
-    #sdk.build(c)
-    #thinkpad.build(c)
-
+ns = Collection(
+    system,
+    regolith,
+    browsers,
+    messaging,
+    editors,
+    desktop,
+    sdk,
+    media,
+    thinkpad,
+    utils
+)
+ns.configure(dict(machine=dict(is_thinkpad=machine.is_thinkpad())))

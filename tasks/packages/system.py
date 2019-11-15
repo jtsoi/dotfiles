@@ -1,33 +1,28 @@
+from invoke import task
+
 from tasks import dotfiles, files, local, apt
 
 
-def build(c):
-    base(c)
-    #snap(c)
-    tldr(c)
-    zsh(c)
-    #ssh(c)
-
-
+@task
 def base(c):
     apt.install(c, 'curl')
 
 
+@task
 def snap(c):
     apt.install(c, 'snapd')
 
 
+@task
 def tldr(c):
     apt.install(c, 'tldr')
 
 
+@task
 def zsh(c):
     HOME = files.resolve_path('~/')
-    BASH_ALIASES = files.resolve_path('~/.bash_aliases')
 
     PREZTO_DIR = files.resolve_path('~/.zprezto')
-    PREZTO_CONFIG = files.resolve_path('~/.zpreztorc')
-    ZSHRC = files.resolve_path('~/.zshrc')
     PREZTO_SYMLINKS = [
         'zlogin',
         'zlogout',
@@ -49,17 +44,28 @@ def zsh(c):
         files.remove(c, target_path)
         files.symlink(c, PREZTO_DIR / 'runcoms' / link, target_path)
 
+    c.run('chsh -s /usr/bin/zsh')
+
+
+@task
+def zsh_conf(c):
+    BASH_ALIASES = files.resolve_path('~/.bash_aliases')
+    PREZTO_CONFIG = files.resolve_path('~/.zpreztorc')
+    ZSHRC = files.resolve_path('~/.zshrc')
+
     dotfiles.link(c, 'files/zsh/zshrc', ZSHRC)
     dotfiles.link(c, 'files/zsh/zpreztorc', PREZTO_CONFIG)
     dotfiles.link(c, 'files/zsh/bash_aliases', BASH_ALIASES)
     dotfiles.link(c, 'files/zsh/zshrcd/direnv.zsh', files.resolve_path('~/.zshrc.d/direnv.zsh'))
 
-    c.run('chsh -s /usr/bin/zsh')
 
-
+@task
 def ssh(c):
     apt.install(c, 'keychain ssh-askpass')
 
+
+@task
+def ssh_conf(c):
     SSH_CONFIG = files.resolve_path('~/.ssh/config')
 
     files.directory(c, SSH_CONFIG.parent, mode=755)

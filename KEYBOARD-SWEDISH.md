@@ -1,5 +1,5 @@
 Add this to /usr/share/X11/xkb/symbols/us:
-```bash
+```
 partial alphanumeric_keys
 xkb_symbols "swedish" {
 
@@ -31,4 +31,4 @@ Add variant in variantList:
 That will let you access å, ä and ö via AltGr (RightAlt), 
 which is the conventional way to access third and fourth level symbols.
 
-Reboot and select the new layout in regional settings.
+RESTART and select the new layout in regional settings.

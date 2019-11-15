@@ -2,26 +2,25 @@
 See how to config Regolith:
 https://regolith-linux.org/configure.html
 """
+from invoke import task
 from patchwork.files import directory
 
 from tasks import dotfiles
 from tasks import apt
 
 
-def build(c):
-    #base(c)
-    # fonts(c)
-    polybar(c)
-    i3conf(c)
-
-
+@task
 def base(c):
     apt.add_ppa(c, 'ppa:kgilmer/speed-ricer')
 
 
+@task
 def fonts(c):
-    # enable bitmap fonts
+    # Manual step
+    # Download and install font-awesome pro files.
+    # Open the otf files in th GUI and click install.
 
+    # enable bitmap fonts
     c.sudo('mv -f /etc/fonts/conf.d/70-no-bitmaps.conf /etc/fonts/conf.d/70-no-bitmaps.conf.old', pty=True, warn=True)
 
     # Polybar siji font
@@ -31,20 +30,20 @@ def fonts(c):
     apt.install(c, 'xfonts-unifont')
 
 
-def i3conf(c):
+@task
+def i3wm_conf(c):
     directory(c, '~/.config/regolith/i3')
     dotfiles.link(c, 'files/regolith/i3config', '~/.config/regolith/i3/config', context=c.config.dot)
-    dotfiles.link(c, 'files/regolith/i3xrocks', '~/.config/regolith/i3/i3xrocks', context=c.config.dot)
 
 
+@task
 def polybar(c):
-    # Manual step
-    # Download and install font-awesome pro files.
-    # Open the otf files in th GUI and click install.
+    apt.install(c, 'polybar yad xdotool')
 
-    #apt.install(c, 'polybar yad xdotool')
-    dotfiles.link(c, 'files/regolith/polybar/config', '~/.config/regolith/polybar/config', context=c.config.dot)
-    dotfiles.link(c, 'files/regolith/polybar/launch-polybar.sh', '~/.config/regolith/polybar/launch-polybar.sh', context=c.config.dot)
-    dotfiles.link(c, 'files/regolith/polybar/popup-calendar.sh', '~/.config/regolith/polybar/popup-calendar.sh', context=c.config.dot)
+
+@task
+def polybar_conf(c):
+    dotfiles.link(c, 'files/regolith/polybar/config', '~/.config/regolith/polybar/config', context=c.config)
+    dotfiles.link(c, 'files/regolith/polybar/launch-polybar.sh', '~/.config/regolith/polybar/launch-polybar.sh', context=c.config)
+    dotfiles.link(c, 'files/regolith/polybar/popup-calendar.sh', '~/.config/regolith/polybar/popup-calendar.sh', context=c.config)
     c.run('chmod +x ~/.config/regolith/polybar/*.sh', pty=True)
-

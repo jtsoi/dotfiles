@@ -65,10 +65,15 @@ font-1 = Siji:style=Regular:pixelsize=24;2
 font-2 = Font Awesome 5 Pro:style=Regular:pixelsize=11;2
 font-3 = Font Awesome 5 Brands:style=Regular:pixelsize=11;2
 
-
-modules-left = time calendar
+{% if machine.is_thinkpad %}
+modules-left = time utc_time calendar cpu_load
+modules-center = i3
+modules-right = wifi bat0 bat1 volume powermenu
+{% else %}
+modules-left = time utc_time calendar cpu_load
 modules-center = i3
 modules-right = volume powermenu
+{% endif %}
 
 tray-position = none
 ;tray-padding = 2
@@ -88,59 +93,6 @@ tray-position = none
 cursor-click = pointer
 cursor-scroll = ns-resize
 
-[module/xwindow]
-[module/xwindow]
-type = internal/xwindow
-label = %title:0:30:...%
-
-[module/xkeyboard]
-type = internal/xkeyboard
-blacklist-0 = num lock
-
-format-prefix = " "
-format-prefix-foreground = ${colors.foreground-alt}
-format-prefix-underline = ${colors.secondary}
-
-label-layout = %layout%
-label-layout-underline = ${colors.secondary}
-
-label-indicator-padding = 2
-label-indicator-margin = 1
-label-indicator-background = ${colors.secondary}
-label-indicator-underline = ${colors.secondary}
-
-[module/filesystem]
-type = internal/fs
-interval = 25
-
-mount-0 = /
-
-label-mounted = %{F#0a81f5}%mountpoint%%{F-}: %percentage_used%%
-label-unmounted = %mountpoint% not mounted
-label-unmounted-foreground = ${colors.foreground-alt}
-
-[module/bspwm]
-type = internal/bspwm
-
-label-focused = %index%
-label-focused-background = ${colors.background-alt}
-label-focused-underline= ${colors.primary}
-label-focused-padding = 2
-
-label-occupied = %index%
-label-occupied-padding = 2
-
-label-urgent = %index%!
-label-urgent-background = ${colors.alert}
-label-urgent-padding = 2
-
-label-empty = %index%
-label-empty-foreground = ${colors.foreground-alt}
-label-empty-padding = 2
-
-; Separator in between workspaces
-; label-separator = |
-
 [module/i3]
 type = internal/i3
 format = <label-state> <label-mode>
@@ -157,13 +109,13 @@ ws-icon-0 = 0;0
 ws-icon-1 = 1;1:
 ws-icon-2 = 2;2:
 ws-icon-3 = 3;3:
-ws-icon-4 = 4;4:
-ws-icon-5 = 5;5:
-ws-icon-6 = 6;6:
-ws-icon-7 = 7;7:
-ws-icon-8 = 8;8:
-ws-icon-9 = 9;9:
-ws-icon-10 = 10;10:
+ws-icon-4 = 4;4:
+ws-icon-5 = 5;5:
+ws-icon-6 = 6;6:
+ws-icon-7 = 7;7:
+ws-icon-8 = 8;8:
+ws-icon-9 = 9;9:
+ws-icon-10 = 10;10:
 ws-icon-11 = 11;11:
 ws-icon-12 = 12;12:
 
@@ -202,92 +154,6 @@ label-urgent-padding = ${self.label-focused-padding}
 ; Separator in between workspaces
 ; label-separator = |
 
-
-icon-prev = 
-icon-stop = 
-icon-play = 
-icon-pause = 
-icon-next = 
-
-label-song-maxlen = 25
-label-song-ellipsis = true
-
-[module/xbacklight]
-type = internal/xbacklight
-
-format = <label> <bar>
-label = BL
-
-bar-width = 10
-bar-indicator = |
-bar-indicator-foreground = #fff
-bar-indicator-font = 2
-bar-fill = ─
-bar-fill-font = 2
-bar-fill-foreground = #9f78e1
-bar-empty = ─
-bar-empty-font = 2
-bar-empty-foreground = ${colors.foreground-alt}
-
-[module/backlight-acpi]
-inherit = module/xbacklight
-type = internal/backlight
-card = intel_backlight
-
-[module/cpu]
-type = internal/cpu
-interval = 2
-format-prefix = " "
-format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #f90000
-label = %percentage:2%%
-
-[module/memory]
-type = internal/memory
-interval = 2
-format-prefix = " "
-format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #4bffdc
-label = %percentage_used%%
-
-[module/wlan]
-type = internal/network
-interface = net1
-interval = 3.0
-
-format-connected = <ramp-signal> <label-connected>
-format-connected-underline = #9f78e1
-label-connected = %essid%
-
-format-disconnected =
-;format-disconnected = <label-disconnected>
-;format-disconnected-underline = ${self.format-connected-underline}
-;label-disconnected = %ifname% disconnected
-;label-disconnected-foreground = ${colors.foreground-alt}
-
-ramp-signal-0 = 
-ramp-signal-1 = 
-ramp-signal-2 = 
-ramp-signal-3 = 
-ramp-signal-4 = 
-ramp-signal-foreground = ${colors.foreground-alt}
-
-[module/eth]
-type = internal/network
-interface = ens2
-interval = 3.0
-
-format-connected-underline = #55aa55
-format-connected-prefix = " "
-format-connected-prefix-foreground = ${colors.foreground-alt}
-label-connected = %local_ip%
-
-format-disconnected =
-;format-disconnected = <label-disconnected>
-;format-disconnected-underline = ${self.format-connected-underline}
-;label-disconnected = %ifname% disconnected
-;label-disconnected-foreground = ${colors.foreground-alt}
-
 [module/time]
 type = internal/date
 interval = 10
@@ -301,6 +167,11 @@ format-prefix-foreground = ${colors.foreground-alt}
 ;format-underline = #0a6cf5
 
 label = %time%
+
+[module/utc_time]
+type = custom/script
+exec = TZ=UTC date +"%H:%M"
+interval = 15
 
 [module/calendar]
 type = custom/script
@@ -318,17 +189,13 @@ format-prefix-foreground = ${colors.foreground-alt}
 ; Default: %output%
 label = %{O5}%output%%{O}
 
-
 [module/volume]
 type = internal/pulseaudio
 use-ui-max = true
-
 interval = 5
 
-
-
-format-volume = <label-volume>
-format-muted = <label-muted>
+format-volume = %{O5}%{A3:gnome-control-center sound:}<label-volume>%{A}%{O}
+format-muted = %{O5}%{A3:gnome-control-center sound:}<label-muted>%{A}%{O}
 
 format-volume-prefix = 
 format-volume-prefix-font = 2
@@ -337,62 +204,79 @@ format-muted-prefix = 
 format-muted-prefix-font = 2
 format-muted-prefix-foreground = ${colors.foreground-alt}
 
-label-volume = %{O5}%{A3:gnome-control-center sound:}%percentage:03%%{A}%{O}
-label-muted = %{O5}000%{O}
+label-volume = %percentage:03%
+label-muted = 000
 label-muted-foreground = #666
 
+[module/wifi]
+type = internal/network
+interface = wlp4s0
 
-[module/battery]
+; Seconds to sleep between updates
+; Default: 1
+interval = 4
+
+format-connected = %{O5}<label-connected>%{O}
+format-connected-prefix = 
+format-connected-prefix-foreground = #444
+
+format-disconnected = %{O5}<label-disconnected>%{O}
+format-disconnected-prefix = 
+format-disconnected-prefix-foreground = #444
+
+label-connected = %{A3:gnome-control-center wifi &:}%essid%:%signal%%{A}
+
+label-disconnected = %{A3:gnome-control-center wifi &:}OFF%{A}
+label-disconnected-foreground = #444
+
+
+[module/cpu_load]
+type = internal/cpu
+
+format = %{O5}<ramp-load>%{O}
+format-prefix = 
+format-prefix-foreground = #444
+
+; Spacing between individual per-core ramps
+ramp-load-spacing = 1
+ramp-load-0 = ▁
+ramp-load-1 = ▂
+ramp-load-2 = ▃
+ramp-load-3 = ▄
+ramp-load-4 = ▅
+ramp-load-5 = ▆
+ramp-load-6 = ▇
+ramp-load-7 = █
+
+
+[module/bat0]
 type = internal/battery
 battery = BAT0
-adapter = ADP1
-full-at = 98
+adapter = ADP0
 
-format-charging = <animation-charging> <label-charging>
-format-charging-underline = #ffb52a
+poll-interval = 10
 
-format-discharging = <animation-discharging> <label-discharging>
-format-discharging-underline = ${self.format-charging-underline}
+format-charging = %{O5}<label-charging>%{O}
+format-discharging = %{O5}<label-discharging>%{O}
+format-discharging-prefix = 
+format-discharging-prefix-foreground = #444
 
-format-full-prefix = " "
-format-full-prefix-foreground = ${colors.foreground-alt}
-format-full-underline = ${self.format-charging-underline}
 
-ramp-capacity-0 = 
-ramp-capacity-1 = 
-ramp-capacity-2 = 
-ramp-capacity-foreground = ${colors.foreground-alt}
+label-charging = %percentage%
+label-discharging = %percentage%
 
-animation-charging-0 = 
-animation-charging-1 = 
-animation-charging-2 = 
-animation-charging-foreground = ${colors.foreground-alt}
-animation-charging-framerate = 750
+[module/bat1]
+type = internal/battery
+battery = BAT1
+adapter = ADP0
 
-animation-discharging-0 = 
-animation-discharging-1 = 
-animation-discharging-2 = 
-animation-discharging-foreground = ${colors.foreground-alt}
-animation-discharging-framerate = 750
+poll-interval = 10
 
-[module/temperature]
-type = internal/temperature
-thermal-zone = 0
-warn-temperature = 60
+format-charging = <label-charging>
+format-discharging = <label-discharging>
 
-format = <ramp> <label>
-format-underline = #f50a4d
-format-warn = <ramp> <label-warn>
-format-warn-underline = ${self.format-underline}
-
-label = %temperature-c%
-label-warn = %temperature-c%
-label-warn-foreground = ${colors.secondary}
-
-ramp-0 = 
-ramp-1 = 
-ramp-2 = 
-ramp-foreground = ${colors.foreground-alt}
+label-charging = %percentage%
+label-discharging = %percentage%
 
 [module/powermenu]
 type = custom/menu

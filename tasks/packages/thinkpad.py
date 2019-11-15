@@ -8,14 +8,12 @@ http://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html
 
 Consider installing thermald to limit CPU when using a lot of cpu
 """
+from invoke import task
+
 from tasks import apt
 
 
-def build(c):
-    tlp(c)
-    powertop(c)
-
-
+@task
 def tlp(c):
     # https://wiki.archlinux.org/index.php/tp_smapi
     # apt.install(c, 'tp-smapi-dkms') # For older Thinkpads? https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html
@@ -31,5 +29,6 @@ def tlp(c):
         c.sudo(line)
 
 
+@task
 def powertop(c):
     apt.install(c, 'powertop')

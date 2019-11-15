@@ -1,6 +1,9 @@
+from invoke import task
+
 from tasks import apt, snap
 
 
-def build(c):
+@task
+def htop(c):
     snap.install(c, 'htop')
 

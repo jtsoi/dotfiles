@@ -1,16 +1,16 @@
 # Dotfiles todo
 
-### Selected
+### Next
+- Per dir gitconfig
+- 1password
 - polybar
   + install
   + base config
-  - Clock UTC Date/Week
-   - Calendar popup
+  + Clock UTC Date/Week
+  + Calendar popup
+  - BAT script
   - Redshift
    - https://github.com/jonls/redshift   
-- i3
-  - https://libraries.io/github/ashinkarov/i3-extras
-- i3blocks - bar
 
 
 ### Braindump:
