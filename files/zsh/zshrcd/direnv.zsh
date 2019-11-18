@@ -1,1 +1,1 @@
-eval "$(direnv hook zsh)"
+echo zshrc.d

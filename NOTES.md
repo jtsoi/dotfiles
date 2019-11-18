@@ -1,20 +1,20 @@
 # Dotfiles todo
 
+### Done
++ polybar - install
++ polybar - base config
++ polybar - Clock UTC Date/Week
++ polybar - Calendar popup
++ chruby
+
 ### Next
-- rbenv
 - 1password
+- vscode + markdown
 - polybar
-  + install
-  + base config
-  + Clock UTC Date/Week
-  + Calendar popup
   - BAT script
-  - Redshift
-   - https://github.com/jonls/redshift   
 
 
 ### Braindump:
-- ODrive + typora
 - Workspace groups
   - https://github.com/infokiller/i3-workspace-groups
 - Fasd aliases
