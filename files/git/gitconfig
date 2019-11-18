@@ -1,7 +1,12 @@
 [user]
         name = {{ git.user }}
-        email = {{ git.email }}
+{% for dir_name, settings in code_dirs.items() %}
+[includeIf "gitdir:~/Code/{{dir_name}}/**"]
+        path = ~/Code/{{dir_name}}/.gitconfig
+{% endfor %}
 
+[core]
+        editor = micro
 
 [alias]
         co = checkout

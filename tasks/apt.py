@@ -18,6 +18,6 @@ def upgrade(c):
     return c.sudo('apt upgrade')
 
 
-def add_ppa(c, ppa, key=None):
+def add_ppa(c, ppa):
     c.sudo(f'apt-add-repository {ppa}')
     return update(c)

@@ -10,6 +10,7 @@ from tasks.packages import (
     browsers,
     messaging,
     sdk,
+    code,
     media,
     thinkpad,
     utils,
@@ -26,6 +27,7 @@ ns = Collection(
     sdk,
     media,
     thinkpad,
-    utils
+    utils,
+    code
 )
 ns.configure(dict(machine=dict(is_thinkpad=machine.is_thinkpad())))

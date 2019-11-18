@@ -17,5 +17,6 @@ Hint: Where do you store secrets? ;-)
 
 To run
 ```
-# inv build
+# source activate
+# inv --list
 ```

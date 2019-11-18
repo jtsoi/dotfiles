@@ -4,17 +4,6 @@ from tasks import snap, dotfiles, apt, files
 
 
 @task
-def git(c):
-    apt.install(c, 'git aspell-en')
-
-
-@task
-def git_conf(c):
-    GIT_CONFIG = files.resolve_path('~/.gitconfig')
-    dotfiles.link(c, 'files/git/gitconfig', GIT_CONFIG, context=c.config.dot)
-
-
-@task
 def aws(c):
     c.sudo('pip3 install awscli --upgrade --user')
 

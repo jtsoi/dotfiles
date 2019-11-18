@@ -4,12 +4,6 @@ from tasks import apt, snap, files
 
 
 @task
-def build(c):
-    kodi(c)
-    spotify(c)
-
-
-@task
 def kodi(c):
     apt.add_ppa(c, 'ppa:team-xbmc/ppa')
     apt.install(c, 'kodi')

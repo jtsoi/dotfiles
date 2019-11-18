@@ -1,7 +1,7 @@
 # Dotfiles todo
 
 ### Next
-- Per dir gitconfig
+- rbenv
 - 1password
 - polybar
   + install

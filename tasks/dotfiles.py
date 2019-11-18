@@ -29,3 +29,22 @@ def link(c, source, target, context=None):
         files.remove(c, target)
     files.symlink(c, storage, target)
 
+
+def copy(c, source, target, context=None):
+    """
+    Copy the dotfile to target
+
+    Ensure dir exists and rm any existing file before copying.
+    :param source:
+    :param target:
+    :return:
+    """
+    target = files.resolve_path(target)
+    target_dir = target.parent
+
+    files.directory(c, target_dir)
+
+    if files.exists(c, target):
+        files.remove(c, target)
+
+    local.template(c, source, target, context=context or {})
