@@ -56,7 +56,7 @@ def zsh_conf(c):
     dotfiles.link(c, 'files/zsh/zshrc', ZSHRC)
     dotfiles.link(c, 'files/zsh/zpreztorc', PREZTO_CONFIG)
     dotfiles.link(c, 'files/zsh/bash_aliases', BASH_ALIASES)
-    dotfiles.link(c, 'files/zsh/zshrcd/direnv.zsh', files.resolve_path('~/.zshrc.d/direnv.zsh'))
+    dotfiles.link(c, 'files/zsh/zshrcd/zshrcd.zsh', files.resolve_path('~/.zshrc.d/zshrcd.zsh'))
 
 
 @task

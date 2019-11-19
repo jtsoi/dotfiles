@@ -5,7 +5,9 @@
 + polybar - base config
 + polybar - Clock UTC Date/Week
 + polybar - Calendar popup
-+ chruby
++ chruby - gem_home
++ .autosrc
+
 
 ### Next
 - 1password
@@ -15,6 +17,7 @@
 
 
 ### Braindump:
+- https://github.com/cdown/clipmenu dmeny clip manager
 - Workspace groups
   - https://github.com/infokiller/i3-workspace-groups
 - Fasd aliases
