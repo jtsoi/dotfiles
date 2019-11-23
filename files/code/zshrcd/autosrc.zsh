@@ -2,6 +2,13 @@ AUTOSRC=".autosrc"
 
 AUTOSRC_IGNORE=0
 
+#Use this to add entries to the PATH env
+path_append ()  { path_remove $1; export PATH="$PATH:$1"; }
+
+path_prepend () { path_remove $1; export PATH="$1:$PATH"; }
+
+path_remove ()  { export PATH=`echo -n $PATH | awk -v RS=: -v ORS=: '$0 != "'$1'"' | sed 's/:$//'`; }
+
 autosrc_clear(){
     unset -f "autosrc_enter" 2>/dev/null
     unset -f "autosrc_exit" 2>/dev/null

@@ -15,6 +15,13 @@ def aws_conf(c):
 
 
 @task
+def gcloud(c):
+    c.sudo('curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -', pty=True)
+    apt.add_ppa(c, '"deb http://packages.cloud.google.com/apt cloud-sdk main"')
+    apt.install(c, 'google-cloud-sdk')
+
+
+@task
 def vagrant(c):
     apt.install(c, 'virtualbox vagrant')
 

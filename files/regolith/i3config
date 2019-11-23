@@ -350,3 +350,4 @@ exec --no-startup-id /usr/bin/xeventbind resolution /usr/bin/wallpaper-refresh
 for_window [class="Yad" title="yad-calendar"] floating enable
 for_window [title="Settings"] floating enable
 for_window [instance="org.gnome.Nautilus"] floating enable
+for_window [instance="crx_gaedmjdfmmahhbjefcbgaolhhanlaolb"] floating enable
