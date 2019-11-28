@@ -19,10 +19,13 @@
   https://github.com/simonthum/git-sync
   
 - polybar
-  - polify
-    https://github.com/budlabs/polify/stargazers
+  - polybar_backend
+    - BAT module
+    https://github.com/budlabs/polify
     https://docs.python.org/3/library/asyncio.html
     https://github.com/rbarrois/aionotify
+    https://www.roguelynn.com/words/asyncio-graceful-shutdowns/
+    https://github.com/cjrh/aiorun
     
   - BAT script
   - pomodoro script
