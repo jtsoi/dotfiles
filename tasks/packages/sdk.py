@@ -90,3 +90,15 @@ def web(c):
 def node(c):
     # Yarn & NPM included
     snap.install(c, 'node --channel=12/stable', classic=True)
+
+
+@task
+def dev_dns_conf(c):
+
+    c.sudo("sed -i.bak 's/^#DNSStubListener=.*/DNSStubListener=no/g' /etc/systemd/resolved.conf")
+    c.sudo('cp files/sdk/dev_dns/confd/00-enable-dnsmasq.conf /etc/NetworkManager/conf.d/00-enable-dnsmasq.conf')
+    c.sudo('cp files/sdk/dev_dns/dnsmasqd/skovik.conf /etc/NetworkManager/dnsmasq.d/skovik.conf')
+
+    c.sudo("mv /etc/resolv.conf /etc/resolv.conf.bak")
+    c.sudo('systemctl restart systemd-resolved')
+    c.sudo('systemctl restart NetworkManager')

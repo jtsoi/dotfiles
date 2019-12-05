@@ -13,6 +13,10 @@ def remove(c, target):
     return c.run(f'rm -rf {target}')
 
 
+def copy(c, source_path, target_path):
+    return c.run(f'cp {source_path} {target_path}')
+
+
 def symlink(c, source_path, target_path):
     return c.run(f'ln -s {source_path} {target_path}')
 

@@ -4,7 +4,7 @@ DOTFILES_TEMPLATES_DIR = files.resolve_path('files')
 DOTFILES_STORAGE_DIR = files.resolve_path('~/.dotfiles/')
 
 
-def link(c, source, target, context=None):
+def link(c, source, target, context=None, jinja=True):
     """
     Copy the dotfile to ~/.dotfiles/
     Create a dotfile link from ~/.dotfiles/
@@ -23,14 +23,17 @@ def link(c, source, target, context=None):
     files.directory(c, storage_dir)
     files.directory(c, target_dir)
 
-    local.template(c, source, storage, context=context or {})
+    if jinja:
+        local.template(c, source, storage, context=context or {})
+    else:
+        files.copy(c, source, storage)
 
     if files.exists(c, target):
         files.remove(c, target)
     files.symlink(c, storage, target)
 
 
-def copy(c, source, target, context=None):
+def copy(c, source, target, context=None, jinja=True):
     """
     Copy the dotfile to target
 
@@ -47,4 +50,7 @@ def copy(c, source, target, context=None):
     if files.exists(c, target):
         files.remove(c, target)
 
-    local.template(c, source, target, context=context or {})
+    if jinja:
+        local.template(c, source, target, context=context or {})
+    else:
+        files.copy(c, source, target)
