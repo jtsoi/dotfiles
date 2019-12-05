@@ -22,6 +22,11 @@ def gcloud(c):
 
 
 @task
+def gcloud_conf(c):
+    dotfiles.link(c, 'files/sdk/gcloud/zshrcd/600_zsh_completion.zsh', files.resolve_path('~/.zshrc.d/600_zsh_completion.zsh'), jinja=False)
+
+
+@task
 def vagrant(c):
     apt.install(c, 'virtualbox vagrant')
 
