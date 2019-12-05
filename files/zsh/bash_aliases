@@ -39,6 +39,6 @@ extract ()
 export BROWSER=/usr/bin/google-chrome-stable
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=gasp'
 
-alias la='ls -la --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --color=auto -F'
-alias ll='ls -l --group-directories-first --time-style=+"%d.%m.%Y %H:%M" --color=auto -F'
+alias la='ls -la --group-directories-first --time-style=+"%d-%m-%Y %H:%M" --color=auto -F'
+alias ll='ls -l --group-directories-first --time-style=+"%d-%m-%Y %H:%M" --color=auto -F'
 alias ls=la
