@@ -347,7 +347,13 @@ exec --no-startup-id /usr/bin/xeventbind resolution /usr/bin/wallpaper-refresh
 
 
 ## Floating windows:
+# Popup calendar
 for_window [class="Yad" title="yad-calendar"] floating enable
+# System settings
 for_window [title="Settings"] floating enable
+# Files browser
 for_window [instance="org.gnome.Nautilus"] floating enable
+# Authy Chrome extension
 for_window [instance="crx_gaedmjdfmmahhbjefcbgaolhhanlaolb"] floating enable
+# PyCharm/RubyMine splash
+for_window [title="win0"] floating enable
