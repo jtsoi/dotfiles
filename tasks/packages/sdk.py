@@ -52,9 +52,10 @@ def docker(c, docker_compose_version='1.25.0', dive_version='0.9.1'):
 
 @task
 def docker_conf(c):
-    # c.sudo(f'groupdel docker || true')
-    # c.sudo(f'addgroup --system docker')
-    # c.sudo(f'usermod -aG docker {c.config.dot.user}')
+    # Ensure docker group
+    c.sudo(f'groupdel docker || true')
+    c.sudo(f'addgroup --system docker')
+    c.sudo(f'usermod -aG docker {c.config.dot.user}')
 
     # Not needed really, but nice to have?
     dotfiles.link(c, 'files/sdk/docker/zshrcd/99-set-uid-gid-for-docker.zsh', files.resolve_path('~/.zshrc.d/99-set-uid-gid-for-docker.zsh'), jinja=False)
