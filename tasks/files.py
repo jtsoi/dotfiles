@@ -26,5 +26,5 @@ def chmod(c, mode, path):
 
 
 def curl_download(c, from_url, to_path):
-    return c.run(f'curl -L {from_url} -o {to_path}')
+    return c.run(f'curl -L {from_url} -o {to_path}', pty=True)
 

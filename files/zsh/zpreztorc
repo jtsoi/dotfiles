@@ -30,6 +30,7 @@ zstyle ':prezto:load' pmodule \
   'archive' \
   'ssh' \
   'fasd' \
+  'docker' \
   'prompt'
 
 

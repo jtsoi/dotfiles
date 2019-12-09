@@ -12,8 +12,7 @@
 + vscode + markdown
 
 ### Next
-- Brew
-  https://brew.sh/
+- dive docker sdk
 
 - Auto commit on _moleskine
   https://github.com/simonthum/git-sync

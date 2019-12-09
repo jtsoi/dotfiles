@@ -32,11 +32,45 @@ def vagrant(c):
 
 
 @task
-def docker(c):
-    c.sudo(f'groupdel docker || true')
-    c.sudo(f'addgroup --system docker')
-    c.sudo(f'adduser {c.config.dot.user} docker')
-    snap.install(c, 'docker')
+def docker(c, docker_compose_version='1.25.0', dive_version='0.9.1'):
+    # Install docker daemon
+    apt.install(c, 'apt-transport-https ca-certificates curl gnupg-agent software-properties-common')
+    c.sudo(f'curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -', pty=True)
+    apt.add_ppa(c, '"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"')
+    apt.install(c, 'docker-ce docker-ce-cli containerd.io')
+
+    c.sudo('systemctl enable docker')
+
+    # Install docker-compose
+    files.curl_download(c, f'https://github.com/docker/compose/releases/download/{docker_compose_version}/docker-compose-$(uname -s)-$(uname -m)', '/usr/local/bin/docker-compose')
+    c.sudo('chmod +x /usr/local/bin/docker-compose', pty=True)
+
+    # Install dive to inspect images
+    files.curl_download(c, f'https://github.com/wagoodman/dive/releases/download/v{dive_version}/dive_{dive_version}_linux_amd64.deb', '/tmp/dive.deb')
+    apt.install(c, '/tmp/dive.deb')
+
+
+@task
+def docker_conf(c):
+    # c.sudo(f'groupdel docker || true')
+    # c.sudo(f'addgroup --system docker')
+    # c.sudo(f'usermod -aG docker {c.config.dot.user}')
+
+    # Not needed really, but nice to have?
+    dotfiles.link(c, 'files/sdk/docker/zshrcd/99-set-uid-gid-for-docker.zsh', files.resolve_path('~/.zshrc.d/99-set-uid-gid-for-docker.zsh'), jinja=False)
+
+    # Set docker to use user namespacing
+    c.sudo(f"""echo '{{"userns-remap": "{c.config.dot.user}"}}' | sudo tee /etc/docker/daemon.json""", pty=True)
+
+    # add user to /etc/subuid & /etc/subgid
+    user_name = c.config.dot.user
+    user_id = c.run(f'id -u {user_name}').stdout.strip()
+    expected_uid_line = f'{user_name}:{user_id}:1'
+    c.sudo(f"grep -q '^{expected_uid_line}$' /etc/subuid || sudo sed -i.bak '1 i {expected_uid_line}' /etc/subuid")
+    c.sudo(f"grep -q '^{expected_uid_line}$' /etc/subgid || sudo sed -i.bak '1 i {expected_uid_line}' /etc/subgid")
+
+    # Restart docker to take effect
+    c.sudo('systemctl restart docker')
 
 
 @task
@@ -70,7 +104,8 @@ def ruby(c, ruby_install_version='0.7.0', chruby_version='0.3.9', gem_home_versi
     with c.cd(f'/tmp/chruby-{chruby_version}/'):
         c.run('sudo make install')
 
-    # Gem home
+    # Gem home - probably not needed?
+    # Doea not play nice with RubyMine
     files.curl_download(c,
                         f'https://github.com/postmodern/gem_home/archive/v{gem_home_version}.tar.gz',
                         f'/tmp/gem_home-{gem_home_version}.tar.gz')
