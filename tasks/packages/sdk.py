@@ -58,7 +58,7 @@ def docker_conf(c):
     c.sudo(f'usermod -aG docker {c.config.dot.user}')
 
     # Not needed really, but nice to have?
-    dotfiles.link(c, 'files/sdk/docker/zshrcd/99-set-uid-gid-for-docker.zsh', files.resolve_path('~/.zshrc.d/99-set-uid-gid-for-docker.zsh'), jinja=False)
+    dotfiles.link(c, 'files/sdk/docker/zshrcd/90-set-uid-gid-for-docker.zsh', files.resolve_path('~/.zshrc.d/90-set-uid-gid-for-docker.zsh'), jinja=False)
 
     # Set docker to use user namespacing
     c.sudo(f"""echo '{{"userns-remap": "{c.config.dot.user}"}}' | sudo tee /etc/docker/daemon.json""", pty=True)
@@ -76,9 +76,7 @@ def docker_conf(c):
 
 @task
 def python(c):
-    c.sudo(f'pip3 install --upgrade pip setuptools wheel', pty=True)
-    #c.run(f'curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash', pty=True)
-    #dotfiles.link(c, 'files/zsh/zshrcd/pyenv.zsh', files.resolve_path('~/.zshrc.d/pyenv.zsh'))
+    c.sudo(f'pip3 install --upgrade pip setuptools wheel virtualenv', pty=True)
 
 
 @task
@@ -120,6 +118,9 @@ def ruby(c, ruby_install_version='0.7.0', chruby_version='0.3.9', gem_home_versi
 @task
 def ruby_conf(c):
     dotfiles.link(c, 'files/zsh/zshrcd/chruby.zsh', files.resolve_path('~/.zshrc.d/chruby.zsh'))
+    # setup github packages access key
+    dotfiles.link(c, 'files/sdk/ruby/gem/credentials', files.resolve_path('~/.gem/credentials'), jinja=True, context=c.config.dot)
+    c.run('chmod 0600 ~/.gem/credentials', pty=True)
 
 
 @task
@@ -135,7 +136,6 @@ def node(c):
 
 @task
 def dev_dns_conf(c):
-
     c.sudo("sed -i.bak 's/^#DNSStubListener=.*/DNSStubListener=no/g' /etc/systemd/resolved.conf")
     c.sudo('cp files/sdk/dev_dns/confd/00-enable-dnsmasq.conf /etc/NetworkManager/conf.d/00-enable-dnsmasq.conf')
     c.sudo('cp files/sdk/dev_dns/dnsmasqd/skovik.conf /etc/NetworkManager/dnsmasq.d/skovik.conf')
@@ -143,3 +143,10 @@ def dev_dns_conf(c):
     c.sudo("mv /etc/resolv.conf /etc/resolv.conf.bak")
     c.sudo('systemctl restart systemd-resolved')
     c.sudo('systemctl restart NetworkManager')
+
+
+@task
+def github_conf(c):
+    # setup github packages access key
+    dotfiles.link(c, 'files/sdk/github/zshrcd/91-github-packages-login.zsh',
+                  files.resolve_path('~/.zshrc.d/91-github-packages-login.zsh'), jinja=True, context=c.config.dot)
