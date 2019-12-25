@@ -11,10 +11,12 @@
 + PATH script  https://stackoverflow.com/questions/370047/what-is-the-most-elegant-way-to-remove-a-path-from-the-path-variable-in-bash
 + vscode + markdown
 + dive docker sdk
++ bitwarden cli sync secrets
 
 ### Next
 
-- bitwarden cli sync secrets
+- night light script
+- Keyboard backlight script
 
 - Auto commit on _moleskine
   https://github.com/simonthum/git-sync
@@ -30,7 +32,6 @@
     
   - BAT script
   - pomodoro script
-
 
 ### Braindump:
 - https://github.com/cdown/clipmenu dmeny clip manager
