@@ -25,6 +25,8 @@ def chmod(c, mode, path):
     return c.run(f'chmod {mode} {Path(path)}')
 
 
-def curl_download(c, from_url, to_path):
+def curl_download(c, from_url, to_path, sudo=True):
+    if sudo:
+        return c.sudo(f'curl -L {from_url} -o {to_path}', pty=True)
     return c.run(f'curl -L {from_url} -o {to_path}', pty=True)
 
