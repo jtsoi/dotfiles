@@ -150,3 +150,11 @@ def github_conf(c):
     # setup github packages access key
     dotfiles.link(c, 'files/sdk/github/zshrcd/91-github-packages-login.zsh',
                   files.resolve_path('~/.zshrc.d/91-github-packages-login.zsh'), jinja=True, context=c.config.dot)
+
+
+@task
+def ubuntu_multipass(c):
+    # https://multipass.run/
+    snap.install(c, 'multipass', classic=True)
+    dotfiles.link(c, 'files/sdk/multipass/zshrcd/11-aliases-multipass.zsh',
+                  files.resolve_path('~/.zshrc.d/11-aliases-multipass.zsh'), jinja=False, context=c.config.dot)
