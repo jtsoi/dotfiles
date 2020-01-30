@@ -16,7 +16,6 @@
 ### Next
 
 - night light script
-- Keyboard backlight script
 
 - Auto commit on _moleskine
   https://github.com/simonthum/git-sync

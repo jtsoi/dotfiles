@@ -9,6 +9,7 @@ from tasks import snap, apt, files
 
 @task
 def pull_secrets(c):
+    print(f">>> Please login using the gmail.com e-mail")
     session_token = bw_login(c)
 
     item_id, attachment_id = bw_find_attachment(c, session_token, "dotfiles")
@@ -26,6 +27,7 @@ def pull_secrets(c):
 
 @task
 def push_secrets(c):
+    print(f">>> Please login using the gmail.com e-mail")
     session_token = bw_login(c)
 
     item_id, attachment_id = bw_find_attachment(c, session_token, "dotfiles")

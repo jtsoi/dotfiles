@@ -76,6 +76,7 @@ def docker_conf(c):
 
 @task
 def python(c):
+    apt.install(c, 'pipenv')
     c.sudo(f'pip3 install --upgrade pip setuptools wheel virtualenv', pty=True)
 
 
