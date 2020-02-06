@@ -13,8 +13,11 @@ def remove(c, target):
     return c.run(f'rm -rf {target}')
 
 
-def copy(c, source_path, target_path):
-    return c.run(f'cp {source_path} {target_path}')
+def copy(c, source_path, target_path, chmod=None):
+    result = c.run(f'cp {source_path} {target_path}')
+    if chmod:
+        c.run(f'chmod {chmod} {target_path}')
+    return result
 
 
 def symlink(c, source_path, target_path):
