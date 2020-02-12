@@ -18,3 +18,8 @@ def broot(c):
     )
     c.sudo('chmod +x /usr/local/bin/broot', pty=True)
     c.run('broot --install', pty=True)
+
+
+@task
+def jq(c):
+    apt.install(c, 'jq')
