@@ -5,7 +5,7 @@ https://regolith-linux.org/configure.html
 from invoke import task
 from patchwork.files import directory
 
-from tasks import dotfiles
+from tasks import dotfiles, files
 from tasks import apt
 
 
@@ -44,6 +44,10 @@ def polybar(c):
 @task
 def polybar_conf(c):
     dotfiles.link(c, 'files/regolith/polybar/config', '~/.config/regolith/polybar/config', context=c.config)
-    dotfiles.link(c, 'files/regolith/polybar/launch-polybar.sh', '~/.config/regolith/polybar/launch-polybar.sh', context=c.config)
-    dotfiles.link(c, 'files/regolith/polybar/popup-calendar.sh', '~/.config/regolith/polybar/popup-calendar.sh', context=c.config)
+    dotfiles.link(c, 'files/regolith/polybar/launch-polybar.sh', '~/.config/regolith/polybar/launch-polybar.sh', jinja=False)
+    dotfiles.link(c, 'files/regolith/polybar/popup-calendar.sh', '~/.config/regolith/polybar/popup-calendar.sh', jinja=False)
     c.run('chmod +x ~/.config/regolith/polybar/*.sh', pty=True)
+
+    # Polify
+    c.sudo('cp files/regolith/polybar/polify /usr/local/bin/polify', pty=True)
+    c.sudo('chmod +x /usr/local/bin/polify', pty=True)

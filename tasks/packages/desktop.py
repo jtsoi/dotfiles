@@ -30,3 +30,10 @@ def bitwarden(c):
 def pinta(c):
     # Runs Mono, do you really need pinta?
     apt.install(c, 'pinta')
+
+
+@task
+def keybase(c):
+    files.curl_download(c, 'https://prerelease.keybase.io/keybase_amd64.deb', '/tmp/keybase_amd64.deb')
+    apt.install(c, '/tmp/keybase_amd64.deb')
+    c.run('run_keybase -g')

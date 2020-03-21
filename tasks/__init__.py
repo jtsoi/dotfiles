@@ -15,6 +15,7 @@ from tasks.packages import (
     media,
     thinkpad,
     utils,
+    wireguard,
     regolith)
 
 
@@ -30,6 +31,7 @@ ns = Collection(
     media,
     thinkpad,
     utils,
+    wireguard,
     code
 )
 
