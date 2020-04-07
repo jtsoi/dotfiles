@@ -16,6 +16,7 @@ from tasks.packages import (
     thinkpad,
     utils,
     wireguard,
+    prusa,
     regolith)
 
 
@@ -32,6 +33,7 @@ ns = Collection(
     thinkpad,
     utils,
     wireguard,
+    prusa,
     code
 )
 
