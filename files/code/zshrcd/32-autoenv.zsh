@@ -1,3 +1,3 @@
-AUTOENV_AUTH_FILE='~/.autoenv/authorized'
+AUTOENV_ENABLE_LEAVE=true
 
 source ~/.autoenv/activate.sh
