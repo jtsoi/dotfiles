@@ -118,7 +118,7 @@ def ruby(c, ruby_install_version='0.7.0', chruby_version='0.3.9', gem_home_versi
 
 @task
 def ruby_conf(c):
-    dotfiles.link(c, 'files/zsh/zshrcd/chruby.zsh', files.resolve_path('~/.zshrc.d/chruby.zsh'))
+    dotfiles.link(c, 'files/sdk/ruby/zshrcd/64-chruby-activate.zsh', files.resolve_path('~/.zshrc.d/64-chruby-activate.zsh'))
     # setup github packages access key
     dotfiles.link(c, 'files/sdk/ruby/gem/credentials', files.resolve_path('~/.gem/credentials'), jinja=True, context=c.config.dot)
     c.run('chmod 0600 ~/.gem/credentials', pty=True)

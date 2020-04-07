@@ -26,7 +26,11 @@ def autoenv(c):
     files.curl_download(c, 'https://github.com/inishchith/autoenv/archive/master.zip', '/tmp/autoenv.zip')
     c.run('mkdir -p ~/.autoenv')
     c.run('unzip -o -j /tmp/autoenv.zip autoenv-master/activate.sh -d ~/.autoenv/')
-    c.run("echo 'source ~/.autoenv/activate.sh' >> ~/.zshrc.d/32-autoenv.zsh")
+
+
+@task
+def autoenv_conf(c):
+    dotfiles.link(c, 'files/code/zshrcd/32-autoenv.zsh', files.resolve_path('~/.zshrc.d/32-autoenv.zsh'), jinja=False)
 
 
 

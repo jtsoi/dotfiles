@@ -1,1 +1,0 @@
-echo zshrc.d
