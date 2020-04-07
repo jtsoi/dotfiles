@@ -23,7 +23,7 @@ def gcloud(c):
 
 @task
 def gcloud_conf(c):
-    dotfiles.link(c, 'files/sdk/gcloud/zshrcd/600_zsh_completion.zsh', files.resolve_path('~/.zshrc.d/600_zsh_completion.zsh'), jinja=False)
+    dotfiles.link(c, 'files/sdk/gcloud/zshrcd/61-gcloud-zsh-completion.zsh', files.resolve_path('~/.zshrc.d/61-gcloud-zsh-completion.zsh'), jinja=False)
 
 
 @task
@@ -58,7 +58,7 @@ def docker_conf(c):
     c.sudo(f'usermod -aG docker {c.config.dot.user}')
 
     # Not needed really, but nice to have?
-    dotfiles.link(c, 'files/sdk/docker/zshrcd/90-set-uid-gid-for-docker.zsh', files.resolve_path('~/.zshrc.d/90-set-uid-gid-for-docker.zsh'), jinja=False)
+    dotfiles.link(c, 'files/sdk/docker/zshrcd/60-docker-set-uid-gid.zsh', files.resolve_path('~/.zshrc.d/60-docker-set-uid-gid.zsh'), jinja=False)
 
     # Set docker to use user namespacing
     c.sudo(f"""echo '{{"userns-remap": "{c.config.dot.user}"}}' | sudo tee /etc/docker/daemon.json""", pty=True)
@@ -105,7 +105,7 @@ def ruby(c, ruby_install_version='0.7.0', chruby_version='0.3.9', gem_home_versi
         c.run('sudo make install')
 
     # Gem home - probably not needed?
-    # Doea not play nice with RubyMine
+    # Does not play nice with RubyMine
     files.curl_download(c,
                         f'https://github.com/postmodern/gem_home/archive/v{gem_home_version}.tar.gz',
                         f'/tmp/gem_home-{gem_home_version}.tar.gz')
@@ -149,13 +149,13 @@ def dev_dns_conf(c):
 @task
 def github_conf(c):
     # setup github packages access key
-    dotfiles.link(c, 'files/sdk/github/zshrcd/91-github-packages-login.zsh',
-                  files.resolve_path('~/.zshrc.d/91-github-packages-login.zsh'), jinja=True, context=c.config.dot)
+    dotfiles.link(c, 'files/sdk/github/zshrcd/62-github-packages-login.zsh',
+                  files.resolve_path('~/.zshrc.d/62-github-packages-login.zsh'), jinja=True, context=c.config.dot)
 
 
 @task
 def ubuntu_multipass(c):
     # https://multipass.run/
     snap.install(c, 'multipass', classic=True)
-    dotfiles.link(c, 'files/sdk/multipass/zshrcd/11-aliases-multipass.zsh',
-                  files.resolve_path('~/.zshrc.d/11-aliases-multipass.zsh'), jinja=False, context=c.config.dot)
+    dotfiles.link(c, 'files/sdk/multipass/zshrcd/63-multipass-aliases.zsh',
+                  files.resolve_path('~/.zshrc.d/63-multipass-aliases.zsh'), jinja=False, context=c.config.dot)

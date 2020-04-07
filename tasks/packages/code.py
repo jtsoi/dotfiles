@@ -22,16 +22,25 @@ def git_conf(c):
 
 
 @task
-def autosrc(c):
+def autoenv(c):
+    files.curl_download(c, 'https://github.com/inishchith/autoenv/archive/master.zip', '/tmp/autoenv.zip')
+    c.run('mkdir -p ~/.autoenv')
+    c.run('unzip -o -j /tmp/autoenv.zip autoenv-master/activate.sh -d ~/.autoenv/')
+    c.run("echo 'source ~/.autoenv/activate.sh' >> ~/.zshrc.d/32-autoenv.zsh")
 
-    dotfiles.link(c, 'files/code/zshrcd/31-autosrc.zsh', files.resolve_path('~/.zshrc.d/31-autosrc.zsh'), jinja=False)
 
 
-@task
-def direnv(c):
-    apt.install(c, 'direnv')
+# @task
+# def autosrc(c):
+#
+#     dotfiles.link(c, 'files/code/zshrcd/31-autosrc.zsh', files.resolve_path('~/.zshrc.d/31-autosrc.zsh'), jinja=False)
 
-@task
-def direnv_conf(c):
-    dotfiles.link(c, 'files/code/zshrcd/30-direnv-hook.zsh', files.resolve_path('~/.zshrc.d/30-direnv-hook.zsh'), jinja=False)
+
+# @task
+# def direnv(c):
+#     apt.install(c, 'direnv')
+#
+# @task
+# def direnv_conf(c):
+#     dotfiles.link(c, 'files/code/zshrcd/30-direnv-hook.zsh', files.resolve_path('~/.zshrc.d/30-direnv-hook.zsh'), jinja=False)
 
