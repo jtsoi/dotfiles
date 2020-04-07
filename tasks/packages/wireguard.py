@@ -25,6 +25,7 @@ def wireguard_conf(c):
         iface.client_private_key = c.config.dot.wireguard.client_private_key
         local.template(c, 'files/wireguard/iface-template.conf.j2', iface_tmp_file_path, context=iface)
 
+        c.sudo('rm -rf /etc/wireguard/*')
         c.sudo(f'mv {iface_tmp_file_path} {iface_conf_file_path}')
         c.sudo(f'chmod 600 {iface_conf_file_path}')
         c.sudo(f'chown root:root {iface_conf_file_path}')
