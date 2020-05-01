@@ -21,23 +21,26 @@ def git_conf(c):
     dotfiles.link(c, 'files/git/gitconfig', '~/.gitconfig', context=c.config.dot)
 
 
-@task
-def autoenv(c):
-    files.curl_download(c, 'https://github.com/inishchith/autoenv/archive/master.zip', '/tmp/autoenv.zip')
-    c.run('mkdir -p ~/.autoenv')
-    c.run('unzip -o -j /tmp/autoenv.zip autoenv-master/activate.sh -d ~/.autoenv/')
-
-
-@task
-def autoenv_conf(c):
-    dotfiles.link(c, 'files/code/zshrcd/32-autoenv.zsh', files.resolve_path('~/.zshrc.d/32-autoenv.zsh'), jinja=False)
-
-
-
+# Autoenv seems quite broken.
+# Should really use direnv or similar
 # @task
-# def autosrc(c):
+# def autoenv(c):
+#     files.curl_download(c, 'https://github.com/inishchith/autoenv/archive/master.`1zip', '/tmp/autoenv.zip')
+#     c.run('mkdir -p ~/.autoenv')
+#     c.run('unzip -o -j /tmp/autoenv.zip autoenv-master/activate.sh -d ~/.autoenv/')
 #
-#     dotfiles.link(c, 'files/code/zshrcd/31-autosrc.zsh', files.resolve_path('~/.zshrc.d/31-autosrc.zsh'), jinja=False)
+#
+# @task
+# def autoenv_conf(c):
+#     dotfiles.link(c, 'files/code/zshrcd/32-autoenv.zsh', files.resolve_path('~/.zshrc.d/32-autoenv.zsh'), jinja=False)
+
+
+# Use autosrc so far until I can debug direnv
+# Direnv has issues with invoke cmd line complete
+@task
+def autosrc(c):
+
+    dotfiles.link(c, 'files/code/zshrcd/31-autosrc.zsh', files.resolve_path('~/.zshrc.d/31-autosrc.zsh'), jinja=False)
 
 
 # @task

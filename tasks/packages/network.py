@@ -3,6 +3,21 @@ from invoke import task
 
 from tasks import snap, dotfiles, apt, files, local
 
+@task
+def dnsmasq_conf(c):
+    """
+    /etc/resolv.conf should be a link to /run/NetworkManager/resolv.conf
+    We will enable dnsmasq supplied with NetworkManager.
+    It listens on address 127.0.1.1
+    Regular systemd-resolved listens on 127.0.0.53
+    """
+    c.sudo("sed -i.bak 's/^#DNSStubListener=.*/DNSStubListener=no/g' /etc/systemd/resolved.conf")
+    c.sudo('cp files/sdk/dev_dns/confd/00-enable-dnsmasq.conf /etc/NetworkManager/conf.d/00-enable-dnsmasq.conf')
+    c.sudo('cp files/sdk/dev_dns/dnsmasqd/skovik.conf /etc/NetworkManager/dnsmasq.d/skovik.conf')
+
+    c.sudo('systemctl restart systemd-resolved')
+    c.sudo('systemctl restart NetworkManager')
+
 
 @task
 def wireguard(c):

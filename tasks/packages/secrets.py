@@ -80,3 +80,16 @@ def bw_download_attachment(c, session_token, item_id, attachment_id, to_path):
 def bw_upload_attachment(c, session_token, item_id, attachment_id, path):
     c.run(f"bw delete attachment {attachment_id} --itemid {item_id}  --session {session_token}", hide=True)
     c.run(f"bw create attachment --file {path} --itemid {item_id} --session {session_token}", hide=True)
+
+
+@task
+def op(c, op_version='0.10.0'):
+    files.curl_download(c,
+                        f'https://cache.agilebits.com/dist/1P/op/pkg/v{op_version}/op_linux_amd64_v{op_version}.zip',
+                        f'/tmp/op_v{op_version}.zip')
+    with c.cd('/tmp/'):
+        c.run(f'unzip -o op_v{op_version}.zip')
+        c.run('gpg --receive-keys 3FEF9748469ADBE15DA7CA80AC2D62742012EA22')
+        c.run('gpg --verify op.sig op && echo "1Password signature verified!"')
+
+    c.sudo('cp /tmp/op /usr/local/bin/op')

@@ -15,13 +15,13 @@ from tasks.packages import (
     media,
     thinkpad,
     utils,
-    wireguard,
+    network,
     prusa,
     regolith)
 
 
 ns = Collection(
-
+    secrets,
     system,
     regolith,
     browsers,
@@ -32,7 +32,7 @@ ns = Collection(
     media,
     thinkpad,
     utils,
-    wireguard,
+    network,
     prusa,
     code
 )

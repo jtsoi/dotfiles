@@ -78,6 +78,8 @@ def docker_conf(c):
 def python(c):
     apt.install(c, 'pipenv')
     c.sudo(f'pip3 install --upgrade pip setuptools wheel virtualenv', pty=True)
+    c.sudo(f'pip3 install --upgrade --user pipenv', pty=True)
+    dotfiles.link(c, 'files/sdk/python/zshrcd/66-pipenv-settings.zsh', files.resolve_path('~/.zshrc.d/66-pipenv-settings.zsh'))
 
 
 @task
@@ -136,14 +138,9 @@ def node(c):
 
 
 @task
-def dev_dns_conf(c):
-    c.sudo("sed -i.bak 's/^#DNSStubListener=.*/DNSStubListener=no/g' /etc/systemd/resolved.conf")
-    c.sudo('cp files/sdk/dev_dns/confd/00-enable-dnsmasq.conf /etc/NetworkManager/conf.d/00-enable-dnsmasq.conf')
-    c.sudo('cp files/sdk/dev_dns/dnsmasqd/skovik.conf /etc/NetworkManager/dnsmasq.d/skovik.conf')
-
-    c.sudo("mv /etc/resolv.conf /etc/resolv.conf.bak")
-    c.sudo('systemctl restart systemd-resolved')
-    c.sudo('systemctl restart NetworkManager')
+def golang(c):
+    apt.add_ppa(c, 'ppa:longsleep/golang-backports')
+    apt.install(c, 'golang-go')
 
 
 @task
