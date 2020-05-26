@@ -23,6 +23,7 @@ def zsh(c):
     HOME = files.resolve_path('~/')
 
     PREZTO_DIR = files.resolve_path('~/.zprezto')
+    PREZTO_CONTRIB_DIR = files.resolve_path('~/.zprezto-contrib')
     PREZTO_SYMLINKS = [
         'zlogin',
         'zlogout',
@@ -38,6 +39,8 @@ def zsh(c):
 
     with c.cd(str(PREZTO_DIR)):
         c.run('git pull && git submodule update --init --recursive')
+
+    files.directory(c, PREZTO_CONTRIB_DIR)
 
     for link in PREZTO_SYMLINKS:
         target_path = HOME / f'.{link}'
