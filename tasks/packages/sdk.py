@@ -6,12 +6,15 @@ from tasks import snap, dotfiles, apt, files
 @task
 def aws(c):
     c.sudo('pip3 install awscli --upgrade --user')
+    files.curl_download(c, "https://github.com/99designs/aws-vault/releases/download/v5.4.4/aws-vault-linux-amd64", '/usr/local/bin/aws-vault')
+    c.sudo('chmod +x /usr/local/bin/aws-vault', pty=True)
 
 
 @task
 def aws_conf(c):
     dotfiles.link(c, 'files/aws/config', '~/.aws/config', context=c.config.dot)
-    dotfiles.link(c, 'files/aws/credentials', '~/.aws/credentials', context=c.config.dot)
+    # Manage this with aws-vault instead
+    #dotfiles.link(c, 'files/aws/credentials', '~/.aws/credentials', context=c.config.dot)
 
 
 @task
