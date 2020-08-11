@@ -108,14 +108,14 @@ def ruby(c, ruby_install_version='0.7.0', chruby_version='0.3.9', gem_home_versi
 
     # Gem home - probably not needed?
     # Does not play nice with RubyMine
-    files.curl_download(c,
-                        f'https://github.com/postmodern/gem_home/archive/v{gem_home_version}.tar.gz',
-                        f'/tmp/gem_home-{gem_home_version}.tar.gz')
-    with c.cd('/tmp/'):
-        c.run(f'tar -xzvf gem_home-{gem_home_version}.tar.gz')
-
-    with c.cd(f'/tmp/gem_home-{gem_home_version}/'):
-        c.run('sudo make install')
+    # files.curl_download(c,
+    #                     f'https://github.com/postmodern/gem_home/archive/v{gem_home_version}.tar.gz',
+    #                     f'/tmp/gem_home-{gem_home_version}.tar.gz')
+    # with c.cd('/tmp/'):
+    #     c.run(f'tar -xzvf gem_home-{gem_home_version}.tar.gz')
+    #
+    # with c.cd(f'/tmp/gem_home-{gem_home_version}/'):
+    #     c.run('sudo make install')
 
 
 @task
