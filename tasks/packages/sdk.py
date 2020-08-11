@@ -52,6 +52,10 @@ def docker(c, docker_compose_version='1.25.0', dive_version='0.9.1'):
     files.curl_download(c, f'https://github.com/wagoodman/dive/releases/download/v{dive_version}/dive_{dive_version}_linux_amd64.deb', '/tmp/dive.deb')
     apt.install(c, '/tmp/dive.deb')
 
+    c.sudo('chmod +x /usr/local/bin/docker-compose', pty=True)
+
+    c.sudo('docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions', pty=True)
+
 
 @task
 def docker_conf(c):
