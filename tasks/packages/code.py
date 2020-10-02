@@ -19,6 +19,7 @@ def git_conf(c):
         dotfiles.copy(c, 'files/git/gitconfig_project_template', dir_path / '.gitconfig', context=dir_settings)
 
     dotfiles.link(c, 'files/git/gitconfig', '~/.gitconfig', context=c.config.dot)
+    dotfiles.link(c, 'files/git/global-gitignore', '~/.gitignore', context=c.config.dot)
 
 
 # Autoenv seems quite broken.
