@@ -140,8 +140,14 @@ def web(c):
 
 @task
 def node(c):
-    # Yarn & NPM included
-    snap.install(c, 'node --channel=12/stable', classic=True)
+    # Install fnm
+    c.run('export SKIP_SHELL=true; curl -fsSL https://github.com/Schniz/fnm/raw/master/.ci/install.sh | bash', pty=True)
+
+
+@task
+def node_conf(c):
+    dotfiles.link(c, 'files/sdk/node/zshrcd/67-node-fnm.zsh',
+                  files.resolve_path('~/.zshrc.d/67-node-fnm.zsh'), jinja=False, context=c.config.dot)
 
 
 @task
