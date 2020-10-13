@@ -33,3 +33,12 @@ def curl_download(c, from_url, to_path, sudo=True):
         return c.sudo(f'curl -L {from_url} -o {to_path}', pty=True)
     return c.run(f'curl -L {from_url} -o {to_path}', pty=True)
 
+
+def wget_download(c, from_url, to_path, sudo=True):
+    cmd = 'wget ' \
+        '--quiet ' \
+        f'--output-document={to_path} ' \
+        f'{from_url}'
+    if sudo:
+        return c.sudo(cmd, pty=True)
+    return c.run(cmd, pty=True)
