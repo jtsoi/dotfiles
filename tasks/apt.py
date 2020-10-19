@@ -1,5 +1,9 @@
 
 
+def add_key(c, url):
+    c.sudo(f'wget -O- "{url}" | sudo apt-key add -', pty=True)
+
+
 def install(c, pkg):
     cmd = f'apt-get -y install {pkg}'
     return c.sudo(cmd, pty=True)
@@ -19,4 +23,4 @@ def upgrade(c):
 
 
 def add_ppa(c, ppa):
-    return c.sudo(f'apt-add-repository {ppa} -y')
+    return c.sudo(f'apt-add-repository "{ppa}" -y')

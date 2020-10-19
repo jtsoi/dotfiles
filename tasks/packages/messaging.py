@@ -5,7 +5,9 @@ from tasks import apt, snap, files
 
 @task
 def signal(c):
-    snap.install(c, 'signal')
+    apt.add_key(c, 'https://updates.signal.org/desktop/apt/keys.asc')
+    apt.add_ppa(c, 'deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main')
+    apt.install(c, 'signal-desktop')
 
 
 @task
