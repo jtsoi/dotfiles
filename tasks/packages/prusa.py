@@ -22,4 +22,10 @@ def slicer(c):
 
 @task
 def openscad(c):
-    apt.install(c, 'openscad')
+    apt.install(c, 'openscad')\
+
+
+@task
+def freecad(c):
+    apt.add_ppa(c, 'ppa:freecad-maintainers/freecad-stable')
+    apt.install(c, 'freecad')

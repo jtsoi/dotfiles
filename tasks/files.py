@@ -29,9 +29,10 @@ def chmod(c, mode, path):
 
 
 def curl_download(c, from_url, to_path, sudo=True):
+    cmd = f'curl --location {from_url} --output {to_path}'
     if sudo:
-        return c.sudo(f'curl -L {from_url} -o {to_path}', pty=True)
-    return c.run(f'curl -L {from_url} -o {to_path}', pty=True)
+        return c.sudo(cmd, pty=True)
+    return c.run(cmd, pty=True)
 
 
 def wget_download(c, from_url, to_path, sudo=True):
