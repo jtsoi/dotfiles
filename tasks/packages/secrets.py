@@ -4,7 +4,7 @@ import time
 
 from invoke import task
 
-from tasks import snap, apt, files
+from tasks import snap, apt, files, dotfiles
 
 
 @task

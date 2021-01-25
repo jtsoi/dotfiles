@@ -44,11 +44,12 @@ def autosrc(c):
     dotfiles.link(c, 'files/code/zshrcd/31-autosrc.zsh', files.resolve_path('~/.zshrc.d/31-autosrc.zsh'), jinja=False)
 
 
-# @task
-# def direnv(c):
-#     apt.install(c, 'direnv')
-#
-# @task
-# def direnv_conf(c):
-#     dotfiles.link(c, 'files/code/zshrcd/30-direnv-hook.zsh', files.resolve_path('~/.zshrc.d/30-direnv-hook.zsh'), jinja=False)
+@task
+def direnv(c):
+    apt.install(c, 'direnv')
+
+@task
+def direnv_conf(c):
+    dotfiles.link(c, 'files/code/zshrcd/30-direnv-hook.zsh', files.resolve_path('~/.zshrc.d/30-direnv-hook.zsh'), jinja=False)
+    dotfiles.link(c, 'files/code/direnvrc', files.resolve_path('~/.direnvrc'), jinja=False)
 
