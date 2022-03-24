@@ -1,6 +1,7 @@
-.venv
+# Project settings
+.env
+
+# Other
 .idea
 .vscode
-*.pyc
 *.swp
-invoke.y*

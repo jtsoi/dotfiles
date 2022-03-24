@@ -1,4 +1,4 @@
-Add this to /usr/share/X11/xkb/symbols/us:
+Add this to /usr/share/X11/xkb/symbols/us: (around line 70)
 ```
 partial alphanumeric_keys
 xkb_symbols "swedish" {
@@ -16,7 +16,7 @@ xkb_symbols "swedish" {
 ```
 
 and this to /usr/share/X11/xkb/rules/evdev.xml:
-Navigate tree to: xkbConfigRegistry >> layoutList >> layout (configItem.name="us") >> variantList
+Navigate tree to: xkbConfigRegistry >> layoutList [L1334] >> layout (configItem.name="us") [L1337] >> variantList
 (It is the first layout in layoutList )
 Add variant in variantList:
 ```xml
