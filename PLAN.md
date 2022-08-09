@@ -15,6 +15,7 @@
 - fnm
 
 ### Next
+- tpm - thermal management, auto tweak service
 
 - rebind launcher key
 
@@ -23,8 +24,6 @@
 - Docker
 
 - Pyenv
-
-
 
 - ruby install
 
