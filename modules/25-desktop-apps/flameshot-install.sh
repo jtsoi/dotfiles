@@ -1,6 +1,8 @@
 #!/bin/sh -Cue
 
 
+# ATTENTION! - Flameshot may not be needed after Gnome 42
+
 . ../../lib/dot.sh
 
 sudo apt-get install -y flameshot
