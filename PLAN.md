@@ -13,17 +13,22 @@
 - direnv
 - Chrome profiles
 - fnm
+- rebind terminal key
+
+- gnome plugins
+  - utc clock
+  - custom clock format
+- install launcher bind to super + space
+
 
 ### Next
 - tpm - thermal management, auto tweak service
 
-- rebind launcher key
+
 
 - Intellij
 
 - Docker
-
-- Pyenv
 
 - ruby install
 
@@ -34,7 +39,6 @@
 - Auto commit on _moleskine
   https://github.com/simonthum/git-sync
   
-
 
 
 ### Braindump:
