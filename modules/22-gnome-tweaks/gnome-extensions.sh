@@ -43,3 +43,12 @@ gnome-shell-extension-installer 4655
 # Multiple timezones https://extensions.gnome.org/extension/2657/timezones-extension/
 # not great for this use case
 # gnome-shell-extension-installer 2657
+
+# System monitor https://extensions.gnome.org/extension/4506/simple-system-monitor/
+gnome-shell-extension-installer 4506
+
+# No Gnome overview on login - https://extensions.gnome.org/extension/4099/no-overview/
+gnome-shell-extension-installer 4099
+
+# Instant switch workspaces - https://extensions.gnome.org/extension/4290/disable-workspace-switch-animation-for-gnome-40/
+gnome-shell-extension-installer 4290

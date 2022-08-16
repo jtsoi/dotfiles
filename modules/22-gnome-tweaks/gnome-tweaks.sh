@@ -15,6 +15,9 @@ gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll false
 gsettings set org.gnome.mutter dynamic-workspaces false
 gsettings set org.gnome.desktop.wm.preferences num-workspaces 12
 
+# Center new windows
+gsettings set org.gnome.mutter center-new-windows true
+
 # Name static workspaces
 gsettings set org.gnome.desktop.wm.preferences workspace-names "['1t','2c','3w','4t','5c','6w','7t','8c','9w','10g','11p','12m']"
 
