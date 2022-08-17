@@ -15,7 +15,5 @@ sudo mv -f /tmp/op "$OP_CLI_PATH"
 
 sudo chmod +x "$OP_CLI_PATH"
 
-op update
-
 echo ">>> To login run:"
 echo ">>>   op signin -h"

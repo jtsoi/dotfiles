@@ -19,11 +19,10 @@
   - custom clock format
 - install launcher bind to super + space
 - Intellij
+- tpm - thermal management, auto tweak service
+- Thinkpad power management (set max bat)
 
 ### Next
-- tpm - thermal management, auto tweak service
-
-- Thinkpad power management (set max bat)
 
 - fonts
   - https://github.com/ryanoasis/nerd-fonts  ?
