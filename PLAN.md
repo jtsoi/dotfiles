@@ -21,11 +21,9 @@
 - Intellij
 - tpm - thermal management, auto tweak service
 - Thinkpad power management (set max bat)
+- extra fonts
 
 ### Next
-
-- fonts
-  - https://github.com/ryanoasis/nerd-fonts  ?
 
 - Prezto modules review
 
@@ -41,6 +39,5 @@
 ### Braindump:
 
 - Synology backup
-
 
 - Insync ? GDrive sync
