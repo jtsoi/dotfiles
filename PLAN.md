@@ -23,9 +23,10 @@
 - Thinkpad power management (set max bat)
 - extra fonts
 
-### Next
-
 - Prezto modules review
+
+
+### Next
 
 - Auto commit on _moleskine
   https://github.com/simonthum/git-sync
