@@ -28,6 +28,11 @@ gsettings set org.gnome.shell.extensions.dash-to-dock isolate-monitors true
 # Enable workspaces on all displays
 gsettings set org.gnome.mutter workspaces-only-on-primary false
 
+# Enable night light
+gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
+gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-automatic true
+
+
 # Rebind navigate workspace keys (Super+#)
 ## Unset Super+# keys 
 gsettings set org.gnome.shell.keybindings switch-to-application-1 "[]"

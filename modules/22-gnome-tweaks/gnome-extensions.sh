@@ -52,3 +52,6 @@ gnome-shell-extension-installer 4099
 
 # Instant switch workspaces - https://extensions.gnome.org/extension/4290/disable-workspace-switch-animation-for-gnome-40/
 gnome-shell-extension-installer 4290
+
+# Workspace wrap around - https://extensions.gnome.org/extension/1116/workspace-switch-wraparound/
+gnome-shell-extension-installer 1116
