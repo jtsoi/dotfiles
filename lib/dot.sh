@@ -15,7 +15,7 @@ DOT_MODULE_FILES_DIR="$DOT_MODULE_DIR/files"
 
 # Dotfiles shared dirs
 DOT_LIB_DIR="$DOT_DIR/lib"
-DOT_MODULES_DIR="$DOT_DIR/modules"
+DOT_MODULES_DIR="$(dirname "$DOT_MODULE_DIR")"
 DOT_ENV_FILE="$DOT_DIR/.env"
 
 # Common folders
