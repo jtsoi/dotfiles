@@ -1,0 +1,50 @@
+[settings]
+# Pinned explicitly, even though it is currently mise's own default, so this
+# module's behaviour does not shift if that default ever changes upstream.
+dotfiles.default_mode = "symlink"
+
+# Source paths are relative to this file, and include the files/ prefix.
+# `dotfiles.root` is deliberately unset: it only governs *implicit* sources
+# (`"~/.zshrc" = {}` -> `<root>/.zshrc`) and is ignored once a source is explicit.
+#
+# New bare "~/…" = "files/…" keys must go above the
+# [dotfiles."~/.config/mise/conf.d/10-personal.toml"] sub-table header below:
+# TOML assigns every key after a sub-table header to that sub-table, so a
+# bare key added below would silently become a key of 10-personal.toml
+# rather than a new dotfile target -- no parse error, no applied file.
+[dotfiles]
+"~/.zshrc"   = "files/zshrc"
+"~/.zshrc.d" = { source = "files/zshrc.d", mode = "symlink-each" }
+"~/.config/starship.toml" = "files/config/starship.toml"
+
+[dotfiles."~/.config/mise/conf.d/10-personal.toml"]
+content = """
+[tools]
+fnox = "latest"
+node = "lts"
+"""
+
+# The verify harness is the only procedural thing in this module, so it lives
+# beside this file rather than inside it, keeping mise.toml purely declarative.
+# Note: `includes` REPLACES mise's default task directories (mise-tasks,
+# .mise/tasks, .config/mise/tasks, ...). This module has none, so nothing is lost
+# -- but a file task added in a default location later will not load unless it is
+# listed here.
+[task_config]
+includes = ["tasks.toml"]
+
+[bootstrap.packages]
+"brew:zoxide"                  = {}
+"brew:zsh-autosuggestions"     = {}
+"brew:zsh-syntax-highlighting" = {}
+"brew:starship"                = {}
+# Carried over from the retired mbp_modules/01-claude. That module also ran
+# `curl https://claude.ai/install.sh | bash` for the CLI, which has no
+# declarative equivalent here — install the CLI by hand if a fresh machine
+# needs it.
+"brew-cask:claude"             = {}
+
+[bootstrap.macos.defaults]
+"NSGlobalDomain"."com.apple.swipescrolldirection"               = false
+"com.apple.AppleMultitouchTrackpad"."Clicking"                  = true
+"com.apple.driver.AppleBluetoothMultitouch.trackpad"."Clicking" = true

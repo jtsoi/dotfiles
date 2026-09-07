@@ -1,0 +1,16 @@
+# ~/.zshrc — managed by skvk-mbp/mise.toml. Edit the source in this repo, then
+# run `mise bootstrap dotfiles apply` from skvk-mbp/.
+
+# ~/.zprofile belongs to developer-machine. It loads ~/.sko/* and runs in login
+# shells only, so IDE and tmux shells would otherwise start with no brew, mise,
+# direnv or completions. brew shellenv exports HOMEBREW_PREFIX, which makes it a
+# reliable test for whether that layer has already run — and keeps this a no-op
+# in login shells rather than sourcing everything twice.
+if [[ -z ${HOMEBREW_PREFIX-} && -r ${HOME}/.zprofile ]]; then
+  source "${HOME}/.zprofile"
+fi
+
+# (N) expands to nothing rather than erroring when the directory is empty.
+for file in ${HOME}/.zshrc.d/*.zsh(N); do
+  source "$file"
+done

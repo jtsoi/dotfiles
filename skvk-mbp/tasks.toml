@@ -1,0 +1,126 @@
+# Task definitions for skvk-mbp, included via [task_config] in mise.toml.
+# Included files have no [tasks] prefix -- task names are top-level tables.
+
+[verify]
+description = "Apply into a throwaway HOME and assert the result"
+dir = "{{config_root}}"
+run = """
+set -eu
+
+FAKE=$(mktemp -d)
+trap 'rm -rf "$FAKE"' EXIT
+
+env HOME="$FAKE" SHELL=/bin/zsh mise trust "$MISE_CONFIG_ROOT" >/dev/null
+env HOME="$FAKE" SHELL=/bin/zsh mise bootstrap dotfiles apply -y >/dev/null
+
+fails=0
+ran=0
+pass() { ran=$((ran + 1)); echo "  ok    $1"; }
+fail() { ran=$((ran + 1)); echo "  FAIL  $1"; fails=$((fails + 1)); }
+
+# Assert a command succeeds inside a NON-login zsh using the throwaway HOME.
+# env -i proves the shell starts from nothing. SHELL is required because
+# ~/.sko/060-direnv.sh expands ${SHELL##*/} and errors when it is empty.
+check() {
+  if env -i HOME="$FAKE" SHELL=/bin/zsh TERM=xterm /bin/zsh -i -c "$2" >/dev/null 2>&1; then
+    pass "$1"
+  else
+    fail "$1"
+  fi
+}
+
+if env HOME="$FAKE" SHELL=/bin/zsh mise bootstrap dotfiles status | grep -q 'missing'; then
+  fail "all declared dotfiles are applied"
+else
+  pass "all declared dotfiles are applied"
+fi
+
+# The status/grep check above passes vacuously if `status` prints nothing at
+# all (e.g. a target's [dotfiles] entry is deleted outright), since there is
+# then no "missing" line to find. These assert each target directly instead.
+if [ -L "$FAKE/.zshrc" ]; then
+  pass "~/.zshrc is a symlink"
+else
+  fail "~/.zshrc is a symlink"
+fi
+
+if [ -d "$FAKE/.zshrc.d" ]; then
+  pass "~/.zshrc.d is a directory"
+else
+  fail "~/.zshrc.d is a directory"
+fi
+
+if [ -L "$FAKE/.config/starship.toml" ]; then
+  pass "~/.config/starship.toml is a symlink"
+else
+  fail "~/.config/starship.toml is a symlink"
+fi
+
+if [ -f "$FAKE/.config/mise/conf.d/10-personal.toml" ] && [ ! -L "$FAKE/.config/mise/conf.d/10-personal.toml" ]; then
+  pass "~/.config/mise/conf.d/10-personal.toml is a regular file"
+else
+  fail "~/.config/mise/conf.d/10-personal.toml is a regular file"
+fi
+
+# Every fragment parses as zsh, so one bad file cannot break every shell.
+fragments=0
+for f in files/zshrc.d/*.zsh; do
+  [ -e "$f" ] || continue
+  fragments=$((fragments + 1))
+  if zsh -n "$f" 2>/dev/null; then
+    pass "valid zsh: $f"
+  else
+    fail "valid zsh: $f"
+  fi
+done
+[ "$fragments" -gt 0 ] || fail "at least one zshrc.d fragment exists"
+
+# A clean non-login shell must start silently. Any stderr is a real defect:
+# it would print on every new terminal. Runs before .zprofile is faked below.
+noise=$(env -i HOME="$FAKE" SHELL=/bin/zsh TERM=xterm /bin/zsh -i -c 'true' 2>&1 || true)
+if [ -z "$noise" ]; then
+  pass "non-login shell starts with no output"
+else
+  fail "non-login shell starts with no output -- got: $noise"
+fi
+
+check "ll aliases ls -la" 'alias ll | grep -q "ls -la"'
+
+# The guard is tested by behaviour, not by grepping .zshrc: the file's own
+# explanatory comment contains the word HOMEBREW_PREFIX, so a text match passes
+# even when the functional guard has been deleted.
+printf 'export HOMEBREW_PREFIX=/opt/homebrew\\necho GUARD-FIRED\\n' > "$FAKE/.zprofile"
+if env -i HOME="$FAKE" SHELL=/bin/zsh TERM=xterm /bin/zsh -i -c 'true' 2>&1 | grep -q GUARD-FIRED; then
+  pass "guard sources .zprofile in a non-login shell"
+else
+  fail "guard sources .zprofile in a non-login shell"
+fi
+
+hits=$(env -i HOME="$FAKE" SHELL=/bin/zsh TERM=xterm /bin/zsh -l -i -c 'true' 2>&1 | grep -c GUARD-FIRED || true)
+if [ "$hits" -eq 1 ]; then
+  pass "guard does not re-source in login shells"
+else
+  fail "guard does not re-source in login shells (fired $hits times)"
+fi
+rm -f "$FAKE/.zprofile"
+
+if env HOME="$FAKE" SHELL=/bin/zsh mise bootstrap dotfiles apply -y 2>&1 | grep -q "all files are applied"; then
+  pass "re-apply is idempotent"
+else
+  fail "re-apply is idempotent"
+fi
+
+# A harness that silently runs zero checks must not report success. This floor
+# is the count of checks that run today (5 zshrc.d fragments -> 5 "valid zsh:"
+# lines) -- bump it whenever a check above is added or removed, or it stops
+# catching a deleted check.
+if [ "$ran" -lt 15 ]; then
+  echo "only $ran check(s) ran, expected at least 15"
+  exit 1
+fi
+if [ "$fails" -ne 0 ]; then
+  echo "$fails check(s) failed"
+  exit 1
+fi
+echo "all $ran checks passed"
+"""

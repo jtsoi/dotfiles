@@ -1,0 +1,28 @@
+# Prompt appearance. Reference: https://starship.rs/config/
+# Managed by skvk-mbp/mise.toml. `starship explain` shows what each part costs.
+
+add_newline = true
+
+format = """
+$directory$git_branch$git_status$cmd_duration
+$character"""
+
+[character]
+success_symbol = "[>](bold green)"
+error_symbol = "[>](bold red)"
+
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+# Abbreviate the path ABOVE the repo root to two characters per component
+# rather than dropping it, so ~/repos/skvk/blueprints reads ~/re/sk/blueprints.
+# Everything from the repo root down stays full, which is the part you need
+# while working. Set to 0 to go back to eliding those components entirely.
+fish_style_pwd_dir_length = 2
+
+[git_branch]
+format = "on [$branch]($style) "
+
+[cmd_duration]
+min_time = 2000
+format = "took [$duration]($style) "
