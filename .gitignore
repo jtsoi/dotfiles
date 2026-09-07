@@ -5,3 +5,6 @@
 .idea
 .vscode
 *.swp
+
+# Planning and design docs — working notes, not repo content
+docs/
