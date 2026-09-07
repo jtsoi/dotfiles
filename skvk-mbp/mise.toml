@@ -66,3 +66,12 @@ includes = ["tasks.toml"]
 # does -- last writer wins. `mise bootstrap --dry-run` reports it as pending
 # whenever that script has reset it, which makes the overlap visible.
 "com.apple.dock"."autohide-delay"                               = 1000.0
+# The unit is 15ms frames: a 45ms repeat after a 375ms delay, fast enough that
+# holding Caps+arrow reads as motion rather than discrete taps.
+# developer-machine sets no keyboard defaults, so nothing else restores these on
+# a rebuilt machine.
+"NSGlobalDomain"."KeyRepeat"                                    = 3
+"NSGlobalDomain"."InitialKeyRepeat"                             = 25
+# Holding a vowel otherwise opens the accent picker rather than repeating, so
+# the rate above would not apply to every key.
+"NSGlobalDomain"."ApplePressAndHoldEnabled"                     = false
