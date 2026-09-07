@@ -80,7 +80,9 @@ Left and Right leave the workspace; everything else acts inside it.
 | `Caps+Tab` | jump back to the previously focused window |
 | `Caps+Q` | close window |
 | `Caps+F` | fullscreen |
-| `Caps+Space` | toggle the window between floating and tiled |
+| `Caps+M` | flip the workspace between side-by-side tiles and a full-width stack |
+| `Caps+/` | flip that layout's axis: horizontal to vertical and back |
+| `Caps+Space` | toggle the focused window between floating and tiled |
 
 `Caps+,` / `Caps+.` are `focus dfs-prev` / `dfs-next` rather than
 `focus left` / `right`, so one pair of keys means "previous and next window"
@@ -96,6 +98,22 @@ Workspaces 1-3 are horizontal tiles, for terminals side by side; the rest are a
 **vertical** accordion, so every window gets full width. Each workspace names
 its layout explicitly (`h_tiles`, `v_accordion`), which keeps this independent
 of `default-root-container-orientation`.
+
+Those layouts are applied by `after-startup-command`, which runs only at
+startup; `Caps+M` and `Caps+/` are how a workspace changes layout after that.
+`Caps+M` names `h_tiles` and `v_accordion` outright, since those are the two
+states this config declares, and `Caps+/` flips the axis of whichever is
+current — so two unshifted keys reach all four layouts. Neither uses Shift,
+because `ctrl-alt-cmd-shift-slash` never reached AeroSpace. Note that the
+workspace named M is reached with `Caps+0`, not `Caps+M`.
+
+AeroSpace's own `layout tiles horizontal vertical` cannot cover this in one
+key: it applies the first layout in the list that differs from the current one,
+so a list of three collapses into a two-cycle.
+
+`aerospace list-workspaces --all --format '%{workspace} %{workspace-root-container-layout}'`
+prints the live layout per workspace, which is worth knowing because a
+workspace holding one window looks identical under all four.
 
 AeroSpace installs from the `bootstrap` task rather than `[bootstrap.packages]`,
 because it ships from `nikitabobko/tap`, which publishes no `api/cask` metadata

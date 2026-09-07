@@ -148,4 +148,12 @@ after-startup-command = [
 
     ctrl-alt-cmd-q = 'close'
     ctrl-alt-cmd-f = 'fullscreen'
+
+    # after-startup-command runs only at startup, so these are the only way to
+    # change a workspace's layout in place. `m` (mode) flips between the two
+    # layouts this config declares; slash then flips the axis of whichever one
+    # is current, so two unshifted keys reach all four states. Both stay off
+    # Shift because ctrl-alt-cmd-shift-slash never reached AeroSpace.
+    ctrl-alt-cmd-m     = 'layout h_tiles v_accordion'
+    ctrl-alt-cmd-slash = 'layout horizontal vertical'
     ctrl-alt-cmd-space = 'layout floating tiling'
