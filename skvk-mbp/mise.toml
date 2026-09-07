@@ -18,6 +18,7 @@ dotfiles.default_mode = "symlink"
 "~/.config/starship.toml" = "files/config/starship.toml"
 "~/.aerospace.toml"       = "files/aerospace.toml"
 "~/.config/karabiner/karabiner.json" = "files/config/karabiner/karabiner.json"
+"~/.config/alacritty/alacritty.toml" = "files/config/alacritty/alacritty.toml"
 
 [dotfiles."~/.config/mise/conf.d/10-personal.toml"]
 content = """
@@ -46,6 +47,7 @@ includes = ["tasks.toml"]
 # needs it.
 "brew-cask:claude"             = {}
 "brew-cask:karabiner-elements" = {}
+"brew-cask:alacritty"          = {}
 # AeroSpace is NOT here: it lives in nikitabobko/tap, which does not publish
 # the api/cask metadata mise's brew-cask backend requires. It is installed by
 # the `bootstrap` task in tasks.toml, which mise runs as the final phase.

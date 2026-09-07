@@ -1,0 +1,22 @@
+# Managed by skvk-mbp/mise.toml ([dotfiles]).
+# Reference: https://alacritty.org/config-alacritty.html
+#
+# Deliberately sparse. Alacritty ships no tabs and no splits, which is the
+# reason it is here: AeroSpace already tiles, and Caps+Enter opens a window.
+
+[window]
+# AeroSpace positions every window, so a title bar is only lost pixels.
+# "Buttonless" gets a draggable bar back if floating a terminal (Caps+Space)
+# ever becomes routine.
+decorations = "None"
+padding = { x = 6, y = 6 }
+# zsh word motion (Opt+B / Opt+F) needs Option to arrive as Alt.
+option_as_alt = "Both"
+
+[scrolling]
+history = 50000
+
+# No font family: macOS defaults to Menlo, which is always present. Naming a
+# font here would make this config depend on one being installed.
+[font]
+size = 13

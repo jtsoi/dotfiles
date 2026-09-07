@@ -68,6 +68,12 @@ else
   fail "~/.config/karabiner/karabiner.json is a symlink"
 fi
 
+if [ -L "$FAKE/.config/alacritty/alacritty.toml" ]; then
+  pass "~/.config/alacritty/alacritty.toml is a symlink"
+else
+  fail "~/.config/alacritty/alacritty.toml is a symlink"
+fi
+
 if [ -L "$FAKE/.aerospace.toml" ]; then
   pass "~/.aerospace.toml is a symlink"
 else
@@ -126,8 +132,8 @@ fi
 # is the count of checks that run today (5 zshrc.d fragments -> 5 "valid zsh:"
 # lines) -- bump it whenever a check above is added or removed, or it stops
 # catching a deleted check.
-if [ "$ran" -lt 17 ]; then
-  echo "only $ran check(s) ran, expected at least 17"
+if [ "$ran" -lt 18 ]; then
+  echo "only $ran check(s) ran, expected at least 18"
   exit 1
 fi
 if [ "$fails" -ne 0 ]; then

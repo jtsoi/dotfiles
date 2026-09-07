@@ -67,8 +67,14 @@ the bindings below reach AeroSpace.
 
 Left and Right leave the workspace; everything else acts inside it.
 
+The terminal is Alacritty, chosen because it ships no tabs and no splits:
+AeroSpace already tiles, so a terminal that tiles too would be two window
+managers fighting. `Caps+Enter` opens a window, mirroring `$mod+Return` in the
+i3 config.
+
 | keys | action |
 |---|---|
+| `Caps+Enter` | open an Alacritty window |
 | `Caps+Left` / `Right` | previous / next workspace, wrapping at the ends |
 | `Caps+Shift+Left` / `Right` | throw the window to the previous / next workspace |
 | `Caps+Up` / `Down` | previous / next window in the accordion stack |

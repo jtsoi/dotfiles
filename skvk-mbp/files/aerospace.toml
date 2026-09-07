@@ -91,6 +91,14 @@ after-startup-command = [
 # Caps Lock sends ctrl-alt-cmd (see the Karabiner rule in this repo). Shift is
 # deliberately NOT part of it, so it stays available for the move bindings.
 [mode.main.binding]
+    # -n is required: plain `open -a` refocuses the existing window instead of
+    # opening one. The cost is a process per window. `alacritty msg
+    # create-window` would reuse one process, but its socket is named
+    # Alacritty-<pid>.sock, so a client cannot find it without ALACRITTY_SOCKET
+    # exported by whoever launched the app. Cmd+N inside a window is the
+    # same-process route when that matters.
+    ctrl-alt-cmd-enter = 'exec-and-forget open -na Alacritty'
+
     # Left/Right leave the workspace; Up/Down and , / . stay inside it.
     # next/prev walk all twelve persistent workspaces, the empty ones included.
     ctrl-alt-cmd-left  = 'workspace --wrap-around prev'
@@ -146,7 +154,11 @@ after-startup-command = [
     ctrl-alt-cmd-shift-minus = 'move-node-to-workspace L'
     ctrl-alt-cmd-shift-equal = 'move-node-to-workspace S'
 
-    ctrl-alt-cmd-q = 'close'
+    # --quit-if-last-window matters because each Caps+Enter window is its own
+    # process: plain `close` leaves a running app with zero windows, and macOS
+    # hands a reactivated app a fresh window, which reads as the close having
+    # been undone.
+    ctrl-alt-cmd-q = 'close --quit-if-last-window'
     ctrl-alt-cmd-f = 'fullscreen'
 
     # after-startup-command runs only at startup, so these are the only way to
