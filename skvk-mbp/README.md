@@ -47,6 +47,17 @@ usual four-modifier Hyper. That is deliberate: Hyper includes Shift, which would
 make `Caps+Shift+Left` indistinguishable from `Caps+Left` and cost every
 move-window binding.
 
+Karabiner also swaps `fn` and Left Control, putting Control in the bottom-left
+corner where Linux keeps it. macOS cannot do this itself — its Modifier Keys
+panel has no row for `fn`.
+
+Everything `fn` does moves one key to the right, onto the old Control position:
+brightness and volume (`com.apple.keyboard.fnState` is 1, so F1-F12 are plain
+function keys), forward delete, and Home/End/PgUp/PgDn. Karabiner performs the
+F-row translation itself rather than leaving it to the keyboard firmware, which
+is why a synthesised `fn` still reaches them. The `AppleFnUsageType` default in
+`mise.toml` belongs to this swap rather than being a separate preference.
+
 **Karabiner needs two manual steps before any of this works.** Its cask ships a
 pkg that requires an interactive `sudo` password, so `mise bootstrap` cannot
 install it unattended; run `brew install --cask karabiner-elements` from a

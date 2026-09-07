@@ -54,3 +54,7 @@ includes = ["tasks.toml"]
 "NSGlobalDomain"."com.apple.swipescrolldirection"               = false
 "com.apple.AppleMultitouchTrackpad"."Clicking"                  = true
 "com.apple.driver.AppleBluetoothMultitouch.trackpad"."Clicking" = true
+# 0 is "Press the globe key to: Do Nothing". The fn/Control swap in
+# karabiner.json needs it: Control now emits fn, so a tap would otherwise open
+# the emoji picker or cycle the input source.
+"com.apple.HIToolbox"."AppleFnUsageType"                        = 0
