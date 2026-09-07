@@ -40,6 +40,39 @@ Personal mise tools go in `conf.d/`, not `config.toml`, because a fragment in
 
 [docs/superpowers/specs/2026-09-06-skvk-mbp-dotfiles-design.md](../docs/superpowers/specs/2026-09-06-skvk-mbp-dotfiles-design.md)
 
+## Window management
+
+Caps Lock is remapped by Karabiner to `Ctrl+Opt+Cmd` — three modifiers, not the
+usual four-modifier Hyper. That is deliberate: Hyper includes Shift, which would
+make `Caps+Shift+Left` indistinguishable from `Caps+Left` and cost every
+move-window binding.
+
+**Karabiner needs two manual steps before any of this works.** Its cask ships a
+pkg that requires an interactive `sudo` password, so `mise bootstrap` cannot
+install it unattended; run `brew install --cask karabiner-elements` from a
+terminal. It then needs Input Monitoring granted in System Settings → Privacy &
+Security. Until both are done Caps Lock stays an ordinary Caps Lock and none of
+the bindings below reach AeroSpace.
+
+| keys | action |
+|---|---|
+| `Caps+1..9`, `Caps+0/-/=` | switch to workspace 1-9, M, L, S |
+| `Caps+Shift+<same>` | move the focused window to that workspace |
+| `Caps+arrows` | focus directionally; on accordion workspaces Up/Down walks the window stack |
+| `Caps+Shift+arrows` | move the window |
+| `Caps+Tab` | jump back to the previously focused window |
+| `Caps+Q` | close window |
+| `Caps+F` | fullscreen |
+
+Workspaces 1-3 tile, for terminals side by side. The rest use a **vertical**
+accordion, so every window gets full width and `Caps+Up`/`Caps+Down` walks the
+stack. The vertical orientation is load-bearing — a horizontal accordion would
+put stack-walking on Left/Right, where the tiling workspaces need those keys.
+
+AeroSpace installs from the `bootstrap` task rather than `[bootstrap.packages]`,
+because it ships from `nikitabobko/tap`, which publishes no `api/cask` metadata
+for mise's brew-cask backend to read.
+
 ## Rollback
 
 `mise bootstrap` records what it applied, so the module removes cleanly:
@@ -48,7 +81,8 @@ Personal mise tools go in `conf.d/`, not `config.toml`, because a fragment in
 mise bootstrap dotfiles unapply
 ```
 
-This removes `~/.zshrc`, `~/.zshrc.d/*`, `~/.config/starship.toml` and
-`~/.config/mise/conf.d/10-personal.toml`, returning the machine to a bare shell
+This removes `~/.zshrc`, `~/.zshrc.d/*`, `~/.config/starship.toml`,
+`~/.config/mise/conf.d/10-personal.toml`, `~/.aerospace.toml` and
+`~/.config/karabiner/karabiner.json`, returning the machine to a bare shell
 driven entirely by `~/.zprofile`. Brew packages and macOS defaults are not
 reverted; remove them with `brew uninstall` and `defaults delete` if wanted.

@@ -62,6 +62,18 @@ else
   fail "~/.config/mise/conf.d/10-personal.toml is a regular file"
 fi
 
+if [ -L "$FAKE/.config/karabiner/karabiner.json" ]; then
+  pass "~/.config/karabiner/karabiner.json is a symlink"
+else
+  fail "~/.config/karabiner/karabiner.json is a symlink"
+fi
+
+if [ -L "$FAKE/.aerospace.toml" ]; then
+  pass "~/.aerospace.toml is a symlink"
+else
+  fail "~/.aerospace.toml is a symlink"
+fi
+
 # Every fragment parses as zsh, so one bad file cannot break every shell.
 fragments=0
 for f in files/zshrc.d/*.zsh; do
@@ -114,8 +126,8 @@ fi
 # is the count of checks that run today (5 zshrc.d fragments -> 5 "valid zsh:"
 # lines) -- bump it whenever a check above is added or removed, or it stops
 # catching a deleted check.
-if [ "$ran" -lt 15 ]; then
-  echo "only $ran check(s) ran, expected at least 15"
+if [ "$ran" -lt 17 ]; then
+  echo "only $ran check(s) ran, expected at least 17"
   exit 1
 fi
 if [ "$fails" -ne 0 ]; then

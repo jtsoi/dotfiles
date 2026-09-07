@@ -1,24 +1,45 @@
-# ~/.aerospace.toml — starter config.
-# Docs:  https://nikitabobko.github.io/AeroSpace/guide
+# Managed by skvk-mbp/mise.toml ([dotfiles]).
+# Docs: https://nikitabobko.github.io/AeroSpace/guide
 
-# Start Aerospace automatically on login (registers as a macOS Login Item;
-# you'll see it in System Settings -> General -> Login Items).
+config-version = 2
+
 start-at-login = true
 
-# NOTE: `auto-reload-config = true` is in Aerospace's newer docs but not
-# recognized by 0.20.3-Beta. Re-enable after upgrading; for now, run
-# `aerospace reload-config` manually after editing this file.
+# Re-enabled after the 0.21.3 upgrade; it was unsupported in 0.20.3. Without it
+# this config has no reload path at all, since service mode (which held the only
+# reload-config binding) was cut.
+auto-reload-config = true
 
-# When a workspace is empty, new windows form a tile container.
-# 'auto' picks horizontal for wide screens, vertical for tall.
+# v2 requires this explicitly: the fallback became an empty array, and in v1 it
+# was inferred from the bindings below.
+persistent-workspaces = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'M', 'L', 'S']
+
 default-root-container-layout = 'accordion'
-default-root-container-orientation = 'auto'
+default-root-container-orientation = 'vertical'
 
-# Run after Aerospace starts (e.g. login). Empty for now.
-after-startup-command = []
-after-login-command = []
+# 0 removes the slivers of adjacent windows. They exist to show a stack is
+# there, but Caps+Up/Down walks the stack, so they are only lost pixels.
+accordion-padding = 0
 
-# Visual breathing room between windows and screen edges (px).
+# Workspaces 1-3 tile, for terminals side by side. The rest use a VERTICAL
+# accordion so each window gets full width AND so Caps+Up/Down walks the stack;
+# a horizontal accordion would put that on Left/Right, where the tiling
+# workspaces already need those keys.
+after-startup-command = [
+    'layout --workspace 1 --root tiles',
+    'layout --workspace 2 --root tiles',
+    'layout --workspace 3 --root tiles',
+    'layout --workspace 4 --root v_accordion',
+    'layout --workspace 5 --root v_accordion',
+    'layout --workspace 6 --root v_accordion',
+    'layout --workspace 7 --root v_accordion',
+    'layout --workspace 8 --root v_accordion',
+    'layout --workspace 9 --root v_accordion',
+    'layout --workspace M --root v_accordion',
+    'layout --workspace L --root v_accordion',
+    'layout --workspace S --root v_accordion',
+]
+
 [gaps]
     inner.horizontal = 4
     inner.vertical = 4
@@ -27,7 +48,6 @@ after-login-command = []
     outer.top = 0
     outer.right = 0
 
-# Auto-rules for windows that don't behave well when tiled.
 # --- Auto-float: small popup-style apps that look bad tiled. ---
 [[on-window-detected]]
     if.app-id = 'com.apple.systempreferences'
@@ -67,84 +87,50 @@ after-login-command = []
     if.app-id = 'com.tinyspeck.slackmacgap'
     run = 'move-node-to-workspace S'
 
-# Default binding mode — active during normal use.
+# Caps Lock sends ctrl-alt-cmd (see the Karabiner rule in this repo). Shift is
+# deliberately NOT part of it, so it stays available for the move bindings.
 [mode.main.binding]
-    # Focus (vim-style)
-    ctrl-h = 'focus left'
-    ctrl-j = 'focus down'
-    ctrl-k = 'focus up'
-    ctrl-l = 'focus right'
+    # --wrap-around is what turns Up/Down into stack cycling on the accordion
+    # workspaces; on the tiling workspaces these stay ordinary directional focus.
+    ctrl-alt-cmd-left  = 'focus left --wrap-around'
+    ctrl-alt-cmd-down  = 'focus down --wrap-around'
+    ctrl-alt-cmd-up    = 'focus up --wrap-around'
+    ctrl-alt-cmd-right = 'focus right --wrap-around'
 
-    # Move focused window
-    ctrl-shift-h = 'move left'
-    ctrl-shift-j = 'move down'
-    ctrl-shift-k = 'move up'
-    ctrl-shift-l = 'move right'
+    ctrl-alt-cmd-shift-left  = 'move left'
+    ctrl-alt-cmd-shift-down  = 'move down'
+    ctrl-alt-cmd-shift-up    = 'move up'
+    ctrl-alt-cmd-shift-right = 'move right'
 
-    # Resize (interactive mode; see [mode.resize.binding] below)
-    ctrl-r = 'mode resize'
+    # The two-window toggle, distinct from walking the stack.
+    ctrl-alt-cmd-tab = 'focus-back-and-forth'
 
-    # Layouts
-    ctrl-slash       = 'layout tiles horizontal vertical'
-    ctrl-comma       = 'layout accordion horizontal vertical'
-    ctrl-shift-space = 'layout floating tiling'     # missing from defaults — restored here
-    ctrl-f           = 'fullscreen'
+    ctrl-alt-cmd-1 = 'workspace 1'
+    ctrl-alt-cmd-2 = 'workspace 2'
+    ctrl-alt-cmd-3 = 'workspace 3'
+    ctrl-alt-cmd-4 = 'workspace 4'
+    ctrl-alt-cmd-5 = 'workspace 5'
+    ctrl-alt-cmd-6 = 'workspace 6'
+    ctrl-alt-cmd-7 = 'workspace 7'
+    ctrl-alt-cmd-8 = 'workspace 8'
+    ctrl-alt-cmd-9 = 'workspace 9'
+    ctrl-alt-cmd-0     = 'workspace M'
+    ctrl-alt-cmd-minus = 'workspace L'
+    ctrl-alt-cmd-equal = 'workspace S'
 
-    # Workspaces
-    ctrl-1 = 'workspace 1'
-    ctrl-2 = 'workspace 2'
-    ctrl-3 = 'workspace 3'
-    ctrl-4 = 'workspace 4'
-    ctrl-5 = 'workspace 5'
-    ctrl-6 = 'workspace 6'
-    ctrl-7 = 'workspace 7'
-    ctrl-8 = 'workspace 8'
-    ctrl-9 = 'workspace 9'
-    ctrl-0     = 'workspace M'
-    ctrl-minus = 'workspace L'
-    ctrl-equal = 'workspace S'
+    ctrl-alt-cmd-shift-1 = 'move-node-to-workspace 1'
+    ctrl-alt-cmd-shift-2 = 'move-node-to-workspace 2'
+    ctrl-alt-cmd-shift-3 = 'move-node-to-workspace 3'
+    ctrl-alt-cmd-shift-4 = 'move-node-to-workspace 4'
+    ctrl-alt-cmd-shift-5 = 'move-node-to-workspace 5'
+    ctrl-alt-cmd-shift-6 = 'move-node-to-workspace 6'
+    ctrl-alt-cmd-shift-7 = 'move-node-to-workspace 7'
+    ctrl-alt-cmd-shift-8 = 'move-node-to-workspace 8'
+    ctrl-alt-cmd-shift-9 = 'move-node-to-workspace 9'
+    ctrl-alt-cmd-shift-0     = 'move-node-to-workspace M'
+    ctrl-alt-cmd-shift-minus = 'move-node-to-workspace L'
+    ctrl-alt-cmd-shift-equal = 'move-node-to-workspace S'
 
-    # Move focused window to workspace
-    ctrl-shift-1 = 'move-node-to-workspace 1'
-    ctrl-shift-2 = 'move-node-to-workspace 2'
-    ctrl-shift-3 = 'move-node-to-workspace 3'
-    ctrl-shift-4 = 'move-node-to-workspace 4'
-    ctrl-shift-5 = 'move-node-to-workspace 5'
-    ctrl-shift-6 = 'move-node-to-workspace 6'
-    ctrl-shift-7 = 'move-node-to-workspace 7'
-    ctrl-shift-8 = 'move-node-to-workspace 8'
-    ctrl-shift-9 = 'move-node-to-workspace 9'
-    ctrl-shift-0     = 'move-node-to-workspace M'
-    ctrl-shift-minus = 'move-node-to-workspace L'
-    ctrl-shift-equal = 'move-node-to-workspace S'
-
-    # Cycle workspaces with arrow keys (wraps at ends).
-    # If these don't fire, disable macOS Mission Control's "Move left/right a space"
-    # in System Settings -> Keyboard -> Keyboard Shortcuts -> Mission Control.
-    ctrl-left        = 'workspace prev --wrap-around'
-    ctrl-right       = 'workspace next --wrap-around'
-    ctrl-shift-left  = 'move-node-to-workspace prev --wrap-around'
-    ctrl-shift-right = 'move-node-to-workspace next --wrap-around'
-
-    # Misc
-    # ctrl-tab clobbers next-tab in browsers/VS Code/JetBrains/Slack.
-    # Disabled for now; revisit (likely remap to ctrl-grave) once the rest of the bindings settle.
-    # ctrl-tab = 'workspace-back-and-forth'
-    ctrl-q = 'close'                  # close focused window (not the whole app, unlike Cmd+Q)
-    ctrl-shift-semicolon = 'mode service'
-
-# Service mode — rarely-used commands. Each one returns to main mode.
-[mode.service.binding]
-    esc       = ['reload-config', 'mode main']
-    r         = ['flatten-workspace-tree', 'mode main']        # collapse nested splits to flat tiles
-    f         = ['layout floating tiling', 'mode main']        # toggle float on focused window
-    backspace = ['close-all-windows-but-current', 'mode main']
-
-# Resize mode — enter with ctrl-r, h/j/k/l interactively resize, esc/enter to leave.
-[mode.resize.binding]
-    h     = 'resize width -50'
-    l     = 'resize width +50'
-    j     = 'resize height +50'
-    k     = 'resize height -50'
-    esc   = 'mode main'
-    enter = 'mode main'
+    ctrl-alt-cmd-q = 'close'
+    ctrl-alt-cmd-f = 'fullscreen'
+    ctrl-alt-cmd-space = 'layout floating tiling'
