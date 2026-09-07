@@ -21,14 +21,15 @@ default-root-container-orientation = 'vertical'
 # there, but Caps+Up/Down walks the stack, so they are only lost pixels.
 accordion-padding = 0
 
-# Workspaces 1-3 tile, for terminals side by side. The rest use a VERTICAL
-# accordion so each window gets full width AND so Caps+Up/Down walks the stack;
-# a horizontal accordion would put that on Left/Right, where the tiling
-# workspaces already need those keys.
+# Every workspace names its orientation explicitly, so none of this depends on
+# default-root-container-orientation. Workspaces 1-3 are horizontal tiles, for
+# terminals side by side, walked with Caps+, / Caps+. and reordered with Shift.
+# The rest use a VERTICAL accordion, so each window gets full width and
+# Caps+Up/Down walks the stack.
 after-startup-command = [
-    'layout --workspace 1 --root tiles',
-    'layout --workspace 2 --root tiles',
-    'layout --workspace 3 --root tiles',
+    'layout --workspace 1 --root h_tiles',
+    'layout --workspace 2 --root h_tiles',
+    'layout --workspace 3 --root h_tiles',
     'layout --workspace 4 --root v_accordion',
     'layout --workspace 5 --root v_accordion',
     'layout --workspace 6 --root v_accordion',
@@ -90,17 +91,31 @@ after-startup-command = [
 # Caps Lock sends ctrl-alt-cmd (see the Karabiner rule in this repo). Shift is
 # deliberately NOT part of it, so it stays available for the move bindings.
 [mode.main.binding]
-    # --wrap-around is what turns Up/Down into stack cycling on the accordion
-    # workspaces; on the tiling workspaces these stay ordinary directional focus.
-    ctrl-alt-cmd-left  = 'focus left --wrap-around'
-    ctrl-alt-cmd-down  = 'focus down --wrap-around'
-    ctrl-alt-cmd-up    = 'focus up --wrap-around'
-    ctrl-alt-cmd-right = 'focus right --wrap-around'
+    # Left/Right leave the workspace; Up/Down and , / . stay inside it.
+    # next/prev walk all twelve persistent workspaces, the empty ones included.
+    ctrl-alt-cmd-left  = 'workspace --wrap-around prev'
+    ctrl-alt-cmd-right = 'workspace --wrap-around next'
 
-    ctrl-alt-cmd-shift-left  = 'move left'
-    ctrl-alt-cmd-shift-down  = 'move down'
-    ctrl-alt-cmd-shift-up    = 'move up'
-    ctrl-alt-cmd-shift-right = 'move right'
+    ctrl-alt-cmd-shift-left  = 'move-node-to-workspace --wrap-around prev'
+    ctrl-alt-cmd-shift-right = 'move-node-to-workspace --wrap-around next'
+
+    # The accordion is vertical, so these walk the window stack; --wrap-around
+    # is what makes them cycle instead of stopping at the ends.
+    ctrl-alt-cmd-up   = 'focus up --wrap-around'
+    ctrl-alt-cmd-down = 'focus down --wrap-around'
+
+    ctrl-alt-cmd-shift-up   = 'move up'
+    ctrl-alt-cmd-shift-down = 'move down'
+
+    # dfs-prev/dfs-next rather than focus left/right, because they mean
+    # "previous and next window" under every layout: one pair of keys switches
+    # windows in a tiling row and in an accordion stack alike. Shift reorders
+    # the row, which only moves anything where windows sit side by side.
+    ctrl-alt-cmd-comma  = 'focus dfs-prev --wrap-around'
+    ctrl-alt-cmd-period = 'focus dfs-next --wrap-around'
+
+    ctrl-alt-cmd-shift-comma  = 'move left'
+    ctrl-alt-cmd-shift-period = 'move right'
 
     # The two-window toggle, distinct from walking the stack.
     ctrl-alt-cmd-tab = 'focus-back-and-forth'

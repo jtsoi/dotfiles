@@ -54,20 +54,37 @@ terminal. It then needs Input Monitoring granted in System Settings → Privacy 
 Security. Until both are done Caps Lock stays an ordinary Caps Lock and none of
 the bindings below reach AeroSpace.
 
+Left and Right leave the workspace; everything else acts inside it.
+
 | keys | action |
 |---|---|
+| `Caps+Left` / `Right` | previous / next workspace, wrapping at the ends |
+| `Caps+Shift+Left` / `Right` | throw the window to the previous / next workspace |
+| `Caps+Up` / `Down` | previous / next window in the accordion stack |
+| `Caps+Shift+Up` / `Down` | move the window up / down the stack |
+| `Caps+,` / `Caps+.` | previous / next window, under any layout |
+| `Caps+Shift+,` / `.` | move the window left / right along a tiling row |
 | `Caps+1..9`, `Caps+0/-/=` | switch to workspace 1-9, M, L, S |
 | `Caps+Shift+<same>` | move the focused window to that workspace |
-| `Caps+arrows` | focus directionally; on accordion workspaces Up/Down walks the window stack |
-| `Caps+Shift+arrows` | move the window |
 | `Caps+Tab` | jump back to the previously focused window |
 | `Caps+Q` | close window |
 | `Caps+F` | fullscreen |
+| `Caps+Space` | toggle the window between floating and tiled |
 
-Workspaces 1-3 tile, for terminals side by side. The rest use a **vertical**
-accordion, so every window gets full width and `Caps+Up`/`Caps+Down` walks the
-stack. The vertical orientation is load-bearing — a horizontal accordion would
-put stack-walking on Left/Right, where the tiling workspaces need those keys.
+`Caps+,` / `Caps+.` are `focus dfs-prev` / `dfs-next` rather than
+`focus left` / `right`, so one pair of keys means "previous and next window"
+whatever the layout — along the tiling row on workspaces 1-3, and up and down
+the accordion stack everywhere else.
+
+Workspace next/prev walks all twelve persistent workspaces, empty ones
+included. Skipping the empties needs an `eval` pipeline over
+`list-workspaces --empty no`; jumping straight to a workspace by name is what
+`Caps+1..9` is for.
+
+Workspaces 1-3 are horizontal tiles, for terminals side by side; the rest are a
+**vertical** accordion, so every window gets full width. Each workspace names
+its layout explicitly (`h_tiles`, `v_accordion`), which keeps this independent
+of `default-root-container-orientation`.
 
 AeroSpace installs from the `bootstrap` task rather than `[bootstrap.packages]`,
 because it ships from `nikitabobko/tap`, which publishes no `api/cask` metadata
