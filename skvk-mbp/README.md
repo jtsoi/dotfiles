@@ -28,8 +28,16 @@ to a path that repo owns:** `~/.zprofile`, `~/.sko/*`, `~/.config/direnv/*`,
 It owns `~/.zshrc`, `~/.zshrc.d/*`, `~/.config/starship.toml`, and
 `~/.config/mise/conf.d/*.toml`.
 
-The two layers need no coordination, because shell startup order separates them:
-`.zprofile` → `.sko/*` runs first, `.zshrc` second.
+The two layers need no coordination for *files*, because shell startup order
+separates them: `.zprofile` → `.sko/*` runs first, `.zshrc` second.
+
+**macOS defaults have no such ordering rule**, and one key is written by both
+layers: `com.apple.dock autohide-delay`, which
+`developer-machine/aerospace-macos-tweaks.sh` sets to `0` and this module sets
+to `1000` so the Dock stays hidden instead of springing up when the cursor
+reaches the bottom edge. Last writer wins, so re-running that script reverts it.
+`mise bootstrap --dry-run` lists the key as pending whenever that has happened,
+which is the only signal that the two disagree.
 
 Personal mise tools go in `conf.d/`, not `config.toml`, because a fragment in
 `~/.sko/` (`062-mise.sh` on this machine; newer provisioning ships it as

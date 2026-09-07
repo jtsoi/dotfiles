@@ -60,3 +60,9 @@ includes = ["tasks.toml"]
 # karabiner.json needs it: Control now emits fn, so a tap would otherwise open
 # the emoji picker or cycle the input source.
 "com.apple.HIToolbox"."AppleFnUsageType"                        = 0
+# The Dock never appears at this delay, but Opt+Cmd+D still summons it. NOTE:
+# ~/repos/skvk/developer-machine/aerospace-macos-tweaks.sh writes this same key
+# as 0, and `defaults` has no ordering rule to arbitrate the way shell startup
+# does -- last writer wins. `mise bootstrap --dry-run` reports it as pending
+# whenever that script has reset it, which makes the overlap visible.
+"com.apple.dock"."autohide-delay"                               = 1000.0
