@@ -1,0 +1,150 @@
+# ~/.aerospace.toml — starter config.
+# Docs:  https://nikitabobko.github.io/AeroSpace/guide
+
+# Start Aerospace automatically on login (registers as a macOS Login Item;
+# you'll see it in System Settings -> General -> Login Items).
+start-at-login = true
+
+# NOTE: `auto-reload-config = true` is in Aerospace's newer docs but not
+# recognized by 0.20.3-Beta. Re-enable after upgrading; for now, run
+# `aerospace reload-config` manually after editing this file.
+
+# When a workspace is empty, new windows form a tile container.
+# 'auto' picks horizontal for wide screens, vertical for tall.
+default-root-container-layout = 'accordion'
+default-root-container-orientation = 'auto'
+
+# Run after Aerospace starts (e.g. login). Empty for now.
+after-startup-command = []
+after-login-command = []
+
+# Visual breathing room between windows and screen edges (px).
+[gaps]
+    inner.horizontal = 4
+    inner.vertical = 4
+    outer.left = 0
+    outer.bottom = 0
+    outer.top = 0
+    outer.right = 0
+
+# Auto-rules for windows that don't behave well when tiled.
+# --- Auto-float: small popup-style apps that look bad tiled. ---
+[[on-window-detected]]
+    if.app-id = 'com.apple.systempreferences'
+    run = 'layout floating'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.finder'
+    if.window-title-regex-substring = '(Copy|Move|Empty Trash)'
+    run = 'layout floating'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.ActivityMonitor'
+    run = 'layout floating'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.calculator'
+    run = 'layout floating'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.SystemProfiler'
+    run = 'layout floating'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.Stickies'
+    run = 'layout floating'
+
+# --- Auto-route: pin specific apps to dedicated workspaces. ---
+[[on-window-detected]]
+    if.app-id = 'com.sublimemerge'
+    run = 'move-node-to-workspace M'
+
+[[on-window-detected]]
+    if.app-id = 'com.linear'
+    run = 'move-node-to-workspace L'
+
+[[on-window-detected]]
+    if.app-id = 'com.tinyspeck.slackmacgap'
+    run = 'move-node-to-workspace S'
+
+# Default binding mode — active during normal use.
+[mode.main.binding]
+    # Focus (vim-style)
+    ctrl-h = 'focus left'
+    ctrl-j = 'focus down'
+    ctrl-k = 'focus up'
+    ctrl-l = 'focus right'
+
+    # Move focused window
+    ctrl-shift-h = 'move left'
+    ctrl-shift-j = 'move down'
+    ctrl-shift-k = 'move up'
+    ctrl-shift-l = 'move right'
+
+    # Resize (interactive mode; see [mode.resize.binding] below)
+    ctrl-r = 'mode resize'
+
+    # Layouts
+    ctrl-slash       = 'layout tiles horizontal vertical'
+    ctrl-comma       = 'layout accordion horizontal vertical'
+    ctrl-shift-space = 'layout floating tiling'     # missing from defaults — restored here
+    ctrl-f           = 'fullscreen'
+
+    # Workspaces
+    ctrl-1 = 'workspace 1'
+    ctrl-2 = 'workspace 2'
+    ctrl-3 = 'workspace 3'
+    ctrl-4 = 'workspace 4'
+    ctrl-5 = 'workspace 5'
+    ctrl-6 = 'workspace 6'
+    ctrl-7 = 'workspace 7'
+    ctrl-8 = 'workspace 8'
+    ctrl-9 = 'workspace 9'
+    ctrl-0     = 'workspace M'
+    ctrl-minus = 'workspace L'
+    ctrl-equal = 'workspace S'
+
+    # Move focused window to workspace
+    ctrl-shift-1 = 'move-node-to-workspace 1'
+    ctrl-shift-2 = 'move-node-to-workspace 2'
+    ctrl-shift-3 = 'move-node-to-workspace 3'
+    ctrl-shift-4 = 'move-node-to-workspace 4'
+    ctrl-shift-5 = 'move-node-to-workspace 5'
+    ctrl-shift-6 = 'move-node-to-workspace 6'
+    ctrl-shift-7 = 'move-node-to-workspace 7'
+    ctrl-shift-8 = 'move-node-to-workspace 8'
+    ctrl-shift-9 = 'move-node-to-workspace 9'
+    ctrl-shift-0     = 'move-node-to-workspace M'
+    ctrl-shift-minus = 'move-node-to-workspace L'
+    ctrl-shift-equal = 'move-node-to-workspace S'
+
+    # Cycle workspaces with arrow keys (wraps at ends).
+    # If these don't fire, disable macOS Mission Control's "Move left/right a space"
+    # in System Settings -> Keyboard -> Keyboard Shortcuts -> Mission Control.
+    ctrl-left        = 'workspace prev --wrap-around'
+    ctrl-right       = 'workspace next --wrap-around'
+    ctrl-shift-left  = 'move-node-to-workspace prev --wrap-around'
+    ctrl-shift-right = 'move-node-to-workspace next --wrap-around'
+
+    # Misc
+    # ctrl-tab clobbers next-tab in browsers/VS Code/JetBrains/Slack.
+    # Disabled for now; revisit (likely remap to ctrl-grave) once the rest of the bindings settle.
+    # ctrl-tab = 'workspace-back-and-forth'
+    ctrl-q = 'close'                  # close focused window (not the whole app, unlike Cmd+Q)
+    ctrl-shift-semicolon = 'mode service'
+
+# Service mode — rarely-used commands. Each one returns to main mode.
+[mode.service.binding]
+    esc       = ['reload-config', 'mode main']
+    r         = ['flatten-workspace-tree', 'mode main']        # collapse nested splits to flat tiles
+    f         = ['layout floating tiling', 'mode main']        # toggle float on focused window
+    backspace = ['close-all-windows-but-current', 'mode main']
+
+# Resize mode — enter with ctrl-r, h/j/k/l interactively resize, esc/enter to leave.
+[mode.resize.binding]
+    h     = 'resize width -50'
+    l     = 'resize width +50'
+    j     = 'resize height +50'
+    k     = 'resize height -50'
+    esc   = 'mode main'
+    enter = 'mode main'

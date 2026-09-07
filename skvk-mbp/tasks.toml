@@ -124,3 +124,19 @@ if [ "$fails" -ne 0 ]; then
 fi
 echo "all $ran checks passed"
 """
+
+# mise runs a task named `bootstrap` as the last phase of `mise bootstrap`.
+# It is the documented escape hatch for setup the declarative sections cannot
+# express -- here, a cask from a tap that publishes no API metadata.
+[bootstrap]
+description = "Install what the declarative sections cannot express"
+dir = "{{config_root}}"
+run = """
+set -eu
+if brew list --cask aerospace >/dev/null 2>&1; then
+  echo "  ok    aerospace already installed"
+else
+  echo "  installing aerospace from nikitabobko/tap"
+  brew install --cask nikitabobko/tap/aerospace
+fi
+"""

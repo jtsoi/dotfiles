@@ -16,6 +16,7 @@ dotfiles.default_mode = "symlink"
 "~/.zshrc"   = "files/zshrc"
 "~/.zshrc.d" = { source = "files/zshrc.d", mode = "symlink-each" }
 "~/.config/starship.toml" = "files/config/starship.toml"
+"~/.aerospace.toml"       = "files/aerospace.toml"
 
 [dotfiles."~/.config/mise/conf.d/10-personal.toml"]
 content = """
@@ -43,6 +44,9 @@ includes = ["tasks.toml"]
 # declarative equivalent here — install the CLI by hand if a fresh machine
 # needs it.
 "brew-cask:claude"             = {}
+# AeroSpace is NOT here: it lives in nikitabobko/tap, which does not publish
+# the api/cask metadata mise's brew-cask backend requires. It is installed by
+# the `bootstrap` task in tasks.toml, which mise runs as the final phase.
 
 [bootstrap.macos.defaults]
 "NSGlobalDomain"."com.apple.swipescrolldirection"               = false
