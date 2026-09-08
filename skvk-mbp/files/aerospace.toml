@@ -12,7 +12,12 @@ auto-reload-config = true
 
 # v2 requires this explicitly: the fallback became an empty array, and in v1 it
 # was inferred from the bindings below.
-persistent-workspaces = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'M', 'L', 'S']
+#
+# The order here is cosmetic -- AeroSpace sorts its own list, digits numerically
+# then letters alphabetically, and that sort is what `workspace next|prev`
+# walks. It is written in that same sorted order anyway so it matches the bar's
+# rail, which the verify harness compares against this line.
+persistent-workspaces = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'L', 'M', 'S']
 
 default-root-container-layout = 'accordion'
 default-root-container-orientation = 'vertical'
@@ -144,8 +149,10 @@ on-focus-changed = ['exec-and-forget sketchybar --trigger aerospace_focus']
     ctrl-alt-cmd-7 = 'workspace 7'
     ctrl-alt-cmd-8 = 'workspace 8'
     ctrl-alt-cmd-9 = 'workspace 9'
-    ctrl-alt-cmd-0     = 'workspace M'
-    ctrl-alt-cmd-minus = 'workspace L'
+    # 0, - and = continue the number row onto the three named workspaces, in the
+    # order the arrow keys walk them and the bar draws them: L, M, S.
+    ctrl-alt-cmd-0     = 'workspace L'
+    ctrl-alt-cmd-minus = 'workspace M'
     ctrl-alt-cmd-equal = 'workspace S'
 
     ctrl-alt-cmd-shift-1 = 'move-node-to-workspace 1'
@@ -157,8 +164,8 @@ on-focus-changed = ['exec-and-forget sketchybar --trigger aerospace_focus']
     ctrl-alt-cmd-shift-7 = 'move-node-to-workspace 7'
     ctrl-alt-cmd-shift-8 = 'move-node-to-workspace 8'
     ctrl-alt-cmd-shift-9 = 'move-node-to-workspace 9'
-    ctrl-alt-cmd-shift-0     = 'move-node-to-workspace M'
-    ctrl-alt-cmd-shift-minus = 'move-node-to-workspace L'
+    ctrl-alt-cmd-shift-0     = 'move-node-to-workspace L'
+    ctrl-alt-cmd-shift-minus = 'move-node-to-workspace M'
     ctrl-alt-cmd-shift-equal = 'move-node-to-workspace S'
 
     # --quit-if-last-window matters because each Caps+Enter window is its own

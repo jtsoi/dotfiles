@@ -25,7 +25,7 @@ slack_badge=$(/usr/bin/lsappinfo info -only StatusLabel "${SLACK_APP:-Slack}" 2>
     sed -n 's/.*"label"="\([^"]*\)".*/\1/p')
 
 args=()
-for ws in 1 2 3 4 5 6 7 8 9 M L S; do
+for ws in 1 2 3 4 5 6 7 8 9 L M S; do
     if [ "$ws" = "$focused" ]; then
         # Filled white with a dark label: an inversion reads at a glance in a
         # way a lighter shade of grey does not, and the focused workspace is the

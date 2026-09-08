@@ -96,7 +96,7 @@ i3 config.
 | `Caps+Shift+Up` / `Down` | move the window up / down the stack |
 | `Caps+,` / `Caps+.` | previous / next window, under any layout |
 | `Caps+Shift+,` / `.` | move the window left / right along a tiling row |
-| `Caps+1..9`, `Caps+0/-/=` | switch to workspace 1-9, M, L, S |
+| `Caps+1..9`, `Caps+0/-/=` | switch to workspace 1-9, L, M, S |
 | `Caps+Shift+<same>` | move the focused window to that workspace |
 | `Caps+Tab` | jump back to the previously focused window |
 | `Caps+Q` | close window |
@@ -128,7 +128,7 @@ startup; `Caps+M` and `Caps+/` are how a workspace changes layout after that.
 states this config declares, and `Caps+/` flips the axis of whichever is
 current — so two unshifted keys reach all four layouts. Neither uses Shift,
 because `ctrl-alt-cmd-shift-slash` never reached AeroSpace. Note that the
-workspace named M is reached with `Caps+0`, not `Caps+M`.
+workspace named M is reached with `Caps+-`, not `Caps+M`.
 
 AeroSpace's own `layout tiles horizontal vertical` cannot cover this in one
 key: it applies the first layout in the list that differs from the current one,

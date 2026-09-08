@@ -120,7 +120,13 @@ sketchybar --add event aerospace_focus
 # The rail is right-anchored, and the right group fills right-to-left, so the
 # first item added lands in the corner and the list has to be walked backwards.
 #
-# The loop header has to stay literally "1 2 3 4 5 6 7 8 9 M L S" -- the verify
+# L M S rather than the mnemonics' own order, because that is the order
+# ctrl-alt-cmd-left/right actually walks. AeroSpace sorts its workspace list
+# itself -- digits numerically, then letters alphabetically -- and
+# persistent-workspaces has no say in it, so the rail is the side that has to
+# agree. Traced live: 8 -> 9 -> L -> M -> S -> 1.
+#
+# The loop header has to stay literally "1 2 3 4 5 6 7 8 9 L M S" -- the verify
 # harness greps it and compares it against workspaces.sh and
 # persistent-workspaces in aerospace.toml, so reversing it there would break the
 # check that exists to catch exactly that drift. Hence the walk by descending
@@ -132,7 +138,7 @@ sketchybar --add event aerospace_focus
 # finds whenever Homebrew has no bash of its own, and nothing here installs one.
 # Appending never expands the old value, so it is safe on every version.
 rail_order=()
-for ws in 1 2 3 4 5 6 7 8 9 M L S; do
+for ws in 1 2 3 4 5 6 7 8 9 L M S; do
     rail_order+=("$ws")
 done
 
