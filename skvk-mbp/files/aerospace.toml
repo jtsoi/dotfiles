@@ -49,8 +49,9 @@ on-focus-changed = ['exec-and-forget sketchybar --trigger aerospace_focus']
     inner.horizontal = 4
     inner.vertical = 4
     outer.left = 0
-    # 28 is the bar height in sketchybar's sketchybarrc, plus 4 to match the
-    # inner gaps. A bottom bar is an overlay window and reserves nothing itself.
+    # Exactly the bar height in sketchybar's sketchybarrc -- no more, so windows
+    # sit flush against the bar with no strip of desktop showing between them.
+    # A bottom bar is an overlay window and reserves nothing itself.
     outer.bottom = 32
     outer.top = 0
     outer.right = 0

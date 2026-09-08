@@ -49,7 +49,7 @@ includes = ["tasks.toml"]
 "brew-cask:claude"             = {}
 "brew-cask:karabiner-elements" = {}
 "brew-cask:alacritty"          = {}
-"brew-cask:font-jetbrains-mono-nerd-font" = {}
+"brew-cask:font-sauce-code-pro-nerd-font"  = {}
 # Declared even though the work layer also installs shellcheck, so this
 # module's own verify harness does not depend on a tool it never asked for.
 "brew:shellcheck"                         = {}

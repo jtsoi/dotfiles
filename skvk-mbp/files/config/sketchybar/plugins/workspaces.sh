@@ -14,11 +14,18 @@ focused=$(aerospace list-workspaces --focused)
 args=()
 for ws in 1 2 3 4 5 6 7 8 9 M L S; do
     if [ "$ws" = "$focused" ]; then
-        # A chip as well as a colour: the focused workspace is the one thing on
-        # the bar you look for rather than notice.
-        args+=(--set "space.$ws" label.color="$ACCENT" background.drawing=on)
+        # Filled white with a dark label: an inversion reads at a glance in a
+        # way a lighter shade of grey does not, and the focused workspace is the
+        # one thing on this bar you look for rather than merely notice.
+        args+=(--set "space.$ws" \
+               label.color="$ACTIVE_FG" \
+               background.color="$ACTIVE_BG" \
+               background.border_color="$ACTIVE_BG")
     else
-        args+=(--set "space.$ws" label.color="$DIM" background.drawing=off)
+        args+=(--set "space.$ws" \
+               label.color="$DIM" \
+               background.color="$CHIP_EMPTY" \
+               background.border_color="$CHIP_BORDER")
     fi
 done
 
