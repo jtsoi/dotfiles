@@ -44,6 +44,13 @@ Personal mise tools go in `conf.d/`, not `config.toml`, because a fragment in
 `998-mise.sh`) runs `mise settings jobs 1` on every shell start, rewriting
 `config.toml`. `conf.d` takes `[tools]` only — `config.toml` wins on `[settings]`.
 
+`~/repos/skvk/developer-machine/aerospace-notes.md` plans to promote AeroSpace
+into that repo once its trial sticks: a proper installer at
+`system-setup/optional/<NNN>-aerospace.sh` and, maybe, a config template. If
+that happens, `~/.aerospace.toml` becomes the second contested file after
+`com.apple.dock autohide-delay` — both layers would then write it, and the
+two would need the same last-writer-wins awareness that key already gets.
+
 ## Design
 
 [docs/superpowers/specs/2026-09-06-skvk-mbp-dotfiles-design.md](../docs/superpowers/specs/2026-09-06-skvk-mbp-dotfiles-design.md)
@@ -105,7 +112,9 @@ the accordion stack everywhere else.
 
 Workspace next/prev walks all twelve persistent workspaces, empty ones
 included. Skipping the empties needs an `eval` pipeline over
-`list-workspaces --empty no`; jumping straight to a workspace by name is what
+`aerospace list-workspaces --monitor all --empty no` (on 0.21.3, `--all` and
+`--empty` are mutually exclusive usage forms, so `--monitor all` is the form
+that actually runs); jumping straight to a workspace by name is what
 `Caps+1..9` is for.
 
 Workspaces 1-3 are horizontal tiles, for terminals side by side; the rest are a
@@ -133,6 +142,62 @@ AeroSpace installs from the `bootstrap` task rather than `[bootstrap.packages]`,
 because it ships from `nikitabobko/tap`, which publishes no `api/cask` metadata
 for mise's brew-cask backend to read.
 
+## Status bar
+
+A sketchybar bar along the bottom edge, driven by six plugin scripts in
+`files/config/sketchybar/plugins/`:
+
+| group | items |
+|---|---|
+| left | local clock, UTC clock, ISO week/weekday, a wall-clock Pomodoro timer |
+| center | the twelve AeroSpace workspaces, M/L/S showing their pinned app's icon, the focused one filled |
+| right | CPU load average, network interface + NetBird VPN state, battery percentage |
+
+Bar `height` in `sketchybarrc` and `outer.bottom` in `aerospace.toml` are one
+number in two files — 32 in both, so windows sit flush against the bar with no
+strip of desktop between them. Nothing syncs the two; change both together.
+
+`netbird` is a third provisioning source alongside this repo and Homebrew: the
+binary at `/usr/local/bin/netbird` is installed by NetBird.app, not by
+`mise.toml`. The network item hides the VPN half of its label whenever that
+binary is absent, so removing NetBird.app degrades the bar rather than
+breaking it.
+
+The bar's launchd agent runs with PATH
+`/opt/homebrew/bin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/sbin:/sbin` — no
+`/usr/local/bin`. Every plugin that shells out to something outside that PATH
+calls it by absolute path (`/usr/local/bin/netbird`, `/usr/bin/jq`,
+`/usr/bin/osascript`); a `command -v` guard would report the tool missing even
+when it is installed and working, which once made a live VPN connection look
+identical to no VPN at all.
+
+The separators between items are drawn as 2px background rectangles, not the
+font's `|` character: SauceCodePro Nerd Font's `|` glyph carries no ink at this
+size, so a typeset pipe renders nothing. Each separator's
+`background.x_offset` sign flips between the left and right groups because
+they lay out in opposite directions — do not simplify this back to a pipe
+character.
+
+Battery and Wi-Fi are redundant now that the bar shows them, so they come out
+of the real menu bar. This is a manual step, not a `mise.toml` declaration:
+the toggles live at `NSStatusItem VisibleCC Battery` and
+`NSStatusItem VisibleCC WiFi` in the plain `com.apple.controlcenter` domain
+(not `-currentHost`, and both are booleans mise could in principle write), but
+ControlCenter resets both to `1` on every relaunch — confirmed by writing
+`false`, running `killall ControlCenter`, and reading back `1`. Since
+ControlCenter restarts on every login, a declared default here would never
+stay converged, so it is not a fit for mise's defaults phase. Turn both off by
+hand in **System Settings → Control Center**, where Battery and Wi-Fi each
+have their own "show in menu bar" toggle.
+
+Rewriting history in this working tree is the one operation to avoid:
+`~/.config/sketchybar` and `~/.aerospace.toml` are symlinks into it, and a
+`git checkout`/`clean` that removes `files/aerospace.toml` from disk leaves
+`~/.aerospace.toml` dangling. `auto-reload-config` then loads a config with
+zero bindings while AeroSpace's server keeps answering CLI commands, so
+nothing looks wrong until a keypress does nothing. Do this kind of rewrite in
+a `git worktree` instead.
+
 ## Rollback
 
 `mise bootstrap` records what it applied, so the module removes cleanly:
@@ -142,7 +207,8 @@ mise bootstrap dotfiles unapply
 ```
 
 This removes `~/.zshrc`, `~/.zshrc.d/*`, `~/.config/starship.toml`,
-`~/.config/mise/conf.d/10-personal.toml`, `~/.aerospace.toml` and
-`~/.config/karabiner/karabiner.json`, returning the machine to a bare shell
-driven entirely by `~/.zprofile`. Brew packages and macOS defaults are not
-reverted; remove them with `brew uninstall` and `defaults delete` if wanted.
+`~/.config/mise/conf.d/10-personal.toml`, `~/.aerospace.toml`,
+`~/.config/karabiner/karabiner.json`, `~/.config/alacritty/alacritty.toml` and
+`~/.config/sketchybar`, returning the machine to a bare shell driven entirely
+by `~/.zprofile`. Brew packages and macOS defaults are not reverted; remove
+them with `brew uninstall` and `defaults delete` if wanted.

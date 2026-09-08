@@ -18,8 +18,9 @@ FONT="SauceCodePro Nerd Font"
 # for a single icon glyph. That is why these are app names and not escapes.
 APP_FONT="sketchybar-app-font"
 
-# height is authoritative for outer.bottom in aerospace.toml, which must be this
-# plus 4 to match the inner gaps. Nothing syncs the two: change both together.
+# height is authoritative for outer.bottom in aerospace.toml -- same number in
+# both files, so windows sit flush against the bar. Nothing syncs the two:
+# change both together.
 sketchybar --bar \
     position=bottom \
     height=32 \

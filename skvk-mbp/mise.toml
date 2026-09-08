@@ -50,6 +50,9 @@ includes = ["tasks.toml"]
 "brew-cask:karabiner-elements" = {}
 "brew-cask:alacritty"          = {}
 "brew-cask:font-sauce-code-pro-nerd-font"  = {}
+# workspaces M, L and S render app icons through this font's GSUB ligatures
+# (see sketchybarrc); without it declared, a rebuilt machine loses those icons.
+"brew-cask:font-sketchybar-app-font"       = {}
 # Declared even though the work layer also installs shellcheck, so this
 # module's own verify harness does not depend on a tool it never asked for.
 "brew:shellcheck"                         = {}

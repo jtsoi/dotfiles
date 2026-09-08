@@ -80,6 +80,83 @@ else
   fail "~/.aerospace.toml is a symlink"
 fi
 
+if [ -L "$FAKE/.config/sketchybar" ]; then
+  pass "~/.config/sketchybar is a symlink"
+else
+  fail "~/.config/sketchybar is a symlink"
+fi
+
+# The symlink means the repo file's mode is the mode sketchybar sees, so a lost
+# executable bit is a silent breakage.
+sketchybar_scripts=0
+for f in files/config/sketchybar/sketchybarrc files/config/sketchybar/plugins/*.sh; do
+  [ -e "$f" ] || continue
+  sketchybar_scripts=$((sketchybar_scripts + 1))
+  if [ -x "$f" ]; then
+    pass "executable: $f"
+  else
+    fail "executable: $f"
+  fi
+done
+[ "$sketchybar_scripts" -gt 0 ] || fail "at least one sketchybar script exists"
+
+# The shell counterpart to the zsh -n checks on zshrc.d. -x so shellcheck
+# follows the source directives into colors.sh.
+sketchybar_shellcheck=0
+for f in files/config/sketchybar/sketchybarrc files/config/sketchybar/colors.sh files/config/sketchybar/plugins/*.sh; do
+  [ -e "$f" ] || continue
+  sketchybar_shellcheck=$((sketchybar_shellcheck + 1))
+  if shellcheck -x "$f" >/dev/null 2>&1; then
+    pass "shellcheck: $f"
+  else
+    fail "shellcheck: $f"
+  fi
+done
+[ "$sketchybar_shellcheck" -gt 0 ] || fail "at least one sketchybar script exists for shellcheck"
+
+# Closes the audit gap that let a broken karabiner.json -- the file whose
+# failure costs the whole keyboard, since every binding is ctrl-alt-cmd-* --
+# reach a commit unchecked.
+if /usr/bin/jq empty files/config/karabiner/karabiner.json 2>/dev/null; then
+  pass "karabiner.json parses as JSON"
+else
+  fail "karabiner.json parses as JSON"
+fi
+
+# /usr/bin/python3 is 3.9 and has no tomllib -- a bare env -i shell resolves to
+# it. Checked on its own so a missing tomllib fails loudly here rather than
+# making the parse check below fail for the wrong reason.
+if python3 -c 'import tomllib' 2>/dev/null; then
+  pass "python3 has tomllib"
+else
+  fail "python3 has tomllib"
+fi
+
+if python3 -c 'import tomllib,sys; tomllib.load(open(sys.argv[1],"rb"))' files/aerospace.toml 2>/dev/null; then
+  pass "aerospace.toml parses as TOML"
+else
+  fail "aerospace.toml parses as TOML"
+fi
+
+# The twelve workspace names are written in three places with nothing tying
+# them together: the item loop in sketchybarrc, the repaint loop in
+# workspaces.sh, and persistent-workspaces in aerospace.toml. Drift fails
+# silently -- a name only in sketchybarrc yields an item workspaces.sh never
+# repaints, so it stays dim forever even when focused; a name only in
+# workspaces.sh targets an item that does not exist, which sketchybar does not
+# report in any way the script would notice.
+ws_sketchybarrc=$(grep -oE 'for ws in [0-9 A-Z]+' files/config/sketchybar/sketchybarrc | head -1 | sed 's/for ws in //')
+ws_plugin=$(grep -oE 'for ws in [0-9 A-Z]+' files/config/sketchybar/plugins/workspaces.sh | head -1 | sed 's/for ws in //')
+ws_aerospace=$(grep -E '^persistent-workspaces' files/aerospace.toml | grep -oE "'[0-9A-Z]+'" | tr -d "'" | tr '\n' ' ' | sed 's/ $//')
+
+# -n guards against all three loops being gone: three empty strings compare
+# equal to each other and would otherwise pass vacuously.
+if [ -n "$ws_sketchybarrc" ] && [ "$ws_sketchybarrc" = "$ws_plugin" ] && [ "$ws_plugin" = "$ws_aerospace" ]; then
+  pass "workspace lists agree across sketchybarrc, workspaces.sh and aerospace.toml"
+else
+  fail "workspace lists disagree: rc=[$ws_sketchybarrc] plugin=[$ws_plugin] aerospace=[$ws_aerospace]"
+fi
+
 # Every fragment parses as zsh, so one bad file cannot break every shell.
 fragments=0
 for f in files/zshrc.d/*.zsh; do
@@ -130,10 +207,11 @@ fi
 
 # A harness that silently runs zero checks must not report success. This floor
 # is the count of checks that run today (5 zshrc.d fragments -> 5 "valid zsh:"
+# lines; 7 sketchybar scripts -> 7 "executable:" lines; 8 -> 8 "shellcheck:"
 # lines) -- bump it whenever a check above is added or removed, or it stops
 # catching a deleted check.
-if [ "$ran" -lt 18 ]; then
-  echo "only $ran check(s) ran, expected at least 18"
+if [ "$ran" -lt 38 ]; then
+  echo "only $ran check(s) ran, expected at least 38"
   exit 1
 fi
 if [ "$fails" -ne 0 ]; then
