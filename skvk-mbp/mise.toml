@@ -19,6 +19,7 @@ dotfiles.default_mode = "symlink"
 "~/.aerospace.toml"       = "files/aerospace.toml"
 "~/.config/karabiner/karabiner.json" = "files/config/karabiner/karabiner.json"
 "~/.config/alacritty/alacritty.toml" = "files/config/alacritty/alacritty.toml"
+"~/.config/sketchybar" = "files/config/sketchybar"
 
 [dotfiles."~/.config/mise/conf.d/10-personal.toml"]
 content = """
@@ -48,6 +49,10 @@ includes = ["tasks.toml"]
 "brew-cask:claude"             = {}
 "brew-cask:karabiner-elements" = {}
 "brew-cask:alacritty"          = {}
+"brew-cask:font-jetbrains-mono-nerd-font" = {}
+# Declared even though the work layer also installs shellcheck, so this
+# module's own verify harness does not depend on a tool it never asked for.
+"brew:shellcheck"                         = {}
 # AeroSpace is NOT here: it lives in nikitabobko/tap, which does not publish
 # the api/cask metadata mise's brew-cask backend requires. It is installed by
 # the `bootstrap` task in tasks.toml, which mise runs as the final phase.

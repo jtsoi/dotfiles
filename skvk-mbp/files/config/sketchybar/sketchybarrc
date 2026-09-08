@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# Managed by skvk-mbp/mise.toml ([dotfiles]).
+# Reference: https://felixkratz.github.io/SketchyBar/
+set -euo pipefail
+
+CONFIG_DIR="$HOME/.config/sketchybar"
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+# shellcheck source=SCRIPTDIR/colors.sh
+source "$CONFIG_DIR/colors.sh"
+
+FONT="JetBrainsMono Nerd Font"
+
+# height is authoritative for outer.bottom in aerospace.toml, which must be this
+# plus 4 to match the inner gaps. Nothing syncs the two: change both together.
+sketchybar --bar \
+    position=bottom \
+    height=28 \
+    margin=0 \
+    y_offset=0 \
+    padding_left=8 \
+    padding_right=8 \
+    color="$BAR_BG"
+
+sketchybar --default \
+    label.font="$FONT:Medium:12" \
+    icon.font="$FONT:Medium:14" \
+    label.color="$FG" \
+    icon.color="$FG" \
+    padding_left=4 \
+    padding_right=4
+
+sketchybar --add item clock left \
+           --set clock script="$PLUGIN_DIR/datetime.sh local" update_freq=30 \
+                       label.color="$FG" \
+           --add item utc left \
+           --set utc script="$PLUGIN_DIR/datetime.sh utc" update_freq=30 \
+                     label.color="$DIM" \
+           --add item isoweek left \
+           --set isoweek script="$PLUGIN_DIR/datetime.sh isoweek" update_freq=3600 \
+                         label.color="$DIM"
+
+# Must exist before anything subscribes or AeroSpace's on-focus-changed
+# triggers it: sketchybar only delivers a trigger for an event --add'ed first.
+sketchybar --add event aerospace_focus
+
+for ws in 1 2 3 4 5 6 7 8 9 M L S; do
+    sketchybar --add item "space.$ws" center \
+               --set "space.$ws" \
+                     label="$(printf '%s' "$ws" | tr '[:upper:]' '[:lower:]')" \
+                     label.color="$DIM" \
+                     background.color="$MUTED" \
+                     background.corner_radius=4 \
+                     background.height=20 \
+                     background.drawing=off \
+                     click_script="aerospace workspace $ws" \
+               --subscribe "space.$ws" aerospace_focus
+done
+
+sketchybar --set space.1 script="$PLUGIN_DIR/workspaces.sh"
+
+sketchybar --update

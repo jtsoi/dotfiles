@@ -41,11 +41,17 @@ after-startup-command = [
     'layout --workspace S --root v_accordion',
 ]
 
+# The bar's workspace and window-title items repaint from this. AeroSpace 0.21.3
+# has no exec-on-workspace-change key -- this callback is the only hook.
+on-focus-changed = ['exec-and-forget sketchybar --trigger aerospace_focus']
+
 [gaps]
     inner.horizontal = 4
     inner.vertical = 4
     outer.left = 0
-    outer.bottom = 0
+    # 28 is the bar height in sketchybar's sketchybarrc, plus 4 to match the
+    # inner gaps. A bottom bar is an overlay window and reserves nothing itself.
+    outer.bottom = 32
     outer.top = 0
     outer.right = 0
 

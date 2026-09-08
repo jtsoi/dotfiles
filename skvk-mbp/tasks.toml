@@ -157,4 +157,20 @@ else
   echo "  installing aerospace from nikitabobko/tap"
   brew install --cask nikitabobko/tap/aerospace
 fi
+
+if brew list sketchybar >/dev/null 2>&1; then
+  echo "  ok    sketchybar already installed"
+else
+  echo "  installing sketchybar from FelixKratz/formulae"
+  brew install FelixKratz/formulae/sketchybar
+fi
+
+# brew services, not [bootstrap.packages]: no declarative phase starts a launchd
+# agent, which is why sketchybar joins aerospace in this task.
+if brew services list | grep -qE '^sketchybar +started'; then
+  echo "  ok    sketchybar service running"
+else
+  echo "  starting sketchybar service"
+  brew services start sketchybar
+fi
 """
