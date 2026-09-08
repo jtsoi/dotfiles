@@ -176,9 +176,10 @@ sketchybar --set space.1 script="$PLUGIN_DIR/workspaces.sh" update_freq=10
 # at once.
 #
 # The horizontal padding is the one new measurement: the outer 8 and 8 bracket
-# the pill, the inner 4 and 4 set the gap between glyph and text. A maximal chip
-# measures 137px with these, and five of them clear the rail by 14px. Changing
-# any of them re-opens that budget.
+# the pill, the inner 2 and 4 set the gap between glyph and text. A maximal chip
+# measures 135px with these, and five of them clear the rail by 19px on the
+# built-in display -- the narrowest one here, so the binding case. Changing any
+# of them re-opens that budget.
 for slot in 1 2 3 4 5; do
     sketchybar --add item "win.$slot" center \
                --set "win.$slot" \
@@ -186,7 +187,7 @@ for slot in 1 2 3 4 5; do
                      icon.font="$APP_FONT:Regular:12" \
                      icon.color="$DIM" \
                      icon.padding_left=8 \
-                     icon.padding_right=4 \
+                     icon.padding_right=2 \
                      icon.y_offset=0 \
                      label.font="$FONT:Medium:14" \
                      label.color="$DIM" \

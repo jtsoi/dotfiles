@@ -12,7 +12,7 @@ case "${1:-}" in
     utc)     label=$(TZ=UTC date '+%H:%MZ') ;;
     # %a has no lowercase form in BSD date, hence tr. Character classes
     # rather than ranges: shellcheck rejects A-Z at info level (SC2019).
-    isoweek) label=$(date '+w%V/%a' | tr '[:upper:]' '[:lower:]') ;;
+    isoweek) label=$(date '+w%V-%a' | tr '[:upper:]' '[:lower:]') ;;
     *)       printf 'usage: %s local|utc|isoweek\n' "${0##*/}" >&2; exit 64 ;;
 esac
 
