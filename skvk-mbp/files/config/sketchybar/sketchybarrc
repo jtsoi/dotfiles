@@ -54,14 +54,10 @@ sketchybar --default \
 # x_offset is doing real work. An item whose label and icon are both off gets a
 # smaller layout advance than its padding implies, so without it the next item
 # starts inside the drawn rectangle and the outline lands on its first
-# character. -1 measures 5px clear on the left and 4px on the right, which is
-# as centred as the gap allows. The shift flips with the stacking direction,
-# hence the side test, and the right-hand value is untested while that group is
-# empty.
+# character. -1 measures 5px clear on the left and 4px on the right, which is as
+# centred as the gap allows.
 separator() {
-    local off=-1
-    [ "$2" = "right" ] && off=8
-    sketchybar --add item "$1" "$2" \
+    sketchybar --add item "$1" left \
                --set "$1" label.drawing=off \
                      icon.drawing=off \
                      width=2 \
@@ -71,7 +67,7 @@ separator() {
                      background.border_width=1 \
                      background.corner_radius=0 \
                      background.height=18 \
-                     background.x_offset="$off" \
+                     background.x_offset=-1 \
                      padding_left=3 \
                      padding_right=1
 }
@@ -82,12 +78,12 @@ sketchybar --add item clock left \
            --set clock script="$PLUGIN_DIR/datetime.sh local" update_freq=30 \
                        label.color="$FG" \
                        label.y_offset=1
-separator sep.l1 left
+separator sep.l1
 sketchybar --add item utc left \
            --set utc script="$PLUGIN_DIR/datetime.sh utc" update_freq=30 \
                      label.color="$DIM" \
                      label.y_offset=1
-separator sep.l2 left
+separator sep.l2
 sketchybar --add item isoweek left \
            --set isoweek script="$PLUGIN_DIR/datetime.sh isoweek" update_freq=3600 \
                          label.color="$DIM" \
@@ -114,21 +110,89 @@ sketchybar --add event aerospace_focus
 # The three named workspaces are named after the app pinned to them by the
 # on-window-detected rules in aerospace.toml, so they show that app's icon
 # instead of its initial. The digits stay digits.
+# The rail is right-anchored, and the right group fills right-to-left, so the
+# first item added lands in the corner and the list has to be walked backwards.
+#
+# The loop header has to stay literally "1 2 3 4 5 6 7 8 9 M L S" -- the verify
+# harness greps it and compares it against workspaces.sh and
+# persistent-workspaces in aerospace.toml, so reversing it there would break the
+# check that exists to catch exactly that drift. Hence the walk by descending
+# index below, which also collapses twelve invocations into one.
+#
+# The index walk is not squeamishness: prepending instead, with
+# rail_order=("$ws" "${rail_order[@]}"), expands an empty array under set -u and
+# dies with "unbound variable" on bash 3.2 -- which is what #!/usr/bin/env bash
+# finds whenever Homebrew has no bash of its own, and nothing here installs one.
+# Appending never expands the old value, so it is safe on every version.
+rail_order=()
 for ws in 1 2 3 4 5 6 7 8 9 M L S; do
+    rail_order+=("$ws")
+done
+
+rail=()
+i=${#rail_order[@]}
+while [ "$i" -gt 0 ]; do
+    i=$((i - 1))
+    ws="${rail_order[$i]}"
     case "$ws" in
         M) label=":sublime_merge:" ; font="$APP_FONT:Regular:12" ; padl=6 ; padr=6  ; yoff=0 ;;
         L) label=":linear:"        ; font="$APP_FONT:Regular:12" ; padl=6 ; padr=6  ; yoff=0 ;;
         S) label=":slack:"         ; font="$APP_FONT:Regular:12" ; padl=6 ; padr=6  ; yoff=0 ;;
         *) label="$ws"             ; font="$FONT:Medium:14"      ; padl=9 ; padr=11 ; yoff=1 ;;
     esac
-    sketchybar --add item "space.$ws" center \
-               --set "space.$ws" \
-                     label="$label" \
-                     label.font="$font" \
+    rail+=(--add item "space.$ws" right
+           --set "space.$ws"
+                 label="$label"
+                 label.font="$font"
+                 label.color="$DIM"
+                 label.padding_left="$padl"
+                 label.padding_right="$padr"
+                 label.y_offset="$yoff"
+                 background.color="$CHIP_EMPTY"
+                 background.border_color="$CHIP_BORDER"
+                 background.border_width=1
+                 background.corner_radius=6
+                 background.height=26
+                 background.drawing=on
+                 padding_left=2
+                 padding_right=2
+                 click_script="aerospace workspace $ws"
+           --subscribe "space.$ws" aerospace_focus)
+done
+sketchybar "${rail[@]}"
+
+# space.1 carries the repaint for all twelve, and update_freq is what catches a
+# Slack badge changing without any focus change -- the event alone would only
+# notice unread that happened to coincide with switching workspace.
+sketchybar --set space.1 script="$PLUGIN_DIR/workspaces.sh" update_freq=10
+
+# Five slots, created once and reused. A fixed pool cannot leak items, cannot
+# race the bar's own layout pass, and makes the worst-case width a constant.
+#
+# Same pill as the rail -- corner radius, height, border weight, colours and
+# item padding all match, so the bar carries one chip in two lengths rather than
+# two kinds of chip. The icon calibration comes from the M/L/S chips and the
+# label calibration from the numbered ones; this is the first item to use both
+# at once.
+#
+# The horizontal padding is the one new measurement: the outer 8 and 8 bracket
+# the pill, the inner 4 and 4 set the gap between glyph and text. A maximal chip
+# measures 137px with these, and five of them clear the rail by 14px. Changing
+# any of them re-opens that budget.
+for slot in 1 2 3 4 5; do
+    sketchybar --add item "win.$slot" center \
+               --set "win.$slot" \
+                     drawing=off \
+                     icon.font="$APP_FONT:Regular:12" \
+                     icon.color="$DIM" \
+                     icon.padding_left=8 \
+                     icon.padding_right=4 \
+                     icon.y_offset=0 \
+                     label.font="$FONT:Medium:14" \
                      label.color="$DIM" \
-                     label.padding_left="$padl" \
-                     label.padding_right="$padr" \
-                     label.y_offset="$yoff" \
+                     label.padding_left=4 \
+                     label.padding_right=8 \
+                     label.y_offset=1 \
                      background.color="$CHIP_EMPTY" \
                      background.border_color="$CHIP_BORDER" \
                      background.border_width=1 \
@@ -136,19 +200,14 @@ for ws in 1 2 3 4 5 6 7 8 9 M L S; do
                      background.height=26 \
                      background.drawing=on \
                      padding_left=2 \
-                     padding_right=2 \
-                     click_script="aerospace workspace $ws" \
-               --subscribe "space.$ws" aerospace_focus
+                     padding_right=2
 done
 
-# space.1 carries the repaint for all twelve, and update_freq is what catches a
-# Slack badge changing without any focus change -- the event alone would only
-# notice unread that happened to coincide with switching workspace.
-sketchybar --set space.1 script="$PLUGIN_DIR/workspaces.sh" update_freq=10
-
-# The right group is empty for now. plugins/cpu.sh, network.sh and battery.sh
-# are all still here and still covered by the harness -- see git history for the
-# block that added their items, which also recorded that the right group lays
-# out right-to-left, so the first item added lands in the corner.
+# win.1 carries the repaint for all five, the way space.1 does for the rail. The
+# event covers every focus change; update_freq catches a background window
+# closing in another workspace, which changes nothing about focus and so fires
+# no event.
+sketchybar --set win.1 script="$PLUGIN_DIR/windows.sh" update_freq=10 \
+           --subscribe win.1 aerospace_focus
 
 sketchybar --update

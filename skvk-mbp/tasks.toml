@@ -157,6 +157,104 @@ else
   fail "workspace lists disagree: rc=[$ws_sketchybarrc] plugin=[$ws_plugin] aerospace=[$ws_aerospace]"
 fi
 
+# The rail's group is what puts it at the screen edge, and it is a single word
+# in one line of sketchybarrc -- easy to lose in a later edit, invisible when
+# lost until someone looks at the bar.
+if grep -q 'item "space\\.\\$ws" right' files/config/sketchybar/sketchybarrc; then
+  pass "workspace rail is added to the right group"
+else
+  fail "workspace rail is added to the right group"
+fi
+
+# The probe rules are asserted through windows.sh's own `probe` mode rather than
+# restated here. A restatement drifts; this cannot.
+expect_probe() {  # bundle-id, app name, window title, expected "glyph|label"
+  got=$(bash files/config/sketchybar/plugins/windows.sh probe "$1" "$2" "$3" 2>/dev/null || echo ERROR)
+  if [ "$got" = "$4" ]; then
+    pass "probe: $1"
+  else
+    fail "probe: $1 -- got [$got] want [$4]"
+  fi
+}
+
+expect_probe com.microsoft.VSCode 'Code' 'compose.deployment.yml — containers' \
+  ':code:|containers'
+expect_probe org.alacritty 'Alacritty' 'Jevgenij-Tsoi-CM99JX97G6: blueprints' \
+  ':terminal:|blueprints'
+expect_probe com.sublimemerge 'Sublime Merge' '~/repos/skvk/arbor' \
+  ':sublime_merge:|arbor'
+expect_probe com.linear 'Linear' "TECH-7716 Align ASI with Mastra's stable conventions" \
+  ':linear:|TECH-7716'
+expect_probe com.tinyspeck.slackmacgap 'Slack' 'Slackbot (DM) - Skovik - 1 new item - Slack' \
+  ':slack:|Slackbot (D…'
+expect_probe com.google.Chrome 'Google Chrome' 'Agentforce | Skovik Slack - Google Chrome' \
+  ':google_chrome:|Agentforce'
+# No table entry: generic glyph, app's own name, capped.
+expect_probe com.apple.DigitalColorMeter 'Digital Color Meter' 'Digital Color Meter' \
+  ':default:|Digital Col…'
+# A VS Code window with no folder open: the project fragment is useless, so the
+# filename stands in.
+expect_probe com.microsoft.VSCode 'Code' 'technical-writing-style-guide.md — Untitled (Workspace)' \
+  ':code:|technical-w…'
+
+# Every glyph the probe can emit must exist in the app font. The names are read
+# out of windows.sh rather than listed here, so adding an app extends this check
+# for free. The font's `post` table stores names as length-prefixed ASCII, so a
+# binary grep finds them.
+#
+# This reads the real HOME on purpose: the throwaway HOME has no font library,
+# and the cask that installs this font is declared in mise.toml, so any
+# bootstrapped machine has it.
+FONT_TTF="$HOME/Library/Fonts/sketchybar-app-font.ttf"
+if [ -f "$FONT_TTF" ]; then
+  for g in $(grep -oE "glyph=':[a-z0-9_]+:'" files/config/sketchybar/plugins/windows.sh |
+             sed "s/^glyph='//; s/'$//" | sort -u); do
+    if grep -aqF "$g" "$FONT_TTF"; then
+      pass "glyph in app font: $g"
+    else
+      fail "glyph in app font: $g"
+    fi
+  done
+else
+  fail "sketchybar-app-font.ttf found at $FONT_TTF"
+fi
+
+# Apple's /bin/bash is 3.2, which counts bytes and slices this label
+# mid-character unless windows.sh pins a UTF-8 locale -- so this is the check
+# that proves the pin does something. env -i so no inherited locale can pass it
+# for the wrong reason.
+#
+# /bin/bash rather than the Homebrew build on purpose: it is the strict
+# interpreter AND the only one macOS guarantees. bash is not declared in
+# mise.toml, so testing both would make this check's count depend on whether
+# Homebrew happens to have installed one, and the floor guard below would trip
+# on a machine that is otherwise fine.
+got=$(env -i PATH=/usr/bin:/bin HOME="$HOME" /bin/bash \
+        files/config/sketchybar/plugins/windows.sh \
+        probe com.example.unknown 'Ålandsbanken naïve café' 'irrelevant' 2>/dev/null ||
+      echo ERROR)
+if [ "$got" = ':default:|Ålandsbanke…' ]; then
+  pass "label caps on a character boundary under /bin/bash"
+else
+  fail "label caps on a character boundary under /bin/bash -- got [$got]"
+fi
+
+# The five slots and their single repaint carrier are each one line, and each is
+# silent when lost: a missing slot renders as a workspace with fewer windows
+# than it has, and a missing script line as a centre group that never repaints.
+if grep -q 'for slot in 1 2 3 4 5' files/config/sketchybar/sketchybarrc; then
+  pass "five win.N slots are registered"
+else
+  fail "five win.N slots are registered"
+fi
+
+if grep -q 'win\\.1 script=' files/config/sketchybar/sketchybarrc &&
+   grep -q 'subscribe win\\.1 aerospace_focus' files/config/sketchybar/sketchybarrc; then
+  pass "win.1 carries the centre repaint and its subscription"
+else
+  fail "win.1 carries the centre repaint and its subscription"
+fi
+
 # Every fragment parses as zsh, so one bad file cannot break every shell.
 fragments=0
 for f in files/zshrc.d/*.zsh; do
@@ -207,11 +305,11 @@ fi
 
 # A harness that silently runs zero checks must not report success. This floor
 # is the count of checks that run today (5 zshrc.d fragments -> 5 "valid zsh:"
-# lines; 7 sketchybar scripts -> 7 "executable:" lines; 8 -> 8 "shellcheck:"
-# lines) -- bump it whenever a check above is added or removed, or it stops
-# catching a deleted check.
-if [ "$ran" -lt 38 ]; then
-  echo "only $ran check(s) ran, expected at least 38"
+# lines; 8 sketchybar scripts -> 8 "executable:" lines; 9 -> 9 "shellcheck:"
+# lines; 8 probe cases; 7 glyphs; 2 win.N pool checks) -- bump it whenever a
+# check above is added or removed, or it stops catching a deleted check.
+if [ "$ran" -lt 59 ]; then
+  echo "only $ran check(s) ran, expected at least 59"
   exit 1
 fi
 if [ "$fails" -ne 0 ]; then
