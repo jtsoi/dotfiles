@@ -23,6 +23,13 @@ APP_FONT="sketchybar-app-font"
 # its top edge comes from outer.bottom in aerospace.toml being height + 3.
 # Nothing syncs those two numbers: change both together.
 #
+# The padding is deliberately asymmetric. It insets each group from its own end
+# of the bar, and only the right group is anchored to an end -- the left group
+# starts from its own item padding and the centre stays centred on the full bar
+# width -- so the extra 5px on the right pulls the workspace rail in toward the
+# middle without moving anything else. Measured: the rail shifts 5px left, the
+# clock and the window chips do not move at all.
+#
 # topmost is on to keep the background flat. Underneath the windows, the bar
 # catches the drop shadow of whatever sits above it: measured across empty bar
 # space, the ground ran from 55% of its configured colour at the top edge to 97%
@@ -37,7 +44,7 @@ sketchybar --bar \
     topmost=on \
     corner_radius=14 \
     padding_left=10 \
-    padding_right=10 \
+    padding_right=15 \
     color="$BAR_BG"
 
 sketchybar --default \
@@ -177,9 +184,10 @@ sketchybar --set space.1 script="$PLUGIN_DIR/workspaces.sh" update_freq=10
 #
 # The horizontal padding is the one new measurement: the outer 8 and 8 bracket
 # the pill, the inner 2 and 4 set the gap between glyph and text. A maximal chip
-# measures 135px with these, and five of them clear the rail by 19px on the
+# measures 135px with these, and five of them clear the rail by 14px on the
 # built-in display -- the narrowest one here, so the binding case. Changing any
-# of them re-opens that budget.
+# of them re-opens that budget, and so does the bar's padding_right, which is
+# what the rail is inset by.
 for slot in 1 2 3 4 5; do
     sketchybar --add item "win.$slot" center \
                --set "win.$slot" \
