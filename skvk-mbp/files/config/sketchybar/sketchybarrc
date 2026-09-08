@@ -8,10 +8,10 @@ PLUGIN_DIR="$CONFIG_DIR/plugins"
 # shellcheck source=SCRIPTDIR/colors.sh
 source "$CONFIG_DIR/colors.sh"
 
-# Source Code Pro, the typeface the old i3 config used, in its Nerd Font
-# patching so glyphs and text come from one family rather than needing a
-# fallback face the way i3 needed FontAwesome alongside it.
-FONT="SauceCodePro Nerd Font"
+# Nerd Font patched, so glyphs and text come from one family rather than needing
+# a fallback face declared alongside them the way the old i3 bar needed
+# FontAwesome next to Source Code Pro.
+FONT="JetBrainsMono Nerd Font"
 
 # sketchybar-app-font is ligature-based rather than codepoint-based: the label
 # text is the literal string ":slack:" and the font's GSUB table substitutes it
@@ -38,11 +38,11 @@ sketchybar --default \
     padding_left=5 \
     padding_right=5
 
-# A drawn rule, not a typeset one. This font's | glyph carries no ink -- a red
-# X in the same item renders while a | renders nothing, and the measurement
-# gives it away: in a monospaced face X advances 13pt and | only 5pt. U+2502
-# fails the same way. So the separator is a 2px filled background, which owes
-# nothing to the typeface.
+# A drawn rule, not a typeset one, so it owes nothing to the typeface. That is
+# not incidental: a pipe character is not reliably inked. Source Code Pro's Nerd
+# Font patching renders | as nothing at all -- a red X in the same item draws
+# while a | draws blank, and the advance gives it away, 13pt against 5pt in a
+# monospaced face. U+2502 fails identically. A 2px filled background cannot.
 #
 # x_offset is doing real work: an item whose label and icon are both off gets a
 # smaller layout advance than its padding implies, so the next item starts left
@@ -112,26 +112,30 @@ sketchybar --add event aerospace_focus
 # font's glyph advance causes: it replaces the padding rather than adding to it,
 # and collapses every chip to the label's own width.
 #
-# y_offset corrects this font's vertical metrics, which centre the glyph about
-# two points above the chip's middle. Negative moves the label down.
+# Every offset here was tuned against the rendered bar rather than derived:
+# positive y_offset moves the label up, and asymmetric label padding shifts it
+# sideways without changing the chip's width, a label having no x_offset of its
+# own. The digits sit a point up and a point left of centre; the icons sit
+# centred and a point lower, because the app font's vertical metrics are not the
+# text font's.
 # The three named workspaces are named after the app pinned to them by the
 # on-window-detected rules in aerospace.toml, so they show that app's icon
 # instead of its initial. The digits stay digits.
 for ws in 1 2 3 4 5 6 7 8 9 M L S; do
     case "$ws" in
-        M) label=":sublime_merge:" ; font="$APP_FONT:Regular:12" ; pad=7  ;;
-        L) label=":linear:"        ; font="$APP_FONT:Regular:12" ; pad=7  ;;
-        S) label=":slack:"         ; font="$APP_FONT:Regular:12" ; pad=7  ;;
-        *) label="$ws"             ; font="$FONT:Medium:14"      ; pad=10 ;;
+        M) label=":sublime_merge:" ; font="$APP_FONT:Regular:12" ; padl=6 ; padr=6  ; yoff=0 ;;
+        L) label=":linear:"        ; font="$APP_FONT:Regular:12" ; padl=6 ; padr=6  ; yoff=0 ;;
+        S) label=":slack:"         ; font="$APP_FONT:Regular:12" ; padl=6 ; padr=6  ; yoff=0 ;;
+        *) label="$ws"             ; font="$FONT:Medium:14"      ; padl=9 ; padr=11 ; yoff=1 ;;
     esac
     sketchybar --add item "space.$ws" center \
                --set "space.$ws" \
                      label="$label" \
                      label.font="$font" \
                      label.color="$DIM" \
-                     label.padding_left="$pad" \
-                     label.padding_right="$pad" \
-                     label.y_offset=-2 \
+                     label.padding_left="$padl" \
+                     label.padding_right="$padr" \
+                     label.y_offset="$yoff" \
                      background.color="$CHIP_EMPTY" \
                      background.border_color="$CHIP_BORDER" \
                      background.border_width=1 \
