@@ -36,6 +36,10 @@ chip_for() {
         com.tinyspeck.slackmacgap) glyph=':slack:'         ; label="${title%% - *}" ;;
         com.google.Chrome)         glyph=':google_chrome:' ; t="${title% - Google Chrome}"
                                                              label="${t%% | *}" ;;
+        # Claude's window title is just "Claude", so the label is the icon said
+        # twice. Taking the title anyway rather than hardcoding a string means a
+        # future version that names the conversation gets shown for free.
+        com.anthropic.claudefordesktop) glyph=':claude:'    ; label="$title" ;;
         # No entry: a generic window mark and the app's own name. Not a bare
         # initial -- two unknown apps would then look identical, and the glyph
         # already says "this app has no icon".

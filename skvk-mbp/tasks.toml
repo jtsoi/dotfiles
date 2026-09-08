@@ -189,6 +189,8 @@ expect_probe com.tinyspeck.slackmacgap 'Slack' 'Slackbot (DM) - Skovik - 1 new i
   ':slack:|Slackbot (D…'
 expect_probe com.google.Chrome 'Google Chrome' 'Agentforce | Skovik Slack - Google Chrome' \
   ':google_chrome:|Agentforce'
+expect_probe com.anthropic.claudefordesktop 'Claude' 'Claude' \
+  ':claude:|Claude'
 # No table entry: generic glyph, app's own name, capped.
 expect_probe com.apple.DigitalColorMeter 'Digital Color Meter' 'Digital Color Meter' \
   ':default:|Digital Col…'
@@ -308,8 +310,8 @@ fi
 # lines; 8 sketchybar scripts -> 8 "executable:" lines; 9 -> 9 "shellcheck:"
 # lines; 8 probe cases; 7 glyphs; 2 win.N pool checks) -- bump it whenever a
 # check above is added or removed, or it stops catching a deleted check.
-if [ "$ran" -lt 59 ]; then
-  echo "only $ran check(s) ran, expected at least 59"
+if [ "$ran" -lt 61 ]; then
+  echo "only $ran check(s) ran, expected at least 61"
   exit 1
 fi
 if [ "$fails" -ne 0 ]; then
