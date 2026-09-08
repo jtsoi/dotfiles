@@ -141,7 +141,10 @@ for ws in 1 2 3 4 5 6 7 8 9 M L S; do
                --subscribe "space.$ws" aerospace_focus
 done
 
-sketchybar --set space.1 script="$PLUGIN_DIR/workspaces.sh"
+# space.1 carries the repaint for all twelve, and update_freq is what catches a
+# Slack badge changing without any focus change -- the event alone would only
+# notice unread that happened to coincide with switching workspace.
+sketchybar --set space.1 script="$PLUGIN_DIR/workspaces.sh" update_freq=10
 
 # The right group is empty for now. plugins/cpu.sh, network.sh and battery.sh
 # are all still here and still covered by the harness -- see git history for the

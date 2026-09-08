@@ -17,6 +17,7 @@ export FG=0xfff1f4f1           # hsl(135 12% 95%) labels
 export DIM=0xffb8c7bb          # hsl(135 12% 75%) secondary labels
 export CHIP_EMPTY=0x00000000   # inactive workspace: outline only, no fill
 export CHIP_BORDER=0xff76937d  # hsl(135 12% 52%) that outline
+export UNREAD=0xffffffff       # a workspace whose app is waiting on you
 export ACTIVE_BG=0xfff9fafa    # hsl(135 10% 98%) focused workspace: filled
 export ACTIVE_FG=0xff304034    # hsl(135 14% 22%) its label, the ground darkened to read on that fill
 export OK=0xff72ca88           # hsl(135 45% 62%) --color-success-signature, lifted: the ground is muted enough that the brand green reads again
