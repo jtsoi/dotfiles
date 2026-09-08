@@ -18,14 +18,24 @@ FONT="JetBrainsMono Nerd Font"
 # for a single icon glyph. That is why these are app names and not escapes.
 APP_FONT="sketchybar-app-font"
 
-# height is authoritative for outer.bottom in aerospace.toml -- same number in
-# both files, so windows sit flush against the bar. Nothing syncs the two:
-# change both together.
+# The bar is a rounded panel hugging the bottom edge: margin insets it 2px each
+# side, y_offset 0 keeps it flush to the screen bottom, and the 3px of air above
+# its top edge comes from outer.bottom in aerospace.toml being height + 3.
+# Nothing syncs those two numbers: change both together.
+#
+# topmost is on to keep the background flat. Underneath the windows, the bar
+# catches the drop shadow of whatever sits above it: measured across empty bar
+# space, the ground ran from 55% of its configured colour at the top edge to 97%
+# at the bottom, which reads as a gradient nobody configured. Drawn on top, it
+# measures flat at every height. AeroSpace already reserves the bar's space, so
+# nothing is hidden by raising it.
 sketchybar --bar \
     position=bottom \
     height=32 \
-    margin=0 \
+    margin=2 \
     y_offset=0 \
+    topmost=on \
+    corner_radius=14 \
     padding_left=10 \
     padding_right=10 \
     color="$BAR_BG"
