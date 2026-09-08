@@ -8,13 +8,13 @@
 #
 # The muted ground is what lets OK be the brand green again. Against
 # --color-brand-primary itself the success signature is invisible, since they are
-# the same colour.
+# the same colour. OK, WARN and CRIT have no consumer while the right group is
+# empty; they are kept because the plugins that use them are kept.
 #
 # Roles, not per-item colours: a re-theme touches only this file.
 export BAR_BG=0xff46554a       # RGB 70 85 74, a desaturated brand hue
 export FG=0xfff1f4f1           # hsl(135 12% 95%) labels
 export DIM=0xffb8c7bb          # hsl(135 12% 75%) secondary labels
-export SEP=0xfff9fafa          # hsl(135 10% 98%) drawn rules between widgets
 export CHIP_EMPTY=0x00000000   # inactive workspace: outline only, no fill
 export CHIP_BORDER=0xff76937d  # hsl(135 12% 52%) that outline
 export ACTIVE_BG=0xfff9fafa    # hsl(135 10% 98%) focused workspace: filled

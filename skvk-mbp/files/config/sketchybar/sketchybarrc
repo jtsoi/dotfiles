@@ -48,67 +48,50 @@ sketchybar --default \
     padding_left=5 \
     padding_right=5
 
-# A drawn rule, not a typeset one, so it owes nothing to the typeface. That is
-# not incidental: a pipe character is not reliably inked. Source Code Pro's Nerd
-# Font patching renders | as nothing at all -- a red X in the same item draws
-# while a | draws blank, and the advance gives it away, 13pt against 5pt in a
-# monospaced face. U+2502 fails identically. A 2px filled background cannot.
+# A separator is a slim outlined rectangle: a 1px border around an item with no
+# label and no icon, so only the outline draws.
 #
-# x_offset is doing real work: an item whose label and icon are both off gets a
-# smaller layout advance than its padding implies, so the next item starts left
-# of where the rule is drawn and the rule lands on top of its first character.
-# Shifting the rule back by 8 puts it in the gap. padding_right does not help --
-# it is ignored for an item with no content to pad.
+# x_offset is doing real work. An item whose label and icon are both off gets a
+# smaller layout advance than its padding implies, so without it the next item
+# starts inside the drawn rectangle and the outline lands on its first
+# character. -1 measures 5px clear on the left and 4px on the right, which is
+# as centred as the gap allows. The shift flips with the stacking direction,
+# hence the side test, and the right-hand value is untested while that group is
+# empty.
 separator() {
-    # The shift flips with the stacking direction: the left group lays out
-    # left-to-right so the rule has to move left out of the next item, and the
-    # right group lays out right-to-left so it has to move right.
-    # -8 and 11 are measured, not guessed: on each side the rule is flush
-    # against one neighbour at one end of a 6px window and flush against the
-    # other at the far end, so these are the midpoints.
-    local off=-8
-    [ "$2" = "right" ] && off=11
+    local off=-1
+    [ "$2" = "right" ] && off=8
     sketchybar --add item "$1" "$2" \
                --set "$1" label.drawing=off \
                      icon.drawing=off \
                      width=2 \
                      background.drawing=on \
-                     background.color="$SEP" \
+                     background.color="$CHIP_EMPTY" \
+                     background.border_color="$CHIP_BORDER" \
+                     background.border_width=1 \
+                     background.corner_radius=0 \
                      background.height=18 \
-                     background.corner_radius=1 \
                      background.x_offset="$off" \
-                     padding_left=10 \
-                     padding_right=10
+                     padding_left=3 \
+                     padding_right=1
 }
 
-# The left group renders in insertion order.
+# The left group renders in insertion order. The clock is the one you read, so
+# it carries the primary label colour and the other two are secondary.
 sketchybar --add item clock left \
            --set clock script="$PLUGIN_DIR/datetime.sh local" update_freq=30 \
-                       label.color="$FG"
+                       label.color="$FG" \
+                       label.y_offset=1
 separator sep.l1 left
 sketchybar --add item utc left \
            --set utc script="$PLUGIN_DIR/datetime.sh utc" update_freq=30 \
-                     label.color="$DIM"
+                     label.color="$DIM" \
+                     label.y_offset=1
 separator sep.l2 left
 sketchybar --add item isoweek left \
            --set isoweek script="$PLUGIN_DIR/datetime.sh isoweek" update_freq=3600 \
-                         label.color="$DIM"
-separator sep.l3 left
-
-# update_freq=0 at startup because the script raises it to 1 itself when a
-# block is running -- including after a restart, since the state file
-# survives.
-# The mouse.clicked subscription is the ONLY click path. A click_script would
-# also fire the plugin, but with no $SENDER set -- so it took the render-only
-# branch and raced the subscribed invocation that writes the state, which is how
-# a click could render the state it had before the toggle.
-#
-# icon.padding_right separates the glyph from the countdown; they touched.
-sketchybar --add item pomodoro left \
-           --set pomodoro script="$PLUGIN_DIR/pomodoro.sh" \
-                          update_freq=0 \
-                          icon.padding_right=6 \
-           --subscribe pomodoro mouse.clicked
+                         label.color="$DIM" \
+                         label.y_offset=1
 
 # Must exist before anything subscribes or AeroSpace's on-focus-changed
 # triggers it: sketchybar only delivers a trigger for an event --add'ed first.
@@ -160,17 +143,9 @@ done
 
 sketchybar --set space.1 script="$PLUGIN_DIR/workspaces.sh"
 
-# The right group renders RIGHT-TO-LEFT in insertion order, so battery is added
-# first to land in the corner and cpu last to sit leftmost. Every item here is
-# fixed-width, which is what keeps the row from shifting under itself.
-sketchybar --add item battery right \
-           --set battery script="$PLUGIN_DIR/battery.sh" update_freq=60 \
-           --subscribe battery power_source_change
-separator sep.r2 right
-sketchybar --add item network right \
-           --set network script="$PLUGIN_DIR/network.sh" update_freq=10
-separator sep.r1 right
-sketchybar --add item cpu right \
-           --set cpu script="$PLUGIN_DIR/cpu.sh" update_freq=5
+# The right group is empty for now. plugins/cpu.sh, network.sh and battery.sh
+# are all still here and still covered by the harness -- see git history for the
+# block that added their items, which also recorded that the right group lays
+# out right-to-left, so the first item added lands in the corner.
 
 sketchybar --update
