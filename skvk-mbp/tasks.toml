@@ -86,6 +86,12 @@ else
   fail "~/.config/sketchybar is a symlink"
 fi
 
+if [ -L "$FAKE/.hammerspoon" ]; then
+  pass "~/.hammerspoon is a symlink"
+else
+  fail "~/.hammerspoon is a symlink"
+fi
+
 # The symlink means the repo file's mode is the mode sketchybar sees, so a lost
 # executable bit is a silent breakage.
 sketchybar_scripts=0
@@ -310,8 +316,102 @@ fi
 # lines; 8 sketchybar scripts -> 8 "executable:" lines; 9 -> 9 "shellcheck:"
 # lines; 8 probe cases; 7 glyphs; 2 win.N pool checks) -- bump it whenever a
 # check above is added or removed, or it stops catching a deleted check.
-if [ "$ran" -lt 61 ]; then
-  echo "only $ran check(s) ran, expected at least 61"
+# --- Caps+N, the new-window mode ---
+# The keys live in aerospace.toml and the overlay lives in Hammerspoon, so the
+# two files have to agree on one function name. Disagreement fails silently: the
+# mode still captures the keyboard and nothing draws.
+if grep -q 'hs -c "modeChanged()"' files/aerospace.toml; then
+  pass "aerospace.toml wires on-mode-changed to modeChanged()"
+else
+  fail "aerospace.toml wires on-mode-changed to modeChanged()"
+fi
+
+if grep -q 'function modeChanged' files/hammerspoon/init.lua; then
+  pass "init.lua defines modeChanged(), the name aerospace.toml calls"
+else
+  fail "init.lua defines modeChanged(), the name aerospace.toml calls"
+fi
+
+# Without this the IPC server never starts and every `hs -c` hangs.
+if grep -q 'require("hs.ipc")' files/hammerspoon/init.lua; then
+  pass "init.lua starts the IPC server hs -c needs"
+else
+  fail "init.lua starts the IPC server hs -c needs"
+fi
+
+# Hammerspoon is a drawing surface and nothing else. AeroSpace owns keys and
+# windows; two window managers bidding for the same events is the failure here.
+if grep -qE 'hs\\.(hotkey|window)' files/hammerspoon/init.lua; then
+  fail "init.lua stays a drawing surface: no hs.hotkey, no hs.window"
+else
+  pass "init.lua stays a drawing surface: no hs.hotkey, no hs.window"
+fi
+
+# The palette has one home. A colour literal in the Lua means a re-theme of
+# colors.sh silently leaves the overlay on the old scheme.
+if grep -q 'colors.sh' files/hammerspoon/init.lua &&
+   ! grep -qE '0x[0-9a-fA-F]{8}' files/hammerspoon/init.lua; then
+  pass "init.lua reads colors.sh rather than restating the palette"
+else
+  fail "init.lua reads colors.sh rather than restating the palette"
+fi
+
+# Every key in the mode must return to main. One that does not strands the
+# overlay on screen with all twelve workspace bindings dead.
+mode_keys=$(sed -n '/^\\[mode\\.new\\.binding\\]/,$p' files/aerospace.toml | grep -cE "^[[:space:]]+[a-z]+ = ")
+mode_exits=$(sed -n '/^\\[mode\\.new\\.binding\\]/,$p' files/aerospace.toml | grep -c "mode main")
+if [ "$mode_keys" -gt 0 ] && [ "$mode_keys" = "$mode_exits" ]; then
+  pass "every mode.new binding returns to main ($mode_keys)"
+else
+  fail "mode.new: $mode_keys binding(s), only $mode_exits return to main"
+fi
+
+# The in-bundle CLI, not the PATH copy: VS Code's palette installs `code` to
+# /usr/local/bin, which is absent from the PATH a login-launched app inherits.
+code_cli=$(grep -oE '/Applications/Visual Studio Code[^"]*/bin/code' files/aerospace.toml | head -1)
+if [ -n "$code_cli" ] && [ -x "$code_cli" ]; then
+  pass "mode.new's VS Code CLI path exists and is executable"
+else
+  fail "mode.new's VS Code CLI path exists and is executable: [$code_cli]"
+fi
+
+if grep -q 'brew-cask:hammerspoon' mise.toml; then
+  pass "mise.toml declares the hammerspoon cask"
+else
+  fail "mise.toml declares the hammerspoon cask"
+fi
+
+# --- Caps+M / Caps+/, the layout toast ---
+# `layout` fires no callback of any kind, so each key must carry its own trigger.
+# One that forgets it changes the layout with no feedback at all.
+lay_keys=$(grep -cE "^[[:space:]]+ctrl-alt-cmd-(m|slash)[[:space:]]+=" files/aerospace.toml)
+lay_toast=$(grep -E "^[[:space:]]+ctrl-alt-cmd-(m|slash)[[:space:]]+=" files/aerospace.toml | grep -c "layoutToast()")
+if [ "$lay_keys" = 2 ] && [ "$lay_toast" = 2 ]; then
+  pass "both layout keys chain the toast trigger"
+else
+  fail "layout keys: $lay_keys found, $lay_toast chain a toast (want 2 and 2)"
+fi
+
+if grep -q 'function layoutToast' files/hammerspoon/init.lua; then
+  pass "init.lua defines layoutToast(), the name aerospace.toml calls"
+else
+  fail "init.lua defines layoutToast(), the name aerospace.toml calls"
+fi
+
+# Caps+M and Caps+/ between them reach all four layouts, verified live. A name
+# missing from the map degrades to AeroSpace's raw identifier in the toast.
+lay_missing=""
+for lay in h_tiles v_tiles h_accordion v_accordion; do
+  grep -qE "$lay[[:space:]]*=" files/hammerspoon/init.lua || lay_missing="$lay_missing $lay"
+done
+if [ -z "$lay_missing" ]; then
+  pass "all four layout states have a display name"
+else
+  fail "layout states with no display name:$lay_missing"
+fi
+
+if [ "$ran" -lt 73 ]; then
+  echo "only $ran check(s) ran, expected at least 73"
   exit 1
 fi
 if [ "$fails" -ne 0 ]; then

@@ -104,6 +104,11 @@ i3 config.
 | `Caps+M` | flip the workspace between side-by-side tiles and a full-width stack |
 | `Caps+/` | flip that layout's axis: horizontal to vertical and back |
 | `Caps+Space` | toggle the focused window between floating and tiled |
+| `Caps+N` | enter "new window" mode: `g` opens Google Chrome, `f` Firefox, `c` VS Code, `Esc` cancels |
+
+`Caps+M` and `Caps+/` flash the resulting layout in the bottom-right corner,
+because AeroSpace fires no callback when a layout changes and the windows moving
+is otherwise the only feedback.
 
 `Caps+,` / `Caps+.` are `focus dfs-prev` / `dfs-next` rather than
 `focus left` / `right`, so one pair of keys means "previous and next window"

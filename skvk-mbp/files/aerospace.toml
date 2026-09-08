@@ -50,6 +50,12 @@ after-startup-command = [
 # has no exec-on-workspace-change key -- this callback is the only hook.
 on-focus-changed = ['exec-and-forget sketchybar --trigger aerospace_focus']
 
+# Fires on both edges -- entering a mode and returning to main -- so one handler
+# shows and hides the overlay with no timer. Hammerspoon draws it rather than the
+# bar: a sketchybar popup anchors to a bar item, so centring one on screen needs
+# a derived offset and has to evict the window chips from the centre group first.
+on-mode-changed = ['exec-and-forget hs -c "modeChanged()"']
+
 [gaps]
     inner.horizontal = 4
     inner.vertical = 4
@@ -87,6 +93,12 @@ on-focus-changed = ['exec-and-forget sketchybar --trigger aerospace_focus']
     if.app-id = 'com.apple.Stickies'
     run = 'layout floating'
 
+# Only its Console and Preferences windows reach this rule. The overlay itself is
+# a canvas above the window layer, which AeroSpace never sees as a window.
+[[on-window-detected]]
+    if.app-id = 'org.hammerspoon.Hammerspoon'
+    run = 'layout floating'
+
 # --- Auto-route: pin specific apps to dedicated workspaces. ---
 [[on-window-detected]]
     if.app-id = 'com.sublimemerge'
@@ -110,6 +122,11 @@ on-focus-changed = ['exec-and-forget sketchybar --trigger aerospace_focus']
     # exported by whoever launched the app. Cmd+N inside a window is the
     # same-process route when that matters.
     ctrl-alt-cmd-enter = 'exec-and-forget open -na Alacritty'
+
+    # A mode rather than a chord per app: one key per app would spend the top
+    # level fast, and the overlay is the only thing that says the keyboard is
+    # captured -- every binding in this table is dead until the mode exits.
+    ctrl-alt-cmd-n = 'mode new'
 
     # Left/Right leave the workspace; Up/Down and , / . stay inside it.
     # next/prev walk all twelve persistent workspaces, the empty ones included.
@@ -180,6 +197,24 @@ on-focus-changed = ['exec-and-forget sketchybar --trigger aerospace_focus']
     # layouts this config declares; slash then flips the axis of whichever one
     # is current, so two unshifted keys reach all four states. Both stay off
     # Shift because ctrl-alt-cmd-shift-slash never reached AeroSpace.
-    ctrl-alt-cmd-m     = 'layout h_tiles v_accordion'
-    ctrl-alt-cmd-slash = 'layout horizontal vertical'
+    #
+    # Each chains its own toast: `layout` fires no callback of any kind, so
+    # on-mode-changed -- which the Caps+N overlay rides on -- never sees these.
+    ctrl-alt-cmd-m     = ['layout h_tiles v_accordion', 'exec-and-forget hs -c "layoutToast()"']
+    ctrl-alt-cmd-slash = ['layout horizontal vertical', 'exec-and-forget hs -c "layoutToast()"']
     ctrl-alt-cmd-space = 'layout floating tiling'
+
+# Each key returns to main, so the mode is exactly one keystroke deep.
+#
+# The three commands disagree because the apps do. Chrome and Firefox hand off to
+# their running instance, so unlike Caps+Enter they cost no extra process. VS Code
+# ignores `open -n` outright -- no window, no error -- and needs its own CLI,
+# referenced inside the bundle because the palette installs it to /usr/local/bin,
+# which is absent from the PATH a login-launched app inherits.
+#
+# No terminal entry: Caps+Enter above already opens one.
+[mode.new.binding]
+    esc = 'mode main'
+    g = ['exec-and-forget open -na "Google Chrome"', 'mode main']
+    f = ['exec-and-forget open -na Firefox', 'mode main']
+    c = ['exec-and-forget "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" --new-window', 'mode main']

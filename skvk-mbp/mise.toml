@@ -20,6 +20,7 @@ dotfiles.default_mode = "symlink"
 "~/.config/karabiner/karabiner.json" = "files/config/karabiner/karabiner.json"
 "~/.config/alacritty/alacritty.toml" = "files/config/alacritty/alacritty.toml"
 "~/.config/sketchybar" = "files/config/sketchybar"
+"~/.hammerspoon" = "files/hammerspoon"
 
 [dotfiles."~/.config/mise/conf.d/10-personal.toml"]
 content = """
@@ -56,6 +57,11 @@ includes = ["tasks.toml"]
 # Declared even though the work layer also installs shellcheck, so this
 # module's own verify harness does not depend on a tool it never asked for.
 "brew:shellcheck"                         = {}
+# Hammerspoon draws the centred "New Window" overlay that Caps+N raises;
+# without it declared, a rebuilt machine gets the keybinding with nothing to
+# draw. The cask ships its `hs` CLI inside the app bundle and brew links it
+# to /opt/homebrew/bin/hs, so nothing needs hs.ipc.cliInstall().
+"brew-cask:hammerspoon"                    = {}
 # AeroSpace is NOT here: it lives in nikitabobko/tap, which does not publish
 # the api/cask metadata mise's brew-cask backend requires. It is installed by
 # the `bootstrap` task in tasks.toml, which mise runs as the final phase.
