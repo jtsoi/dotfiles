@@ -39,6 +39,15 @@ sketchybar --add item clock left \
            --set isoweek script="$PLUGIN_DIR/datetime.sh isoweek" update_freq=3600 \
                          label.color="$DIM"
 
+# update_freq=0 at startup because the script raises it to 1 itself when a
+# block is running -- including after a restart, since the state file
+# survives.
+sketchybar --add item pomodoro left \
+           --set pomodoro script="$PLUGIN_DIR/pomodoro.sh" \
+                          click_script="$PLUGIN_DIR/pomodoro.sh" \
+                          update_freq=0 \
+           --subscribe pomodoro mouse.clicked
+
 # Must exist before anything subscribes or AeroSpace's on-focus-changed
 # triggers it: sketchybar only delivers a trigger for an event --add'ed first.
 sketchybar --add event aerospace_focus
@@ -57,5 +66,24 @@ for ws in 1 2 3 4 5 6 7 8 9 M L S; do
 done
 
 sketchybar --set space.1 script="$PLUGIN_DIR/workspaces.sh"
+
+# Leftmost of the right group deliberately: right-aligned items stack
+# right-to-left, so a variable-width label here grows into the empty gap toward
+# the centre instead of shoving the fixed-width items sideways on every focus
+# change.
+sketchybar --add item window_title right \
+           --set window_title script="$PLUGIN_DIR/window_title.sh" \
+                              update_freq=0 \
+                              label.max_chars=60 \
+                              label.color="$FG" \
+           --subscribe window_title aerospace_focus
+
+sketchybar --add item cpu right \
+           --set cpu script="$PLUGIN_DIR/cpu.sh" update_freq=5 \
+           --add item network right \
+           --set network script="$PLUGIN_DIR/network.sh" update_freq=10 \
+           --add item battery right \
+           --set battery script="$PLUGIN_DIR/battery.sh" update_freq=60 \
+           --subscribe battery power_source_change
 
 sketchybar --update
