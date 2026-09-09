@@ -36,10 +36,17 @@ chip_for() {
         com.tinyspeck.slackmacgap) glyph=':slack:'         ; label="${title%% - *}" ;;
         com.google.Chrome)         glyph=':google_chrome:' ; t="${title% - Google Chrome}"
                                                              label="${t%% | *}" ;;
+        # Firefox puts no app name in the title at all, so unlike Chrome only the
+        # site suffix after " | " has to go.
+        org.mozilla.firefox)       glyph=':firefox:'       ; label="${title%% | *}" ;;
         # Claude's window title is just "Claude", so the label is the icon said
         # twice. Taking the title anyway rather than hardcoding a string means a
         # future version that names the conversation gets shown for free.
         com.anthropic.claudefordesktop) glyph=':claude:'    ; label="$title" ;;
+        # com.openai.codex, not com.openai.chat: the ChatGPT app ships on the
+        # Codex framework and reports that id at runtime. The obvious guess would
+        # match nothing and fall through to the generic chip in silence.
+        com.openai.codex)          glyph=':openai:'        ; label="$title" ;;
         # No entry: a generic window mark and the app's own name. Not a bare
         # initial -- two unknown apps would then look identical, and the glyph
         # already says "this app has no icon".

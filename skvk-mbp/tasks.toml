@@ -197,6 +197,12 @@ expect_probe com.google.Chrome 'Google Chrome' 'Agentforce | Skovik Slack - Goog
   ':google_chrome:|Agentforce'
 expect_probe com.anthropic.claudefordesktop 'Claude' 'Claude' \
   ':claude:|Claude'
+# Firefox carries no app name in its title, so only the site suffix is dropped.
+expect_probe org.mozilla.firefox 'Firefox' 'CSS: Cascading Style Sheets | MDN' \
+  ':firefox:|CSS: Cascad\u2026'
+# Keyed on com.openai.codex, which is what the ChatGPT app actually reports.
+expect_probe com.openai.codex 'ChatGPT' 'ChatGPT' \
+  ':openai:|ChatGPT'
 # No table entry: generic glyph, app's own name, capped.
 expect_probe com.apple.DigitalColorMeter 'Digital Color Meter' 'Digital Color Meter' \
   ':default:|Digital Col…'
@@ -410,8 +416,8 @@ else
   fail "layout states with no display name:$lay_missing"
 fi
 
-if [ "$ran" -lt 73 ]; then
-  echo "only $ran check(s) ran, expected at least 73"
+if [ "$ran" -lt 77 ]; then
+  echo "only $ran check(s) ran, expected at least 77"
   exit 1
 fi
 if [ "$fails" -ne 0 ]; then

@@ -62,6 +62,9 @@ includes = ["tasks.toml"]
 # draw. The cask ships its `hs` CLI inside the app bundle and brew links it
 # to /opt/homebrew/bin/hs, so nothing needs hs.ipc.cliInstall().
 "brew-cask:hammerspoon"                    = {}
+# The ChatGPT app reports com.openai.codex at runtime, which is the id the
+# window chips key on -- see the note in windows.sh.
+"brew-cask:chatgpt"                        = {}
 # AeroSpace is NOT here: it lives in nikitabobko/tap, which does not publish
 # the api/cask metadata mise's brew-cask backend requires. It is installed by
 # the `bootstrap` task in tasks.toml, which mise runs as the final phase.
