@@ -210,6 +210,38 @@ expect_probe com.apple.DigitalColorMeter 'Digital Color Meter' 'Digital Color Me
 # filename stands in.
 expect_probe com.microsoft.VSCode 'Code' 'technical-writing-style-guide.md — Untitled (Workspace)' \
   ':code:|technical-w…'
+# Unsaved changes: macOS appends a suffix on the same em-dash separator the
+# title already uses, so the project fragment is no longer the last field.
+expect_probe com.microsoft.VSCode 'Code' 'application.hbs — arbor — Modified' \
+  ':code:|arbor'
+
+# The unread rule is asserted through workspaces.sh's own `probe` mode for the
+# same reason: it decides three chip states from a workspace name, the focused
+# name and Slack's Dock badge, and none of that is restated here.
+expect_state() {  # workspace, focused workspace, badge label, expected state
+  got=$(bash files/config/sketchybar/plugins/workspaces.sh probe "$1" "$2" "$3" 2>/dev/null || echo ERROR)
+  if [ "$got" = "$4" ]; then
+    pass "state: ws=$1 focused=$2 badge=[$3]"
+  else
+    fail "state: ws=$1 focused=$2 badge=[$3] -- got [$got] want [$4]"
+  fi
+}
+
+# A count means something is addressed to you: a DM, a mention, a keyword or a
+# reply in a followed thread.
+expect_state S 3 '2' unread
+expect_state S 3 '12' unread
+# The reason the rule tests a leading digit rather than the whole label.
+expect_state S 3 '99+' unread
+# The dot is the case this rule exists to reject -- Slack draws it for plain
+# channel activity, which is not addressed to anyone.
+expect_state S 3 '•' idle
+# No unread, badges switched off for Slack, or Slack not running.
+expect_state S 3 '' idle
+expect_state S 3 '0' idle
+# Focus outranks unread, and no badge lights a chip other than S.
+expect_state S S '2' focused
+expect_state 4 3 '2' idle
 
 # Every glyph the probe can emit must exist in the app font. The names are read
 # out of windows.sh rather than listed here, so adding an app extends this check
@@ -320,7 +352,8 @@ fi
 # A harness that silently runs zero checks must not report success. This floor
 # is the count of checks that run today (5 zshrc.d fragments -> 5 "valid zsh:"
 # lines; 8 sketchybar scripts -> 8 "executable:" lines; 9 -> 9 "shellcheck:"
-# lines; 8 probe cases; 7 glyphs; 2 win.N pool checks) -- bump it whenever a
+# lines; 9 probe cases; 8 chip-state cases; 7 glyphs; 2 win.N pool checks) --
+# bump it whenever a
 # check above is added or removed, or it stops catching a deleted check.
 # --- Caps+N, the new-window mode ---
 # The keys live in aerospace.toml and the overlay lives in Hammerspoon, so the
@@ -416,7 +449,7 @@ else
   fail "layout states with no display name:$lay_missing"
 fi
 
-if [ "$ran" -lt 77 ]; then
+if [ "$ran" -lt 86 ]; then
   echo "only $ran check(s) ran, expected at least 77"
   exit 1
 fi

@@ -28,6 +28,14 @@ CAP=12
 # Sets the globals `glyph` and `label`.
 chip_for() {
     local bid="$1" app="$2" title="$3" t
+
+    # macOS appends this to the accessibility title of any window with unsaved
+    # changes, which is the title AeroSpace reports. Stripped once here rather
+    # than per app: the rules that take a trailing field -- VS Code's project,
+    # Alacritty's directory -- would otherwise show the suffix in place of the
+    # thing they name.
+    title="${title% — Modified}"
+
     case "$bid" in
         com.microsoft.VSCode)      glyph=':code:'          ; label="${title##* — }" ;;
         org.alacritty)             glyph=':terminal:'      ; label="${title##*: }" ;;
